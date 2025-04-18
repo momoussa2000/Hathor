@@ -5,8 +5,7 @@
       "src": "client/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "build",
-        "buildCommand": "npm run build"
+        "distDir": "client/build"
       }
     },
     {
@@ -20,35 +19,11 @@
       "dest": "/server.js"
     },
     {
-      "src": "/static/(.*)",
-      "dest": "/client/build/static/$1"
-    },
-    {
-      "src": "/assets/(.*)",
-      "dest": "/client/build/assets/$1"
-    },
-    {
-      "src": "/fonts/(.*)",
-      "dest": "/client/build/fonts/$1"
-    },
-    {
-      "src": "/images/(.*)",
-      "dest": "/client/build/images/$1"
-    },
-    {
-      "src": "/manifest.json",
-      "dest": "/client/build/manifest.json"
-    },
-    {
-      "src": "/favicon.ico",
-      "dest": "/client/build/favicon.ico"
-    },
-    {
       "handle": "filesystem"
     },
     {
       "src": "/(.*)",
-      "dest": "/client/build/index.html"
+      "dest": "/"
     }
   ]
 } 
