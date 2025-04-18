@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/static/css/main.b6a69221.css",
+    "main.js": "/static/js/main.9e27f540.js",
+    "static/media/POORICH.TTF": "/static/media/POORICH.0c9803a1c930981d6c99.TTF",
+    "static/media/Caslons Egyptian Regular.otf": "/static/media/Caslons Egyptian Regular.b33a74bc69ffbe2d782e.otf",
+    "index.html": "/index.html",
+    "main.b6a69221.css.map": "/static/css/main.b6a69221.css.map",
+    "main.9e27f540.js.map": "/static/js/main.9e27f540.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b6a69221.css",
+    "static/js/main.9e27f540.js"
+  ]
+}
