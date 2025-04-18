@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hathor Root Test Page</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+      text-align: center;
+    }
+    h1 { color: #333; margin-top: 40px; }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 40px auto;
+      background: #f9f9f9;
+      max-width: 600px;
+    }
+    a {
+      display: inline-block;
+      background: #4a69bd;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 10px;
+      text-decoration: none;
+    }
+    a:hover { background: #3867d6; }
+  </style>
+</head>
+<body>
+  <h1>Hathor App Root Test Page</h1>
+  
+  <div class="card">
+    <h2>Static File Serving Test</h2>
+    <p>If you can see this page, static file serving is working correctly!</p>
+    <p>Try accessing these test endpoints:</p>
+    <div>
+      <a href="/debug.html">Debug Page</a>
+      <a href="/api/health">API Health Check</a>
+      <a href="/api/debug">API Debug</a>
+    </div>
+  </div>
+</body>
+</html> 
