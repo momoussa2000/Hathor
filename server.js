@@ -14,6 +14,33 @@ const winston = require('winston');
 const expressWinston = require('express-winston');
 const { format } = require('winston');
 
+// Configure MongoDB connection with proper error handling
+const connectToDatabase = async () => {
+  try {
+    if (!process.env.MONGODB_URI) {
+      logger.warn('MONGODB_URI environment variable not set, database functionality will be unavailable');
+      return false;
+    }
+    
+    await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    
+    logger.info('MongoDB connected successfully');
+    return true;
+  } catch (error) {
+    logger.error('MongoDB connection error:', { 
+      error: error.message,
+      stack: error.stack
+    });
+    return false;
+  }
+};
+
+// Flag to track if database is connected
+let isDatabaseConnected = false;
+
 // Configure Winston logger
 const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
@@ -678,6 +705,13 @@ const Subscription = mongoose.model('Subscription', subscriptionSchema);
 // Route to handle purchases
 app.post('/api/purchases', async (req, res) => {
   try {
+    if (!isDatabaseConnected) {
+      return res.status(503).json({ 
+        error: 'Database service unavailable',
+        message: 'The database connection is not established. Please try again later.'
+      });
+    }
+    
     const { userId, items } = req.body;
     const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
     
@@ -716,6 +750,7 @@ app.post('/api/purchases', async (req, res) => {
       });
     }
   } catch (error) {
+    logger.error('Error in purchases endpoint:', { error: error.message, stack: error.stack });
     res.status(500).json({ error: error.message });
   }
 });
@@ -723,12 +758,21 @@ app.post('/api/purchases', async (req, res) => {
 // Route to check subscription status
 app.get('/api/subscriptions/:userId', async (req, res) => {
   try {
+    if (!isDatabaseConnected) {
+      return res.status(503).json({ 
+        error: 'Database service unavailable',
+        message: 'The database connection is not established. Please try again later.',
+        isActive: false
+      });
+    }
+    
     const subscription = await Subscription.findOne({ userId: req.params.userId });
     if (!subscription) {
       return res.json({ isActive: false });
     }
     res.json(subscription);
   } catch (error) {
+    logger.error('Error in subscriptions endpoint:', { error: error.message, stack: error.stack });
     res.status(500).json({ error: error.message });
   }
 });
@@ -788,7 +832,9 @@ app.get('/api/vercel-debug', (req, res) => {
       VERCEL_URL: process.env.VERCEL_URL
     },
     cwd: process.cwd(),
-    dirname: __dirname
+    dirname: __dirname,
+    databaseConnected: isDatabaseConnected,
+    mongoDbUri: process.env.MONGODB_URI ? `${process.env.MONGODB_URI.substring(0, 10)}...` : 'not set'
   };
   
   // Gather registered routes
@@ -885,14 +931,40 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Only start the server if not in Vercel's production environment
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-    console.log('OpenAI API Key configured:', !!process.env.OPENAI_API_KEY);
-    console.log('Frontend should connect to:', `http://localhost:${port}`);
-  });
-}
+// Initialize app for serverless environment
+(async () => {
+  try {
+    // Initialize database connection
+    isDatabaseConnected = await connectToDatabase();
+    
+    logger.info('Server initialization complete', {
+      environment: process.env.NODE_ENV,
+      vercelEnv: process.env.VERCEL_ENV,
+      databaseConnected: isDatabaseConnected,
+      openaiInitialized: !!openai
+    });
+    
+    // Only start the server if not in production (local development)
+    if (process.env.NODE_ENV !== 'production') {
+      app.listen(port, () => {
+        console.log(`Server is running on port ${port}`);
+        console.log('OpenAI API Key configured:', !!process.env.OPENAI_API_KEY);
+        console.log('Database connected:', isDatabaseConnected);
+        console.log('Frontend should connect to:', `http://localhost:${port}`);
+      });
+    }
+  } catch (error) {
+    logger.error('Server initialization error:', {
+      message: error.message,
+      stack: error.stack
+    });
+    
+    // Don't throw the error in production (serverless) to allow the function to start anyway
+    if (process.env.NODE_ENV !== 'production') {
+      throw error;
+    }
+  }
+})();
 
 // Export the Express app for Vercel
 module.exports = app; 
