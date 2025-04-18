@@ -3,14 +3,14 @@
 /* Font face declarations */
 @font-face {
   font-family: 'Poor Richard';
-  src: url('../assets/fonts/POORICH.TTF') format('truetype');
+  src: url('/client/src/assets/fonts/POORICH.TTF') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Caslon Egyptian';
-  src: url('../assets/fonts/Caslons Egyptian Regular.otf') format('opentype');
+  src: url('/client/src/assets/fonts/Caslons Egyptian Regular.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
