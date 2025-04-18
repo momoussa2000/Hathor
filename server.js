@@ -580,8 +580,8 @@ Example:
 With divine blessings,
 Hathor`;
 
-// Apply OpenAI check middleware to chat endpoint
-app.post('/api/chat', checkOpenAI, async (req, res) => {
+// Modified chat endpoint with fallback
+app.post('/api/chat', async (req, res) => {
   try {
     logger.info('Received chat request', { 
       hasMessage: !!req.body.message,
@@ -595,6 +595,16 @@ app.post('/api/chat', checkOpenAI, async (req, res) => {
       return res.status(400).json({ 
         error: 'No message provided',
         success: false 
+      });
+    }
+
+    // Check if OpenAI is initialized
+    if (!openai) {
+      logger.warn('OpenAI not initialized, using fallback response');
+      return res.json({
+        response: "✨ Hathor's Beauty Advice ✨\n\n🌙 I Hear You, My Child\nI understand your concern. However, I'm currently unable to provide personalized advice as my connection to the wisdom realm is temporarily disrupted.\n\n🌿 Please Try Again Later\nPlease try again later when my connection to the realm of beauty wisdom is restored. In the meantime, you can explore our collection of healing oils at https://hathororganics.com/collections/all\n\nWith divine blessings,\nHathor",
+        success: true,
+        fallback: true
       });
     }
 
@@ -615,10 +625,12 @@ app.post('/api/chat', checkOpenAI, async (req, res) => {
 
       if (!completion.choices || !completion.choices[0] || !completion.choices[0].message) {
         logger.error('Invalid response format from OpenAI');
-        return res.status(500).json({
-          error: 'Invalid response format from OpenAI API',
-          success: false,
-          debug: { hasChoices: !!completion.choices, responseStructure: JSON.stringify(completion) }
+        
+        // Fallback response when OpenAI returns invalid format
+        return res.json({
+          response: "✨ Hathor's Beauty Advice ✨\n\n🌙 I Hear You, My Child\nI understand your concern. However, I'm currently unable to provide personalized advice as my connection to the wisdom realm is temporarily disrupted.\n\n🌿 Please Try Again Later\nPlease try again later when my connection to the realm of beauty wisdom is restored. In the meantime, you can explore our collection of healing oils at https://hathororganics.com/collections/all\n\nWith divine blessings,\nHathor",
+          success: true,
+          fallback: true
         });
       }
 
@@ -626,7 +638,7 @@ app.post('/api/chat', checkOpenAI, async (req, res) => {
       logger.info('Received complete response from OpenAI', { responseLength: response.length });
       res.json({ response, success: true });
     } catch (openaiError) {
-      // Detailed OpenAI error handling
+      // Detailed OpenAI error handling with fallback
       logger.error('OpenAI API call failed:', { 
         error: openaiError.message, 
         type: openaiError.type,
@@ -634,21 +646,15 @@ app.post('/api/chat', checkOpenAI, async (req, res) => {
         code: openaiError.code
       });
       
-      const errorResponse = handleOpenAIError(openaiError);
-      
-      return res.status(errorResponse.status).json({
-        error: errorResponse.message,
-        success: false,
-        details: {
-          message: openaiError.message,
+      // Return fallback response instead of error
+      res.json({
+        response: "✨ Hathor's Beauty Advice ✨\n\n🌙 I Hear You, My Child\nI understand your concern. However, I'm currently unable to provide personalized advice as my connection to the wisdom realm is temporarily disrupted.\n\n🌿 Please Try Again Later\nPlease try again later when my connection to the realm of beauty wisdom is restored. In the meantime, you can explore our collection of healing oils at https://hathororganics.com/collections/all\n\nWith divine blessings,\nHathor",
+        success: true,
+        fallback: true,
+        error: {
           code: openaiError.code,
           type: openaiError.type,
-          status: openaiError.status
-        },
-        debug: {
-          environment: process.env.NODE_ENV,
-          vercelEnv: process.env.VERCEL_ENV,
-          apiKeyConfigured: !!process.env.OPENAI_API_KEY
+          message: openaiError.message
         }
       });
     }
@@ -658,10 +664,11 @@ app.post('/api/chat', checkOpenAI, async (req, res) => {
       stack: error.stack
     });
     
-    res.status(500).json({ 
-      error: 'Unexpected server error',
-      success: false,
-      details: error.message
+    // Return fallback response instead of error status
+    res.json({ 
+      response: "✨ Hathor's Beauty Advice ✨\n\n🌙 I Hear You, My Child\nI understand your concern. However, I'm currently unable to provide personalized advice as my connection to the wisdom realm is temporarily disrupted.\n\n🌿 Please Try Again Later\nPlease try again later when my connection to the realm of beauty wisdom is restored. In the meantime, you can explore our collection of healing oils at https://hathororganics.com/collections/all\n\nWith divine blessings,\nHathor",
+      success: true,
+      fallback: true
     });
   }
 });
