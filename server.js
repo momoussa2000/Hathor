@@ -1,3 +1,4 @@
+console.log('--- Loading server.js module ---');
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -613,6 +614,11 @@ app.get('/api/subscriptions/:userId', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+});
+
+// Simple health check endpoint
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
 });
 
 // Only start the server if not in Vercel's production environment
