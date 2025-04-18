@@ -6,7 +6,11 @@
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/server.js" },
-    { "src": "/(.*)", "dest": "/client/build/$1" },
-    { "handle": "filesystem" }
+    { "src": "/static/(.*)", "dest": "/client/build/static/$1" },
+    { "src": "/images/(.*)", "dest": "/client/build/images/$1" },
+    { "src": "/fonts/(.*)", "dest": "/client/build/fonts/$1" },
+    { "src": "/manifest.json", "dest": "/client/build/manifest.json" },
+    { "src": "/asset-manifest.json", "dest": "/client/build/asset-manifest.json" },
+    { "src": "/(.*)", "dest": "/client/build/index.html" }
   ]
 } 
