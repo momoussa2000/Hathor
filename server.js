@@ -1,12 +1,21 @@
 console.log('--- Loading server.js module ---');
+console.log('Server environment:', process.env.NODE_ENV);
+console.log('Current working directory:', process.cwd());
+console.log('File directory:', __dirname);
+console.log('Available environment variables:', Object.keys(process.env).filter(key => !key.includes('KEY') && !key.includes('SECRET')).join(', '));
+
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const OpenAI = require('openai');
 const mongoose = require('mongoose');
+const morgan = require('morgan');
 
 const app = express();
 const port = process.env.PORT || 5003;
+
+// Use Morgan for request logging
+app.use(morgan('dev'));
 
 // Initialize OpenAI with better error handling
 const initializeOpenAI = () => {
@@ -619,6 +628,35 @@ app.get('/api/subscriptions/:userId', async (req, res) => {
 // Simple health check endpoint
 app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
+});
+
+// Add a simple diagnostic endpoint
+app.get('/api/debug', (req, res) => {
+  res.json({
+    env: process.env.NODE_ENV,
+    cwd: process.cwd(),
+    dirname: __dirname,
+    headers: req.headers,
+    envKeys: Object.keys(process.env).filter(key => !key.includes('KEY') && !key.includes('SECRET')),
+    serverTime: new Date().toISOString()
+  });
+});
+
+// Custom error handling middleware - add this near the end of your file but before module.exports
+app.use((err, req, res, next) => {
+  console.error('Global error handler caught:', err);
+  console.error('Error stack:', err.stack);
+  console.error('Request path:', req.path);
+  console.error('Request method:', req.method);
+  console.error('Request query:', req.query);
+  console.error('Request headers:', req.headers);
+  
+  res.status(500).json({
+    error: 'Server error',
+    message: process.env.NODE_ENV === 'production' ? 'An unexpected error occurred' : err.message,
+    path: req.path,
+    timestamp: new Date().toISOString()
+  });
 });
 
 // Only start the server if not in Vercel's production environment
