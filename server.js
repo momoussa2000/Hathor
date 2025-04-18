@@ -20,7 +20,7 @@ const openai = new OpenAI({
 
 // Configure CORS with specific options
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: '*', // Allow all origins in production
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
@@ -601,9 +601,14 @@ app.get('/api/subscriptions/:userId', async (req, res) => {
   }
 });
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-  console.log('OpenAI API Key configured:', !!process.env.OPENAI_API_KEY);
-  console.log('Frontend should connect to:', `http://localhost:${port}`);
-}); 
+// Start server
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+    console.log('OpenAI API Key configured:', !!process.env.OPENAI_API_KEY);
+    console.log('Frontend should connect to:', `http://localhost:${port}`);
+  });
+} else {
+  // For Vercel deployment
+  module.exports = app;
+} 
