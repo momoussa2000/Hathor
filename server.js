@@ -61,21 +61,12 @@ const handleOpenAIError = (error) => {
   return errorInfo;
 };
 
-// Configure CORS with specific options
-const corsOptions = {
-  origin: '*', // Allow all origins in production
+// Enable CORS for all origins in production
+app.use(cors({
+  origin: '*',
   methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-  preflightContinue: false,
-  optionsSuccessStatus: 204
-};
-
-// Apply CORS middleware
-app.use(cors(corsOptions));
-
-// Handle preflight requests
-app.options('*', cors(corsOptions));
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -624,7 +615,7 @@ app.get('/api/subscriptions/:userId', async (req, res) => {
   }
 });
 
-// Only start the server if we're not in Vercel's production environment
+// Only start the server if not in Vercel's production environment
 if (process.env.NODE_ENV !== 'production') {
   app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
