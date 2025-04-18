@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 const PurchaseComponent = ({ userId }) => {
@@ -6,19 +6,19 @@ const PurchaseComponent = ({ userId }) => {
   const [subscription, setSubscription] = useState(null);
   const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    // Check subscription status on component mount
-    checkSubscriptionStatus();
-  }, [userId]);
-
-  const checkSubscriptionStatus = async () => {
+  const checkSubscriptionStatus = useCallback(async () => {
     try {
       const response = await axios.get(`http://localhost:5003/api/subscriptions/${userId}`);
       setSubscription(response.data);
     } catch (error) {
       console.error('Error checking subscription status:', error);
     }
-  };
+  }, [userId]);
+
+  useEffect(() => {
+    // Check subscription status on component mount
+    checkSubscriptionStatus();
+  }, [checkSubscriptionStatus]);
 
   const handlePurchase = async () => {
     try {
@@ -36,10 +36,6 @@ const PurchaseComponent = ({ userId }) => {
       console.error('Error processing purchase:', error);
       setMessage('Error processing purchase. Please try again.');
     }
-  };
-
-  const addToCart = (oilId) => {
-    setCart([...cart, { oilId, quantity: 1 }]);
   };
 
   return (
