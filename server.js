@@ -10,9 +10,50 @@ const cors = require('cors');
 const OpenAI = require('openai');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
+const winston = require('winston');
+const expressWinston = require('express-winston');
+const { format } = require('winston');
+
+// Configure Winston logger
+const logger = winston.createLogger({
+  level: process.env.LOG_LEVEL || 'info',
+  format: format.combine(
+    format.timestamp({
+      format: 'YYYY-MM-DD HH:mm:ss'
+    }),
+    format.errors({ stack: true }),
+    format.splat(),
+    format.json()
+  ),
+  defaultMeta: { service: 'hathor-app' },
+  transports: [
+    new winston.transports.Console({
+      format: format.combine(
+        format.colorize(),
+        format.printf(({ level, message, timestamp, ...metadata }) => {
+          let msg = `${timestamp} [${level}]: ${message}`;
+          if (Object.keys(metadata).length > 0 && metadata.service === 'hathor-app') {
+            msg += ` ${JSON.stringify(metadata)}`;
+          }
+          return msg;
+        })
+      )
+    })
+  ]
+});
 
 const app = express();
 const port = process.env.PORT || 5003;
+
+// Request logging with express-winston (before route handlers)
+app.use(expressWinston.logger({
+  winstonInstance: logger,
+  meta: true,
+  msg: "HTTP {{req.method}} {{req.url}}",
+  expressFormat: true,
+  colorize: true,
+  ignoreRoute: function (req, res) { return false; }
+}));
 
 // Use Morgan for request logging
 app.use(morgan('dev'));
@@ -21,9 +62,10 @@ app.use(morgan('dev'));
 const initializeOpenAI = () => {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    console.error('OpenAI API key is not configured');
+    logger.error('OpenAI API key is not configured');
     return null;
   }
+  logger.info('OpenAI client initialized successfully');
   return new OpenAI({ apiKey });
 };
 
@@ -32,17 +74,25 @@ const openai = initializeOpenAI();
 // Add middleware to check OpenAI initialization
 const checkOpenAI = (req, res, next) => {
   if (!openai) {
+    logger.error('OpenAI middleware check failed - API not configured');
     return res.status(500).json({
       error: 'OpenAI is not properly configured',
       message: 'Please check the API key configuration'
     });
   }
+  logger.debug('OpenAI middleware check passed');
   next();
 };
 
 // Helper function to handle OpenAI errors
 const handleOpenAIError = (error) => {
-  console.error('OpenAI API Error:', error);
+  logger.error('OpenAI API Error:', { 
+    code: error.code, 
+    type: error.type, 
+    status: error.status,
+    message: error.message,
+    stack: error.stack
+  });
   
   const errorMap = {
     'insufficient_quota': {
@@ -642,20 +692,115 @@ app.get('/api/debug', (req, res) => {
   });
 });
 
-// Custom error handling middleware - add this near the end of your file but before module.exports
+// Add a vercel-specific debug endpoint
+app.get('/api/vercel-debug', (req, res) => {
+  logger.info('Vercel debug endpoint called');
+  
+  // Gather system information
+  const systemInfo = {
+    nodeVersion: process.version,
+    platform: process.platform,
+    arch: process.arch,
+    memoryUsage: process.memoryUsage(),
+    uptime: process.uptime(),
+    env: process.env.NODE_ENV,
+    cwd: process.cwd(),
+    dirname: __dirname,
+    // Safe headers only
+    headers: {
+      host: req.headers.host,
+      'user-agent': req.headers['user-agent'],
+      'x-forwarded-for': req.headers['x-forwarded-for'],
+      'x-vercel-id': req.headers['x-vercel-id'],
+      'x-vercel-deployment-url': req.headers['x-vercel-deployment-url'],
+      'x-forwarded-host': req.headers['x-forwarded-host'],
+      'x-real-ip': req.headers['x-real-ip']
+    },
+    // Filter out sensitive env vars
+    envKeys: Object.keys(process.env).filter(key => 
+      !key.includes('KEY') && !key.includes('SECRET') && 
+      !key.includes('TOKEN') && !key.includes('PASSWORD')
+    ),
+    serverTime: new Date().toISOString(),
+    // App settings
+    corsSettings: {
+      origin: '*',
+      methods: ['GET', 'POST', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization']
+    },
+    // Routes registered
+    registeredRoutes: app._router.stack
+      .filter(r => r.route)
+      .map(r => ({
+        path: r.route.path,
+        methods: Object.keys(r.route.methods).filter(m => r.route.methods[m])
+      }))
+  };
+  
+  res.json({
+    status: 'ok',
+    message: 'Vercel debug information',
+    systemInfo
+  });
+});
+
+// Add a catch-all 404 handler (must be placed after all other routes and before error handlers)
+app.use((req, res, next) => {
+  logger.warn('404 Not Found:', {
+    path: req.path,
+    method: req.method,
+    query: req.query,
+    headers: {
+      'user-agent': req.headers['user-agent'],
+      'x-vercel-id': req.headers['x-vercel-id'],
+      'x-forwarded-for': req.headers['x-forwarded-for'],
+      'x-forwarded-host': req.headers['x-forwarded-host'],
+      'x-real-ip': req.headers['x-real-ip']
+    }
+  });
+  
+  res.status(404).json({
+    error: 'Not Found',
+    message: `Cannot ${req.method} ${req.path}`,
+    availableRoutes: app._router.stack
+      .filter(r => r.route)
+      .map(r => ({
+        path: r.route.path,
+        methods: Object.keys(r.route.methods).filter(m => r.route.methods[m])
+      })),
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Error logging with express-winston (after route handlers, before error handlers)
+app.use(expressWinston.errorLogger({
+  winstonInstance: logger,
+  msg: "{{err.message}}",
+  meta: true
+}));
+
+// Custom error handling middleware - with Winston logging
 app.use((err, req, res, next) => {
-  console.error('Global error handler caught:', err);
-  console.error('Error stack:', err.stack);
-  console.error('Request path:', req.path);
-  console.error('Request method:', req.method);
-  console.error('Request query:', req.query);
-  console.error('Request headers:', req.headers);
+  logger.error('Global error handler caught:', { 
+    error: err.message,
+    stack: err.stack,
+    path: req.path,
+    method: req.method,
+    query: req.query,
+    body: req.body ? JSON.stringify(req.body).substring(0, 200) : null,
+    headers: {
+      'user-agent': req.headers['user-agent'],
+      'content-type': req.headers['content-type'],
+      'x-vercel-id': req.headers['x-vercel-id']
+    }
+  });
   
   res.status(500).json({
     error: 'Server error',
     message: process.env.NODE_ENV === 'production' ? 'An unexpected error occurred' : err.message,
     path: req.path,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    requestId: req.headers['x-request-id'] || req.headers['x-vercel-id'] || 'unknown'
   });
 });
 

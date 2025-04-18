@@ -49,6 +49,7 @@
     <h2>API Health Check</h2>
     <button onclick="checkHealth()">Check API Health</button>
     <button onclick="getDebugInfo()">Get Debug Info</button>
+    <button onclick="getVercelDebug()">Get Vercel Debug Info</button>
     <div id="health-result"></div>
   </div>
   
@@ -97,6 +98,26 @@ Host: ${window.location.host}
       
       try {
         const response = await fetch('/api/debug');
+        const data = await response.json();
+        
+        healthDiv.innerHTML = `
+          <p>Status: ${response.status}</p>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        `;
+      } catch (err) {
+        healthDiv.innerHTML = `
+          <p>Error: ${err.message}</p>
+        `;
+      }
+    }
+    
+    // Vercel debug info
+    async function getVercelDebug() {
+      const healthDiv = document.getElementById('health-result');
+      healthDiv.innerHTML = 'Getting Vercel debug info...';
+      
+      try {
+        const response = await fetch('/api/vercel-debug');
         const data = await response.json();
         
         healthDiv.innerHTML = `
