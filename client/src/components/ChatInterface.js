@@ -3,7 +3,9 @@ import ReactMarkdown from 'react-markdown';
 import './ChatInterface.css';
 
 // Get the backend URL from environment variable or use default
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5003';
+const BACKEND_URL = process.env.NODE_ENV === 'production' 
+  ? '' // Empty string means same domain in production
+  : 'http://localhost:5003';
 
 function ChatInterface() {
   const [messages, setMessages] = useState([]);

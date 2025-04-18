@@ -601,14 +601,14 @@ app.get('/api/subscriptions/:userId', async (req, res) => {
   }
 });
 
-// Start server
+// Only start the server if we're not in Vercel's production environment
 if (process.env.NODE_ENV !== 'production') {
   app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
     console.log('OpenAI API Key configured:', !!process.env.OPENAI_API_KEY);
     console.log('Frontend should connect to:', `http://localhost:${port}`);
   });
-} else {
-  // For Vercel deployment
-  module.exports = app;
-} 
+}
+
+// Export the Express app for Vercel
+module.exports = app; 
