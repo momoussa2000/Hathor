@@ -7,16 +7,59 @@ const mongoose = require('mongoose');
 const app = express();
 const port = process.env.PORT || 5003;
 
-// Check if OpenAI API key is configured
-if (!process.env.OPENAI_API_KEY) {
-  console.error('OpenAI API key is not configured. Please check your .env file.');
-  process.exit(1);
-}
+// Initialize OpenAI with better error handling
+const initializeOpenAI = () => {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) {
+    console.error('OpenAI API key is not configured');
+    return null;
+  }
+  return new OpenAI({ apiKey });
+};
 
-// Initialize OpenAI
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
+const openai = initializeOpenAI();
+
+// Add middleware to check OpenAI initialization
+const checkOpenAI = (req, res, next) => {
+  if (!openai) {
+    return res.status(500).json({
+      error: 'OpenAI is not properly configured',
+      message: 'Please check the API key configuration'
+    });
+  }
+  next();
+};
+
+// Helper function to handle OpenAI errors
+const handleOpenAIError = (error) => {
+  console.error('OpenAI API Error:', error);
+  
+  const errorMap = {
+    'insufficient_quota': {
+      status: 429,
+      message: "We're currently experiencing high demand. Please try again later."
+    },
+    'invalid_api_key': {
+      status: 401,
+      message: "Authentication error. Please check the API configuration."
+    },
+    'model_not_found': {
+      status: 400,
+      message: "The requested AI model is not available. Please try again later."
+    },
+    'rate_limit_exceeded': {
+      status: 429,
+      message: "Too many requests. Please try again in a few moments."
+    }
+  };
+
+  const errorInfo = errorMap[error.code] || {
+    status: error.status || 500,
+    message: "An error occurred while processing your request."
+  };
+
+  return errorInfo;
+};
 
 // Configure CORS with specific options
 const corsOptions = {
@@ -445,7 +488,8 @@ Example:
 With divine blessings,
 Hathor`;
 
-app.post('/api/chat', async (req, res) => {
+// Apply OpenAI check middleware to chat endpoint
+app.post('/api/chat', checkOpenAI, async (req, res) => {
   try {
     console.log('Received request:', req.body);
     const { message } = req.body;
@@ -478,30 +522,9 @@ app.post('/api/chat', async (req, res) => {
   } catch (error) {
     console.error('Detailed error:', error);
     
-    // Handle specific OpenAI API errors
-    if (error.code === 'invalid_api_key') {
-      return res.status(401).json({ 
-        error: 'The OpenAI API key is invalid or not properly configured. Please check your API key in the .env file.',
-        details: error.message 
-      });
-    }
-    
-    if (error.code === 'model_not_found') {
-      return res.status(400).json({ 
-        error: 'The requested AI model is not available. Please try again later.',
-        details: error.message 
-      });
-    }
-
-    if (error.code === 'insufficient_quota' || error.code === 'rate_limit_exceeded') {
-      return res.status(429).json({ 
-        error: 'The OpenAI API quota has been exceeded. Please check your billing details or try again later.',
-        details: error.message 
-      });
-    }
-
-    res.status(500).json({ 
-      error: 'Something went wrong while processing your request. Please try again later.',
+    const openAIError = handleOpenAIError(error);
+    res.status(openAIError.status).json({ 
+      error: openAIError.message,
       details: error.message 
     });
   }
