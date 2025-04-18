@@ -21,6 +21,16 @@
     {
       "src": "/(.*)",
       "dest": "/client/build/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/client/build/index.html"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/client/build/index.html"
     }
   ]
 } 
