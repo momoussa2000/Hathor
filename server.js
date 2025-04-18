@@ -60,11 +60,25 @@ app.use(morgan('dev'));
 
 // Initialize OpenAI with better error handling
 const initializeOpenAI = () => {
-  const apiKey = process.env.OPENAI_API_KEY;
+  // Check various potential naming conventions used by Vercel
+  const apiKey = process.env.OPENAI_API_KEY || 
+                process.env.OPENAI_KEY || 
+                process.env.VERCEL_OPENAI_API_KEY;
+  
+  // Log environment information for debugging
+  logger.info('OpenAI initialization - Environment Info:', {
+    nodeEnv: process.env.NODE_ENV,
+    vercelEnv: process.env.VERCEL_ENV,
+    hasApiKey: !!apiKey,
+    apiKeyLength: apiKey ? apiKey.length : 0,
+    apiKeyStart: apiKey ? `${apiKey.substring(0, 3)}...` : 'not set'
+  });
+  
   if (!apiKey) {
-    logger.error('OpenAI API key is not configured');
+    logger.error('OpenAI API key is not configured. Checked OPENAI_API_KEY, OPENAI_KEY, and VERCEL_OPENAI_API_KEY');
     return null;
   }
+  
   logger.info('OpenAI client initialized successfully');
   return new OpenAI({ apiKey });
 };
@@ -542,15 +556,23 @@ Hathor`;
 // Apply OpenAI check middleware to chat endpoint
 app.post('/api/chat', checkOpenAI, async (req, res) => {
   try {
-    console.log('Received request:', req.body);
+    logger.info('Received chat request', { 
+      hasMessage: !!req.body.message,
+      messageLength: req.body.message ? req.body.message.length : 0
+    });
+    
     const { message } = req.body;
     
     if (!message) {
-      console.error('No message provided in request');
-      return res.status(400).json({ error: 'No message provided' });
+      logger.warn('No message provided in request');
+      return res.status(400).json({ 
+        error: 'No message provided',
+        success: false 
+      });
     }
 
-    console.log('Sending request to OpenAI with message:', message);
+    logger.info('Sending request to OpenAI API', { messagePreview: message.substring(0, 50) + '...' });
+    
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
@@ -564,19 +586,27 @@ app.post('/api/chat', checkOpenAI, async (req, res) => {
     });
 
     if (!completion.choices || !completion.choices[0] || !completion.choices[0].message) {
-      throw new Error('Invalid response format from OpenAI');
+      logger.error('Invalid response format from OpenAI');
+      throw new Error('Invalid response format from OpenAI API');
     }
 
     const response = completion.choices[0].message.content;
-    console.log('Received complete response from OpenAI');
-    res.json({ response });
+    logger.info('Received complete response from OpenAI', { responseLength: response.length });
+    res.json({ response, success: true });
   } catch (error) {
-    console.error('Detailed error:', error);
+    logger.error('Chat endpoint error:', { 
+      message: error.message,
+      code: error.code,
+      status: error.status,
+      type: error.type
+    });
     
     const openAIError = handleOpenAIError(error);
     res.status(openAIError.status).json({ 
       error: openAIError.message,
-      details: error.message 
+      details: error.message,
+      success: false,
+      code: error.code || 'unknown_error'
     });
   }
 });
@@ -801,6 +831,32 @@ app.use((err, req, res, next) => {
     path: req.path,
     timestamp: new Date().toISOString(),
     requestId: req.headers['x-request-id'] || req.headers['x-vercel-id'] || 'unknown'
+  });
+});
+
+// Add a specific API key test endpoint
+app.get('/api/check-openai-key', (req, res) => {
+  const apiKeyInfo = {
+    isConfigured: !!process.env.OPENAI_API_KEY,
+    envVars: {
+      NODE_ENV: process.env.NODE_ENV,
+      VERCEL_ENV: process.env.VERCEL_ENV,
+      // Check potential API key environment variable names
+      hasOPENAI_API_KEY: !!process.env.OPENAI_API_KEY,
+      hasOPENAI_KEY: !!process.env.OPENAI_KEY,
+      hasVERCEL_OPENAI_API_KEY: !!process.env.VERCEL_OPENAI_API_KEY
+    },
+    openaiClientInitialized: !!openai,
+    // Show first and last few characters of the key if it exists (for debugging)
+    keyPreview: process.env.OPENAI_API_KEY ? 
+      `${process.env.OPENAI_API_KEY.substring(0, 3)}...${process.env.OPENAI_API_KEY.substring(process.env.OPENAI_API_KEY.length - 3)}` : 
+      'not set'
+  };
+  
+  res.json({
+    status: apiKeyInfo.isConfigured ? 'ok' : 'missing',
+    message: apiKeyInfo.isConfigured ? 'OpenAI API key is configured' : 'OpenAI API key is not configured',
+    details: apiKeyInfo
   });
 });
 
