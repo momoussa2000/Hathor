@@ -30,24 +30,34 @@ const LandingPage = () => {
       </div>
       
       <button className="enter-portal-button" onClick={handleEnter}>
-        Enter Hathor's Portal
+        ✧ Enter the Sacred Chamber ✧
       </button>
 
       <div className="content">
-        <h1>Welcome to Hathor's Wisdom</h1>
-        <p className="subtitle">Your guide to ancient Egyptian beauty and wellness</p>
+        <h1>The Divine Sanctum of Hathor</h1>
+        <p className="subtitle">Ancient wisdom from the Golden Goddess of Healing Oils</p>
         
         <div className="portal-description">
-          <h2>Discover Your Inner Radiance</h2>
+          <h2>✧ Celestial Alchemy of the Ancients ✧</h2>
           <p>
-            Step into Hathor's Portal and unlock personalized beauty and wellness advice 
-            inspired by the timeless wisdom of ancient Egypt. Receive guidance on natural 
-            remedies, essential oil blends, and rituals tailored to your unique needs.
+            Step through this mystic threshold into the divine presence of Hathor—
+            Mistress of Fragrant Oils and Keeper of Sacred Healing Arts whose wisdom has been 
+            veiled from mortal eyes since the fall of the great temples.
           </p>
           <p>
-            Ask Hathor about your skin concerns, hair health, or overall well-being, 
-            and let her ancient knowledge illuminate your path to natural beauty.
+            Receive personalized sacred formulations—divine prescriptions 
+            channeled directly from the goddess herself. Each remedy carries 
+            the essence of celestial mysteries, potent oils measured with divine precision, 
+            and ceremonial rituals known only to the high priestesses of Her temple.
           </p>
+          <p>
+            Whisper your afflictions unto the Goddess, and by Her divine grace, you shall receive 
+            the exact alchemical formulas to restore balance to body, mind, and spirit. Where modern 
+            remedies falter, Hathor's ancient knowledge transcends time.
+          </p>
+          <div className="divine-signature">
+            ~ By the Sacred Sistrum and Divine Horns of Hathor ~
+          </div>
         </div>
       </div>
     </div>
