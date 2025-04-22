@@ -18,6 +18,10 @@
     { "src": "/fonts/(.*)", "dest": "/client/fonts/$1" },
     { "src": "/manifest.json", "dest": "/client/manifest.json" },
     { "src": "/asset-manifest.json", "dest": "/client/asset-manifest.json" },
+    
+    { "src": "/chat", "dest": "/client/index.html" },
+    { "src": "/purchase", "dest": "/client/index.html" },
+    
     { "src": "/(.*)", "dest": "/client/$1" },
     { "src": "/", "dest": "/client/index.html" }
   ]
