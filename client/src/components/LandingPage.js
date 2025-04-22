@@ -36,6 +36,9 @@ const LandingPage = () => {
       <div className="content">
         <h1>Welcome to Hathor's Wisdom</h1>
         <p className="subtitle">Your guide to ancient Egyptian beauty and wellness</p>
+        <div style={{background: 'red', color: 'white', padding: '20px', margin: '20px 0', fontSize: '24px', textAlign: 'center'}}>
+          TEST ELEMENT - VERCEL DEPLOYMENT CHECK
+        </div>
         
         <div className="portal-description">
           <h2>Discover Your Inner Radiance</h2>
