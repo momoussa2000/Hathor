@@ -37,20 +37,18 @@ const LandingPage = () => {
         <h1>Welcome to Hathor's Wisdom</h1>
         <p className="subtitle">Your guide to ancient Egyptian beauty and wellness</p>
         
-        <div className="subscription-info">
-          <h2>Divine Access</h2>
-          <p className="price">$9.99/month</p>
-          <ul className="benefits">
-            <li>Unlimited access to Hathor's wisdom</li>
-            <li>Personalized beauty and wellness guidance</li>
-            <li>Ancient Egyptian beauty rituals</li>
-            <li>Expert advice for your specific concerns</li>
-          </ul>
+        <div className="portal-description">
+          <h2>Discover Your Inner Radiance</h2>
+          <p>
+            Step into Hathor's Portal and unlock personalized beauty and wellness advice 
+            inspired by the timeless wisdom of ancient Egypt. Receive guidance on natural 
+            remedies, essential oil blends, and rituals tailored to your unique needs.
+          </p>
+          <p>
+            Ask Hathor about your skin concerns, hair health, or overall well-being, 
+            and let her ancient knowledge illuminate your path to natural beauty.
+          </p>
         </div>
-        
-        <p className="disclaimer">
-          * Subscription required to access Hathor's wisdom. Start your journey to ancient beauty secrets today.
-        </p>
       </div>
     </div>
   );
