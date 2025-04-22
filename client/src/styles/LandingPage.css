@@ -11,6 +11,19 @@
   overflow: hidden;
 }
 
+/* Add a subtle hieroglyphic background pattern */
+.landing-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%239C92AC' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+  opacity: 0.1;
+  z-index: 0;
+}
+
 .portal-container {
   position: relative;
   width: 300px;
@@ -82,6 +95,7 @@ h1 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
   text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  letter-spacing: 1px;
 }
 
 .subtitle {
@@ -89,6 +103,7 @@ h1 {
   font-size: 1.2rem;
   margin-bottom: 2rem;
   opacity: 0.9;
+  font-style: italic;
 }
 
 .subscription-info {
@@ -205,4 +220,62 @@ h1 {
   background: var(--secondary-color);
   transform: translateY(-2px);
   box-shadow: 0 0 30px rgba(212, 175, 55, 0.7);
+}
+
+.portal-description {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 2rem;
+  border-radius: 1rem;
+  margin: 2rem 0;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  position: relative;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.portal-description::before,
+.portal-description::after {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--primary-color);
+  opacity: 0.6;
+}
+
+.portal-description::before {
+  top: 10px;
+  left: 10px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.portal-description::after {
+  bottom: 10px;
+  right: 10px;
+  border-left: none;
+  border-top: none;
+}
+
+.portal-description h2 {
+  font-family: var(--heading-font);
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  letter-spacing: 2px;
+}
+
+.portal-description p {
+  margin-bottom: 1.2rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.divine-signature {
+  font-family: var(--heading-font);
+  text-align: center;
+  color: var(--primary-color);
+  font-style: italic;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  opacity: 0.8;
+  text-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
 } 
