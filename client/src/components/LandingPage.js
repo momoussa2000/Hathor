@@ -7,12 +7,26 @@ const LandingPage = () => {
 
   const handleEnter = () => {
     console.log('Enter button clicked, navigating to /chat');
+    // Force navigation to absolute path
+    window.location.href = '/chat';
+    // As a fallback, also try React Router navigation
     navigate('/chat');
   };
 
   return (
     <div className="landing-page">
-      <div className="portal-container" onClick={handleEnter}>
+      <div 
+        className="portal-container" 
+        onClick={handleEnter}
+        role="button"
+        tabIndex={0}
+        aria-label="Enter Hathor's chat portal"
+        onKeyPress={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            handleEnter();
+          }
+        }}
+      >
         <div className="portal-glow"></div>
         <div className="portal-ring"></div>
         <div className="portal-inner">
@@ -29,7 +43,12 @@ const LandingPage = () => {
         </div>
       </div>
       
-      <button className="enter-portal-button" onClick={handleEnter}>
+      <button 
+        className="enter-portal-button" 
+        onClick={handleEnter}
+        type="button"
+        aria-label="Enter the Sacred Chamber of Hathor"
+      >
         ✧ Enter the Sacred Chamber ✧
       </button>
 
