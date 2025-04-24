@@ -2,13 +2,7 @@
   "version": 2,
   "buildCommand": "cd client && npm install && npm run build",
   "outputDirectory": "client/build",
-  "framework": null,
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api" }
+    { "source": "/api/(.*)", "destination": "/api/index.js" }
   ]
 } 
