@@ -1,29 +1,14 @@
 {
   "version": 2,
-  "builds": [
-    { 
-      "src": "client/package.json", 
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build"
-      }
-    },
-    { "src": "server.js", "use": "@vercel/node" }
-  ],
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/server.js" },
-    { "src": "/static/(.*)", "dest": "/client/build/static/$1" },
-    { "src": "/assets/(.*)", "dest": "/client/build/assets/$1" },
-    { "src": "/images/(.*)", "dest": "/client/build/images/$1" },
-    { "src": "/fonts/(.*)", "dest": "/client/build/fonts/$1" },
-    { "src": "/manifest.json", "dest": "/client/build/manifest.json" },
-    { "src": "/asset-manifest.json", "dest": "/client/build/asset-manifest.json" },
-    { "src": "/favicon.ico", "dest": "/client/build/favicon.ico" },
-    
-    { "src": "/chat", "dest": "/client/build/index.html" },
-    { "src": "/purchase", "dest": "/client/build/index.html" },
-    
-    { "src": "/(.*)", "dest": "/client/build/$1" },
-    { "src": "/", "dest": "/client/build/index.html" }
+  "buildCommand": "cd client && npm install && npm run build",
+  "outputDirectory": "client/build",
+  "framework": null,
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api" }
   ]
 } 
