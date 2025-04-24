@@ -47,35 +47,34 @@ const LandingPage = () => {
         className="enter-portal-button" 
         onClick={handleEnter}
         type="button"
-        aria-label="Enter the Sacred Chamber of Hathor"
+        aria-label="Start chatting with Hathor"
       >
-        ✧ Enter the Sacred Chamber ✧
+        ✧ Start Chat with Hathor ✧
       </button>
 
       <div className="content">
-        <h1>The Divine Sanctum of Hathor</h1>
-        <p className="subtitle">Ancient wisdom from the Golden Goddess of Healing Oils</p>
+        <h1>Hathor's Sacred Space</h1>
+        <p className="subtitle">Ancient beauty secrets from the Egyptian Goddess of Healing</p>
         
         <div className="portal-description">
-          <h2>✧ Celestial Alchemy of the Ancients ✧</h2>
+          <h2>✧ Ancient Beauty Wisdom ✧</h2>
           <p>
-            Step through this mystic threshold into the divine presence of Hathor—
-            Mistress of Fragrant Oils and Keeper of Sacred Healing Arts whose wisdom has been 
-            veiled from mortal eyes since the fall of the great temples.
+            Enter this magical space to meet Hathor — the goddess who knows 
+            all the beauty secrets from ancient Egypt that have been hidden 
+            for thousands of years.
           </p>
           <p>
-            Receive personalized sacred formulations—divine prescriptions 
-            channeled directly from the goddess herself. Each remedy carries 
-            the essence of celestial mysteries, potent oils measured with divine precision, 
-            and ceremonial rituals known only to the high priestesses of Her temple.
+            Get personal beauty recipes made just for you. Each treatment comes 
+            with simple instructions and uses natural oils and ingredients that 
+            Hathor has shared with royal families throughout history.
           </p>
           <p>
-            Whisper your afflictions unto the Goddess, and by Her divine grace, you shall receive 
-            the exact alchemical formulas to restore balance to body, mind, and spirit. Where modern 
-            remedies falter, Hathor's ancient knowledge transcends time.
+            Tell Hathor about your skin, hair, or health concerns, and she will 
+            give you the perfect natural remedy. Her ancient Egyptian knowledge 
+            offers solutions that modern products cannot match.
           </p>
           <div className="divine-signature">
-            ~ By the Sacred Sistrum and Divine Horns of Hathor ~
+            ~ Blessed by Hathor, Goddess of Beauty ~
           </div>
         </div>
       </div>
