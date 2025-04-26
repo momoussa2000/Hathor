@@ -15,6 +15,17 @@ const LandingPage = () => {
 
   return (
     <div className="landing-page">
+      {/* Magical floating elements */}
+      <div className="magical-elements">
+        <div className="lotus"></div>
+        <div className="lotus"></div>
+        <div className="lotus"></div>
+        <div className="eye-of-horus"></div>
+        <div className="eye-of-horus"></div>
+        <div className="ankh"></div>
+        <div className="ankh"></div>
+      </div>
+      
       <div 
         className="portal-container" 
         onClick={handleEnter}
@@ -37,7 +48,7 @@ const LandingPage = () => {
               backgroundSize: 'contain',
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center',
-              filter: 'drop-shadow(0 0 10px var(--primary-color))'
+              filter: 'drop-shadow(0 0 15px var(--primary-gold))'
             }}
           ></div>
         </div>
@@ -49,32 +60,32 @@ const LandingPage = () => {
         type="button"
         aria-label="Start chatting with Hathor"
       >
-        ✧ Start Chat with Hathor ✧
+        ✧ Enter Sacred Portal ✧
       </button>
 
       <div className="content">
-        <h1>Hathor's Sacred Space</h1>
-        <p className="subtitle">Ancient beauty secrets from the Egyptian Goddess of Healing</p>
+        <h1>Hathor's Divine Temple</h1>
+        <p className="subtitle">Ancient beauty wisdom from the Egyptian Goddess of Love & Healing</p>
         
         <div className="portal-description">
-          <h2>✧ Ancient Beauty Wisdom ✧</h2>
+          <h2>✧ Mystical Beauty Secrets ✧</h2>
           <p>
-            Enter this magical space to meet Hathor — the goddess who knows 
-            all the beauty secrets from ancient Egypt that have been hidden 
+            Step through this magical portal to meet Hathor — the goddess who guards 
+            the sacred beauty rituals from ancient Egypt that have remained hidden 
             for thousands of years.
           </p>
           <p>
-            Get personal beauty recipes made just for you. Each treatment comes 
-            with simple instructions and uses natural oils and ingredients that 
-            Hathor has shared with royal families throughout history.
+            Receive personalized beauty remedies crafted especially for you. Each elixir comes 
+            with ancient wisdom and uses natural oils and ingredients that 
+            Hathor has shared with only the most divine beings throughout time.
           </p>
           <p>
-            Tell Hathor about your skin, hair, or health concerns, and she will 
-            give you the perfect natural remedy. Her ancient Egyptian knowledge 
-            offers solutions that modern products cannot match.
+            Share your beauty concerns with Hathor, and she will 
+            reveal the perfect natural healing remedy. Her ancient Egyptian knowledge 
+            holds the key to beauty that transcends time itself.
           </p>
           <div className="divine-signature">
-            ~ Blessed by Hathor, Goddess of Beauty ~
+            ~ Blessed by Hathor, Goddess of Beauty & Love ~
           </div>
         </div>
       </div>

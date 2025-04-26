@@ -1,17 +1,27 @@
+:root {
+  --primary-gold: #d4af37;
+  --deep-purple: #5c2751;
+  --mystical-blue: #234975;
+  --teal-accent: #1a9b9b;
+  --lotus-pink: #ff7eb6;
+  --papyrus: #f0e6c9;
+}
+
 .landing-page {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1a1a1a, #2d1a1a);
-  color: var(--primary-color);
+  background: linear-gradient(135deg, var(--mystical-blue), var(--deep-purple));
+  color: var(--papyrus);
   padding: 2rem;
   position: relative;
   overflow: hidden;
+  font-family: var(--body-font);
 }
 
-/* Add a subtle hieroglyphic background pattern */
+/* Egyptian pattern background */
 .landing-page::before {
   content: '';
   position: absolute;
@@ -19,39 +29,115 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%239C92AC' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
-  opacity: 0.1;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l15 15H15L30 0zm0 60l15-15H15L30 60zm15-30h15v15H45V30zm0-15h15v15H45V15zM15 30H0v15h15V30zm0-15H0v15h15V15z' fill='%23d4af37' fill-opacity='0.08' fill-rule='evenodd'/%3E%3C/svg%3E");
+  opacity: 0.15;
   z-index: 0;
 }
 
+/* Magical floating elements */
+.magical-elements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.lotus {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,20c0,0-25,25-25,40c0,15,25,15,25,15s25,0,25-15C75,45,50,20,50,20z' fill='%23ff7eb6' stroke='%23d4af37' stroke-width='2'/%3E%3Ccircle cx='50' cy='60' r='10' fill='%23d4af37'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  animation: float 15s infinite linear;
+  opacity: 0.8;
+}
+
+.eye-of-horus {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M20,50c0,0,15-20,30-20c15,0,30,20,30,20s-15,20-30,20C35,70,20,50,20,50z' fill='none' stroke='%23d4af37' stroke-width='3'/%3E%3Ccircle cx='50' cy='50' r='10' fill='%23d4af37'/%3E%3Cpath d='M70,50h20M60,60l10,10M60,40l10-10M10,50h20M40,60l-10,10M40,40l-10-10' stroke='%23d4af37' stroke-width='3'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  animation: float 20s infinite linear;
+  opacity: 0.7;
+}
+
+.ankh {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,20v50M35,30c0-8,7-15,15-15s15,7,15,15s-7,15-15,15' stroke='%231a9b9b' stroke-width='5' fill='none'/%3E%3Cpath d='M30,45h40' stroke='%231a9b9b' stroke-width='5'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  animation: float 18s infinite linear;
+  opacity: 0.6;
+}
+
+/* Place multiple elements */
+.lotus:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+.lotus:nth-child(2) { top: 70%; left: 80%; animation-delay: -5s; }
+.lotus:nth-child(3) { top: 40%; left: 85%; animation-delay: -10s; }
+.eye-of-horus:nth-child(4) { top: 20%; left: 80%; animation-delay: -3s; }
+.eye-of-horus:nth-child(5) { top: 75%; left: 15%; animation-delay: -8s; }
+.ankh:nth-child(6) { top: 15%; left: 40%; animation-delay: -12s; }
+.ankh:nth-child(7) { top: 60%; left: 30%; animation-delay: -7s; }
+
 .portal-container {
   position: relative;
-  width: 300px;
-  height: 300px;
+  width: 320px;
+  height: 320px;
   margin: 2rem 0;
   cursor: pointer;
   z-index: 2;
   pointer-events: auto;
+  transition: transform 0.5s ease;
+}
+
+.portal-container:hover {
+  transform: scale(1.05);
 }
 
 .portal-glow {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.4) 0%, rgba(139, 69, 19, 0.2) 70%);
+  background: radial-gradient(
+    circle, 
+    rgba(255, 126, 182, 0.4) 0%, 
+    rgba(26, 155, 155, 0.3) 50%, 
+    rgba(35, 73, 117, 0.2) 70%
+  );
   border-radius: 50%;
-  animation: pulse 3s infinite;
-  box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+  animation: pulse 4s infinite;
+  box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
 }
 
 .portal-ring {
   position: absolute;
   width: 100%;
   height: 100%;
-  border: 4px solid var(--primary-color);
+  border: 6px solid var(--primary-gold);
   border-radius: 50%;
   animation: rotate 20s linear infinite;
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
+}
+
+.portal-ring::before {
+  content: '';
+  position: absolute;
+  width: 110%;
+  height: 110%;
+  top: -5%;
+  left: -5%;
+  border: 3px dashed var(--teal-accent);
+  border-radius: 50%;
+  animation: rotate-reverse 15s linear infinite;
 }
 
 .portal-inner {
@@ -60,51 +146,89 @@
   height: 90%;
   top: 5%;
   left: 5%;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, rgba(139, 69, 19, 0.1) 70%);
+  background: radial-gradient(
+    circle, 
+    rgba(240, 230, 201, 0.3) 0%, 
+    rgba(212, 175, 55, 0.2) 40%, 
+    rgba(92, 39, 81, 0.1) 70%
+  );
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+}
+
+.portal-inner::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(
+      circle at 30% 30%, 
+      rgba(255, 126, 182, 0.4) 0%, 
+      transparent 20%
+    ),
+    radial-gradient(
+      circle at 70% 70%, 
+      rgba(26, 155, 155, 0.4) 0%, 
+      transparent 20%
+    );
+  animation: shimmer 8s infinite linear;
 }
 
 .hathor-silhouette {
   width: 80%;
   height: 80%;
-  background-image: url('../images/hathor-logo-01.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  filter: drop-shadow(0 0 10px var(--primary-color));
-}
-
-/* Dark mode logo */
-@media (prefers-color-scheme: dark) {
-  .hathor-silhouette {
-    background-image: url('../images/hathor-logo-02.png');
-    filter: drop-shadow(0 0 10px var(--primary-color));
-  }
+  filter: drop-shadow(0 0 15px var(--primary-gold));
+  z-index: 2;
+  position: relative;
 }
 
 .content {
   text-align: center;
-  max-width: 600px;
+  max-width: 700px;
   z-index: 1;
+  position: relative;
 }
 
 h1 {
   font-family: var(--heading-font);
-  font-size: 2.5rem;
+  font-size: 3rem;
   margin-bottom: 1rem;
-  text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-  letter-spacing: 1px;
+  background: linear-gradient(to right, var(--primary-gold), var(--lotus-pink), var(--teal-accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+  letter-spacing: 2px;
+  position: relative;
+}
+
+h1::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 3px;
+  background: linear-gradient(to right, var(--primary-gold), var(--lotus-pink), var(--teal-accent));
+  border-radius: 3px;
 }
 
 .subtitle {
   font-family: var(--body-font);
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   margin-bottom: 2rem;
   opacity: 0.9;
   font-style: italic;
+  color: var(--papyrus);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .subscription-info {
@@ -112,13 +236,13 @@ h1 {
   padding: 2rem;
   border-radius: 1rem;
   margin: 2rem 0;
-  border: 1px solid var(--primary-color);
+  border: 1px solid var(--primary-gold);
 }
 
 .price {
   font-family: var(--heading-font);
   font-size: 2rem;
-  color: var(--primary-color);
+  color: var(--primary-gold);
   margin: 1rem 0;
 }
 
@@ -140,35 +264,101 @@ h1 {
   content: '✦';
   position: absolute;
   left: 0;
-  color: var(--primary-color);
+  color: var(--primary-gold);
 }
 
-.enter-portal {
-  background: var(--primary-color);
+.enter-portal-button {
+  background: linear-gradient(45deg, var(--primary-gold), var(--teal-accent));
   color: #1a1a1a;
   border: none;
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
+  padding: 1.2rem 2.5rem;
+  font-size: 1.3rem;
   font-family: var(--heading-font);
-  border-radius: 0.5rem;
+  border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
   margin: 2rem 0;
   text-transform: uppercase;
   letter-spacing: 2px;
-}
-
-.enter-portal:hover {
-  background: var(--secondary-color);
-  transform: translateY(-2px);
   box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+  position: relative;
+  z-index: 10;
+  pointer-events: auto;
+  overflow: hidden;
 }
 
-.disclaimer {
-  font-size: 0.8rem;
-  opacity: 0.7;
-  max-width: 400px;
-  margin: 0 auto;
+.enter-portal-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: 0.5s;
+}
+
+.enter-portal-button:hover::before {
+  left: 100%;
+}
+
+.enter-portal-button:hover {
+  background: linear-gradient(45deg, var(--teal-accent), var(--primary-gold));
+  transform: translateY(-3px);
+  box-shadow: 0 0 30px rgba(26, 155, 155, 0.7);
+}
+
+.portal-description {
+  background: rgba(35, 73, 117, 0.4);
+  backdrop-filter: blur(5px);
+  padding: 2.5rem;
+  border-radius: 1.5rem;
+  margin: 2.5rem 0;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  position: relative;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.portal-description::before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background: radial-gradient(circle at center, transparent 0%, rgba(26, 155, 155, 0.1) 100%);
+  animation: rotate 30s linear infinite;
+  pointer-events: none;
+}
+
+.portal-description h2 {
+  font-family: var(--heading-font);
+  color: var(--primary-gold);
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  letter-spacing: 2px;
+}
+
+.portal-description p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 1.2rem;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.divine-signature {
+  font-family: var(--heading-font);
+  color: var(--lotus-pink);
+  font-style: italic;
+  margin-top: 2rem;
+  opacity: 0.9;
+  font-size: 1.1rem;
+  text-shadow: 0 0 10px rgba(255, 126, 182, 0.5);
+  letter-spacing: 1px;
 }
 
 @keyframes pulse {
@@ -182,104 +372,46 @@ h1 {
   to { transform: rotate(360deg); }
 }
 
+@keyframes rotate-reverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes shimmer {
+  0% { opacity: 0.5; transform: scale(0.95); }
+  25% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.95); }
+  75% { opacity: 0.8; transform: scale(1); }
+  100% { opacity: 0.5; transform: scale(0.95); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+  25% { transform: translateY(-15px) rotate(90deg); opacity: 0.8; }
+  50% { transform: translateY(0) rotate(180deg); opacity: 0.6; }
+  75% { transform: translateY(15px) rotate(270deg); opacity: 0.8; }
+  100% { transform: translateY(0) rotate(360deg); opacity: 0.6; }
+}
+
 @media (max-width: 768px) {
   .portal-container {
-    width: 200px;
-    height: 200px;
+    width: 250px;
+    height: 250px;
   }
 
   h1 {
-    font-size: 2rem;
+    font-size: 2.2rem;
   }
 
   .subtitle {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 
-  .subscription-info {
-    padding: 1rem;
+  .portal-description {
+    padding: 1.5rem;
   }
-}
-
-.enter-portal-button {
-  background: var(--primary-color);
-  color: #1a1a1a;
-  border: none;
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
-  font-family: var(--heading-font);
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin: 2rem 0;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
-  position: relative;
-  z-index: 10;
-  pointer-events: auto;
-}
-
-.enter-portal-button:hover {
-  background: var(--secondary-color);
-  transform: translateY(-2px);
-  box-shadow: 0 0 30px rgba(212, 175, 55, 0.7);
-}
-
-.portal-description {
-  background: rgba(0, 0, 0, 0.4);
-  padding: 2rem;
-  border-radius: 1rem;
-  margin: 2rem 0;
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  position: relative;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-}
-
-.portal-description::before,
-.portal-description::after {
-  content: '';
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  border: 2px solid var(--primary-color);
-  opacity: 0.6;
-}
-
-.portal-description::before {
-  top: 10px;
-  left: 10px;
-  border-right: none;
-  border-bottom: none;
-}
-
-.portal-description::after {
-  bottom: 10px;
-  right: 10px;
-  border-left: none;
-  border-top: none;
-}
-
-.portal-description h2 {
-  font-family: var(--heading-font);
-  color: var(--primary-color);
-  margin-bottom: 1.5rem;
-  letter-spacing: 2px;
-}
-
-.portal-description p {
-  margin-bottom: 1.2rem;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.divine-signature {
-  font-family: var(--heading-font);
-  text-align: center;
-  color: var(--primary-color);
-  font-style: italic;
-  margin-top: 2rem;
-  font-size: 1.1rem;
-  opacity: 0.8;
-  text-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+  
+  .magical-elements {
+    display: none;
+  }
 } 
