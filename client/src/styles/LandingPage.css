@@ -12,22 +12,24 @@
 
 .landing-page {
   min-height: 100vh;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--night-bg);
+  background: var(--night-bg); /* Fallback background */
   color: var(--papyrus);
   padding: 2rem;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
   font-family: var(--body-font);
+  box-sizing: border-box; /* Include padding in width calculation */
 }
 
 /* Blue lily background effect */
 .landing-page::before {
   content: '';
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -35,12 +37,16 @@
   background: 
     linear-gradient(
       to bottom,
-      rgba(15, 23, 42, 0.85) 0%,
-      rgba(15, 23, 42, 0.6) 100%
+      rgba(15, 23, 42, 0.75) 0%,
+      rgba(15, 23, 42, 0.5) 100%
     ),
-    url('https://the-public-domain-review.imgix.net/collections/plates-from-robert-thornton-s-temple-of-flora-1807/8166830125_8f6a979392_o.jpg?auto=format,compress') center/cover no-repeat;
+    url('https://the-public-domain-review.imgix.net/collections/plates-from-robert-thornton-s-temple-of-flora-1807/8166830125_8f6a979392_o.jpg?auto=format,compress') center/cover fixed no-repeat;
   z-index: 0;
-  opacity: 0.9;
+  opacity: 1;
+  background-size: cover;
+  background-position: center center;
+  width: 100vw;
+  height: 100vh;
 }
 
 /* Magical floating elements */
@@ -432,23 +438,36 @@ h1::after {
 }
 
 @media (max-width: 768px) {
+  .landing-page {
+    padding: 1rem;
+  }
+  
+  /* Make sure the background image looks good on mobile */
+  .landing-page::before {
+    background-position: 65% center; /* Adjust positioning to better show the flower on mobile */
+  }
+  
+  /* Make the portal smaller on mobile */
   .portal-container {
-    width: 250px;
-    height: 250px;
+    width: 220px;
+    height: 220px;
+    margin: 1.5rem 0;
   }
 
+  /* Adjust font sizes for mobile */
   h1 {
-    font-size: 2.2rem;
+    font-size: 2rem;
   }
 
   .subtitle {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   .portal-description {
     padding: 1.5rem;
   }
   
+  /* Hide some magical elements on small screens for better performance */
   .magical-elements {
     display: none;
   }
