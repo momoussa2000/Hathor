@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hathor App Debug Page</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 { color: #333; }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 20px;
+      background: #f9f9f9;
+    }
+    button {
+      background: #4a69bd;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-right: 8px;
+    }
+    button:hover { background: #3867d6; }
+    pre {
+      background: #f1f1f1;
+      padding: 10px;
+      border-radius: 4px;
+      overflow: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Hathor App Debug Page</h1>
+  
+  <div class="card">
+    <h2>Browser Info</h2>
+    <div id="browser-info"></div>
+  </div>
+  
+  <div class="card">
+    <h2>API Health Check</h2>
+    <button onclick="checkHealth()">Check API Health</button>
+    <button onclick="getDebugInfo()">Get Debug Info</button>
+    <button onclick="getVercelDebug()">Get Vercel Debug Info</button>
+    <div id="health-result"></div>
+  </div>
+  
+  <div class="card">
+    <h2>Test API Request</h2>
+    <button onclick="testChat()">Test Chat Endpoint</button>
+    <div id="test-result"></div>
+  </div>
+
+  <script>
+    // Show browser info
+    document.getElementById('browser-info').innerHTML = `
+      <pre>
+User Agent: ${navigator.userAgent}
+Screen Size: ${window.innerWidth}x${window.innerHeight}
+URL: ${window.location.href}
+Protocol: ${window.location.protocol}
+Host: ${window.location.host}
+      </pre>
+    `;
+    
+    // API Health Check
+    async function checkHealth() {
+      const healthDiv = document.getElementById('health-result');
+      healthDiv.innerHTML = 'Checking API health...';
+      
+      try {
+        const response = await fetch('/api/health');
+        const data = await response.json();
+        
+        healthDiv.innerHTML = `
+          <p>Status: ${response.status}</p>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        `;
+      } catch (err) {
+        healthDiv.innerHTML = `
+          <p>Error: ${err.message}</p>
+        `;
+      }
+    }
+    
+    // Debug info
+    async function getDebugInfo() {
+      const healthDiv = document.getElementById('health-result');
+      healthDiv.innerHTML = 'Getting debug info...';
+      
+      try {
+        const response = await fetch('/api/debug');
+        const data = await response.json();
+        
+        healthDiv.innerHTML = `
+          <p>Status: ${response.status}</p>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        `;
+      } catch (err) {
+        healthDiv.innerHTML = `
+          <p>Error: ${err.message}</p>
+        `;
+      }
+    }
+    
+    // Vercel debug info
+    async function getVercelDebug() {
+      const healthDiv = document.getElementById('health-result');
+      healthDiv.innerHTML = 'Getting Vercel debug info...';
+      
+      try {
+        const response = await fetch('/api/vercel-debug');
+        const data = await response.json();
+        
+        healthDiv.innerHTML = `
+          <p>Status: ${response.status}</p>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        `;
+      } catch (err) {
+        healthDiv.innerHTML = `
+          <p>Error: ${err.message}</p>
+        `;
+      }
+    }
+    
+    // Test chat API
+    async function testChat() {
+      const testDiv = document.getElementById('test-result');
+      testDiv.innerHTML = 'Testing chat API...';
+      
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: 'This is a test message'
+          })
+        });
+        
+        const data = await response.json();
+        
+        testDiv.innerHTML = `
+          <p>Status: ${response.status}</p>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        `;
+      } catch (err) {
+        testDiv.innerHTML = `
+          <p>Error: ${err.message}</p>
+        `;
+      }
+    }
+  </script>
+</body>
+</html> 

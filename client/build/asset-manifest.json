@@ -1,16 +1,14 @@
 {
   "files": {
-    "main.css": "./static/css/main.69df5307.css",
-    "main.js": "./static/js/main.7881e550.js",
+    "main.css": "./static/css/main.d2c78c45.css",
+    "main.js": "./static/js/main.7189d45a.js",
     "static/js/206.b649609d.chunk.js": "./static/js/206.b649609d.chunk.js",
-    "static/media/hathor-logo-02.png": "./static/media/hathor-logo-02.9de112badf5f5379a081.png",
     "static/media/POORICH.TTF": "./static/media/POORICH.0c9803a1c930981d6c99.TTF",
     "static/media/Caslons Egyptian Regular.otf": "./static/media/Caslons Egyptian Regular.b33a74bc69ffbe2d782e.otf",
-    "static/media/hathor-logo-01.png": "./static/media/hathor-logo-01.7ece5f12c3702d09cc35.png",
     "index.html": "./index.html"
   },
   "entrypoints": [
-    "static/css/main.69df5307.css",
-    "static/js/main.7881e550.js"
+    "static/css/main.d2c78c45.css",
+    "static/js/main.7189d45a.js"
   ]
 }
