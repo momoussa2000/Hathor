@@ -15,6 +15,9 @@ const LandingPage = () => {
 
   return (
     <div className="landing-page">
+      {/* Water ripple effect */}
+      <div className="water-ripple"></div>
+      
       {/* Magical floating elements */}
       <div className="magical-elements">
         <div className="lotus"></div>
@@ -48,7 +51,7 @@ const LandingPage = () => {
               backgroundSize: 'contain',
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center',
-              filter: 'drop-shadow(0 0 15px var(--primary-gold))'
+              filter: 'drop-shadow(0 0 15px var(--lily-gold))'
             }}
           ></div>
         </div>
@@ -60,32 +63,32 @@ const LandingPage = () => {
         type="button"
         aria-label="Start chatting with Hathor"
       >
-        ✧ Enter Sacred Portal ✧
+        ✧ Enter Sacred Waters ✧
       </button>
 
       <div className="content">
-        <h1>Hathor's Divine Temple</h1>
-        <p className="subtitle">Ancient beauty wisdom from the Egyptian Goddess of Love & Healing</p>
+        <h1>The Blue Lily of Hathor</h1>
+        <p className="subtitle">Sacred wisdom from the Egyptian Goddess of Beauty & Renewal</p>
         
         <div className="portal-description">
-          <h2>✧ Mystical Beauty Secrets ✧</h2>
+          <h2>✧ Waters of Eternal Beauty ✧</h2>
           <p>
-            Step through this magical portal to meet Hathor — the goddess who guards 
-            the sacred beauty rituals from ancient Egypt that have remained hidden 
-            for thousands of years.
+            Step into the sacred waters where the blue Egyptian water lily blooms — 
+            where Hathor, goddess of beauty, awaits to share ancient secrets 
+            preserved through millennia.
           </p>
           <p>
-            Receive personalized beauty remedies crafted especially for you. Each elixir comes 
-            with ancient wisdom and uses natural oils and ingredients that 
-            Hathor has shared with only the most divine beings throughout time.
+            Like the water lily that opens with the morning sun, receive personalized beauty wisdom 
+            crafted especially for you. Each remedy harnesses the power of natural oils and essences 
+            that Hathor has blessed throughout the ages.
           </p>
           <p>
-            Share your beauty concerns with Hathor, and she will 
-            reveal the perfect natural healing remedy. Her ancient Egyptian knowledge 
-            holds the key to beauty that transcends time itself.
+            Share your beauty concerns with Hathor, and watch as she transforms them 
+            with the rejuvenating power of the blue lotus. Her divine knowledge flows 
+            like the Nile itself, bringing life and beauty to all who seek it.
           </p>
           <div className="divine-signature">
-            ~ Blessed by Hathor, Goddess of Beauty & Love ~
+            ~ Blessed by Hathor, Goddess of the Sacred Blue Lotus ~
           </div>
         </div>
       </div>

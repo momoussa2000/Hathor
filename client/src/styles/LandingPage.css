@@ -1,10 +1,13 @@
 :root {
-  --primary-gold: #d4af37;
-  --deep-purple: #5c2751;
-  --mystical-blue: #234975;
-  --teal-accent: #1a9b9b;
-  --lotus-pink: #ff7eb6;
-  --papyrus: #f0e6c9;
+  --lily-blue: #3a5683;
+  --lily-deep-blue: #1b355e;
+  --lily-light-blue: #91b3d9;
+  --lily-petal: #aec9e8;
+  --water-teal: #2a5c6b;
+  --lily-gold: #d8b056;
+  --lily-pink: #d4879c;
+  --night-bg: #0f172a;
+  --papyrus: #f4e9d0;
 }
 
 .landing-page {
@@ -13,7 +16,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--mystical-blue), var(--deep-purple));
+  background: var(--night-bg);
   color: var(--papyrus);
   padding: 2rem;
   position: relative;
@@ -21,7 +24,7 @@
   font-family: var(--body-font);
 }
 
-/* Egyptian pattern background */
+/* Blue lily background effect */
 .landing-page::before {
   content: '';
   position: absolute;
@@ -29,9 +32,15 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l15 15H15L30 0zm0 60l15-15H15L30 60zm15-30h15v15H45V30zm0-15h15v15H45V15zM15 30H0v15h15V30zm0-15H0v15h15V15z' fill='%23d4af37' fill-opacity='0.08' fill-rule='evenodd'/%3E%3C/svg%3E");
-  opacity: 0.15;
+  background: 
+    linear-gradient(
+      to bottom,
+      rgba(15, 23, 42, 0.85) 0%,
+      rgba(15, 23, 42, 0.6) 100%
+    ),
+    url('https://the-public-domain-review.imgix.net/collections/plates-from-robert-thornton-s-temple-of-flora-1807/8166830125_8f6a979392_o.jpg?auto=format,compress') center/cover no-repeat;
   z-index: 0;
+  opacity: 0.9;
 }
 
 /* Magical floating elements */
@@ -50,33 +59,33 @@
   position: absolute;
   width: 80px;
   height: 80px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,20c0,0-25,25-25,40c0,15,25,15,25,15s25,0,25-15C75,45,50,20,50,20z' fill='%23ff7eb6' stroke='%23d4af37' stroke-width='2'/%3E%3Ccircle cx='50' cy='60' r='10' fill='%23d4af37'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,20c0,0-25,25-25,40c0,15,25,15,25,15s25,0,25-15C75,45,50,20,50,20z' fill='%23aec9e8' stroke='%23d8b056' stroke-width='2'/%3E%3Ccircle cx='50' cy='60' r='10' fill='%23d8b056'/%3E%3C/svg%3E");
   background-size: contain;
   background-repeat: no-repeat;
   animation: float 15s infinite linear;
-  opacity: 0.8;
+  opacity: 0.7;
 }
 
 .eye-of-horus {
   position: absolute;
   width: 60px;
   height: 60px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M20,50c0,0,15-20,30-20c15,0,30,20,30,20s-15,20-30,20C35,70,20,50,20,50z' fill='none' stroke='%23d4af37' stroke-width='3'/%3E%3Ccircle cx='50' cy='50' r='10' fill='%23d4af37'/%3E%3Cpath d='M70,50h20M60,60l10,10M60,40l10-10M10,50h20M40,60l-10,10M40,40l-10-10' stroke='%23d4af37' stroke-width='3'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M20,50c0,0,15-20,30-20c15,0,30,20,30,20s-15,20-30,20C35,70,20,50,20,50z' fill='none' stroke='%23d8b056' stroke-width='3'/%3E%3Ccircle cx='50' cy='50' r='10' fill='%23d8b056'/%3E%3Cpath d='M70,50h20M60,60l10,10M60,40l10-10M10,50h20M40,60l-10,10M40,40l-10-10' stroke='%23d8b056' stroke-width='3'/%3E%3C/svg%3E");
   background-size: contain;
   background-repeat: no-repeat;
   animation: float 20s infinite linear;
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
 .ankh {
   position: absolute;
   width: 50px;
   height: 50px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,20v50M35,30c0-8,7-15,15-15s15,7,15,15s-7,15-15,15' stroke='%231a9b9b' stroke-width='5' fill='none'/%3E%3Cpath d='M30,45h40' stroke='%231a9b9b' stroke-width='5'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,20v50M35,30c0-8,7-15,15-15s15,7,15,15s-7,15-15,15' stroke='%232a5c6b' stroke-width='5' fill='none'/%3E%3Cpath d='M30,45h40' stroke='%232a5c6b' stroke-width='5'/%3E%3C/svg%3E");
   background-size: contain;
   background-repeat: no-repeat;
   animation: float 18s infinite linear;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 /* Place multiple elements */
@@ -87,6 +96,29 @@
 .eye-of-horus:nth-child(5) { top: 75%; left: 15%; animation-delay: -8s; }
 .ankh:nth-child(6) { top: 15%; left: 40%; animation-delay: -12s; }
 .ankh:nth-child(7) { top: 60%; left: 30%; animation-delay: -7s; }
+
+/* Water ripple effect */
+.water-ripple {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(
+      circle at 30% 70%, 
+      rgba(174, 201, 232, 0.05) 0%, 
+      rgba(15, 23, 42, 0) 50%
+    ),
+    radial-gradient(
+      circle at 70% 30%, 
+      rgba(174, 201, 232, 0.05) 0%, 
+      rgba(15, 23, 42, 0) 50%
+    );
+  animation: ripple 15s infinite linear;
+  opacity: 0.8;
+  z-index: 0;
+}
 
 .portal-container {
   position: relative;
@@ -109,23 +141,23 @@
   height: 100%;
   background: radial-gradient(
     circle, 
-    rgba(255, 126, 182, 0.4) 0%, 
-    rgba(26, 155, 155, 0.3) 50%, 
-    rgba(35, 73, 117, 0.2) 70%
+    rgba(174, 201, 232, 0.4) 0%, 
+    rgba(42, 92, 107, 0.3) 50%, 
+    rgba(27, 53, 94, 0.2) 70%
   );
   border-radius: 50%;
   animation: pulse 4s infinite;
-  box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 0 40px rgba(174, 201, 232, 0.3);
 }
 
 .portal-ring {
   position: absolute;
   width: 100%;
   height: 100%;
-  border: 6px solid var(--primary-gold);
+  border: 6px solid var(--lily-gold);
   border-radius: 50%;
   animation: rotate 20s linear infinite;
-  box-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
+  box-shadow: 0 0 30px rgba(216, 176, 86, 0.4);
 }
 
 .portal-ring::before {
@@ -135,7 +167,7 @@
   height: 110%;
   top: -5%;
   left: -5%;
-  border: 3px dashed var(--teal-accent);
+  border: 3px dashed var(--lily-blue);
   border-radius: 50%;
   animation: rotate-reverse 15s linear infinite;
 }
@@ -148,9 +180,9 @@
   left: 5%;
   background: radial-gradient(
     circle, 
-    rgba(240, 230, 201, 0.3) 0%, 
-    rgba(212, 175, 55, 0.2) 40%, 
-    rgba(92, 39, 81, 0.1) 70%
+    rgba(174, 201, 232, 0.3) 0%, 
+    rgba(58, 86, 131, 0.2) 40%, 
+    rgba(15, 23, 42, 0.1) 70%
   );
   border-radius: 50%;
   display: flex;
@@ -167,12 +199,12 @@
   background: 
     radial-gradient(
       circle at 30% 30%, 
-      rgba(255, 126, 182, 0.4) 0%, 
+      rgba(174, 201, 232, 0.4) 0%, 
       transparent 20%
     ),
     radial-gradient(
       circle at 70% 70%, 
-      rgba(26, 155, 155, 0.4) 0%, 
+      rgba(42, 92, 107, 0.4) 0%, 
       transparent 20%
     );
   animation: shimmer 8s infinite linear;
@@ -184,7 +216,7 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  filter: drop-shadow(0 0 15px var(--primary-gold));
+  filter: drop-shadow(0 0 15px var(--lily-gold));
   z-index: 2;
   position: relative;
 }
@@ -200,11 +232,11 @@ h1 {
   font-family: var(--heading-font);
   font-size: 3rem;
   margin-bottom: 1rem;
-  background: linear-gradient(to right, var(--primary-gold), var(--lotus-pink), var(--teal-accent));
+  background: linear-gradient(to right, var(--lily-gold), var(--lily-petal), var(--lily-light-blue));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+  text-shadow: 0 0 15px rgba(174, 201, 232, 0.5);
   letter-spacing: 2px;
   position: relative;
 }
@@ -217,7 +249,7 @@ h1::after {
   transform: translateX(-50%);
   width: 150px;
   height: 3px;
-  background: linear-gradient(to right, var(--primary-gold), var(--lotus-pink), var(--teal-accent));
+  background: linear-gradient(to right, var(--lily-gold), var(--lily-petal), var(--lily-light-blue));
   border-radius: 3px;
 }
 
@@ -227,8 +259,8 @@ h1::after {
   margin-bottom: 2rem;
   opacity: 0.9;
   font-style: italic;
-  color: var(--papyrus);
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  color: var(--lily-petal);
+  text-shadow: 0 0 10px rgba(15, 23, 42, 0.5);
 }
 
 .subscription-info {
@@ -268,8 +300,8 @@ h1::after {
 }
 
 .enter-portal-button {
-  background: linear-gradient(45deg, var(--primary-gold), var(--teal-accent));
-  color: #1a1a1a;
+  background: linear-gradient(45deg, var(--lily-gold), var(--water-teal));
+  color: var(--night-bg);
   border: none;
   padding: 1.2rem 2.5rem;
   font-size: 1.3rem;
@@ -280,7 +312,7 @@ h1::after {
   margin: 2rem 0;
   text-transform: uppercase;
   letter-spacing: 2px;
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+  box-shadow: 0 0 20px rgba(42, 92, 107, 0.5);
   position: relative;
   z-index: 10;
   pointer-events: auto;
@@ -294,7 +326,7 @@ h1::after {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(174, 201, 232, 0.3), transparent);
   transition: 0.5s;
 }
 
@@ -303,20 +335,20 @@ h1::after {
 }
 
 .enter-portal-button:hover {
-  background: linear-gradient(45deg, var(--teal-accent), var(--primary-gold));
+  background: linear-gradient(45deg, var(--water-teal), var(--lily-gold));
   transform: translateY(-3px);
-  box-shadow: 0 0 30px rgba(26, 155, 155, 0.7);
+  box-shadow: 0 0 30px rgba(174, 201, 232, 0.7);
 }
 
 .portal-description {
-  background: rgba(35, 73, 117, 0.4);
+  background: rgba(27, 53, 94, 0.4);
   backdrop-filter: blur(5px);
   padding: 2.5rem;
   border-radius: 1.5rem;
   margin: 2.5rem 0;
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  border: 1px solid rgba(174, 201, 232, 0.3);
   position: relative;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 30px rgba(15, 23, 42, 0.4);
   overflow: hidden;
 }
 
@@ -327,17 +359,17 @@ h1::after {
   height: 200%;
   top: -50%;
   left: -50%;
-  background: radial-gradient(circle at center, transparent 0%, rgba(26, 155, 155, 0.1) 100%);
+  background: radial-gradient(circle at center, transparent 0%, rgba(42, 92, 107, 0.1) 100%);
   animation: rotate 30s linear infinite;
   pointer-events: none;
 }
 
 .portal-description h2 {
   font-family: var(--heading-font);
-  color: var(--primary-gold);
+  color: var(--lily-gold);
   font-size: 1.8rem;
   margin-bottom: 1.5rem;
-  text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  text-shadow: 0 0 10px rgba(216, 176, 86, 0.5);
   letter-spacing: 2px;
 }
 
@@ -347,17 +379,17 @@ h1::after {
   margin-bottom: 1.2rem;
   position: relative;
   z-index: 1;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 0 10px rgba(15, 23, 42, 0.5);
 }
 
 .divine-signature {
   font-family: var(--heading-font);
-  color: var(--lotus-pink);
+  color: var(--lily-petal);
   font-style: italic;
   margin-top: 2rem;
   opacity: 0.9;
   font-size: 1.1rem;
-  text-shadow: 0 0 10px rgba(255, 126, 182, 0.5);
+  text-shadow: 0 0 10px rgba(174, 201, 232, 0.5);
   letter-spacing: 1px;
 }
 
@@ -391,6 +423,12 @@ h1::after {
   50% { transform: translateY(0) rotate(180deg); opacity: 0.6; }
   75% { transform: translateY(15px) rotate(270deg); opacity: 0.8; }
   100% { transform: translateY(0) rotate(360deg); opacity: 0.6; }
+}
+
+@keyframes ripple {
+  0% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.2); opacity: 0.5; }
+  100% { transform: scale(1); opacity: 0.3; }
 }
 
 @media (max-width: 768px) {
