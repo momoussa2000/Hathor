@@ -31,28 +31,30 @@ body {
   --lily-pink: #d4879c;
   --night-bg: #0f172a;
   --papyrus: #f4e9d0;
+  --clean-bg: #ffffff;
+  --header-color: #d8b056;
 }
 
 .landing-page {
   min-height: 100vh;
-  width: 100vw; /* Changed to 100vw to ensure full viewport width */
+  width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--night-bg); /* Fallback background */
-  color: var(--papyrus);
-  padding: 0; /* Remove all padding */
+  background: var(--clean-bg); /* Changed to white for cleaner look */
+  color: var(--lily-deep-blue); /* Darker blue for better contrast on white */
+  padding: 0;
   position: relative;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-x: hidden;
   font-family: var(--body-font);
-  box-sizing: border-box; /* Include padding in width calculation */
-  margin: 0; /* Ensure no margins */
+  box-sizing: border-box;
+  margin: 0;
   left: 0;
   right: 0;
 }
 
-/* Blue lily background effect */
+/* Background with subtle pattern instead of gradient */
 .landing-page::before {
   content: '';
   position: fixed;
@@ -61,21 +63,16 @@ body {
   right: 0;
   bottom: 0;
   background: 
-    linear-gradient(
-      to bottom,
-      rgba(15, 23, 42, 0.75) 0%,
-      rgba(15, 23, 42, 0.5) 100%
-    ),
     url('https://the-public-domain-review.imgix.net/collections/plates-from-robert-thornton-s-temple-of-flora-1807/8166830125_8f6a979392_o.jpg?auto=format,compress') center/cover fixed no-repeat;
   z-index: 0;
-  opacity: 1;
+  opacity: 0.15; /* Lighter opacity for subtlety */
   background-size: cover;
   background-position: center center;
-  width: 100vw; /* Using 100vw here to ensure full viewport width */
+  width: 100vw;
   height: 100vh;
-  transform: translateZ(0); /* Force hardware acceleration */
-  -webkit-transform: translateZ(0); /* For Safari */
-  will-change: transform; /* Optimize for animations */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
   margin: 0;
 }
 
@@ -100,7 +97,7 @@ body {
   background-size: contain;
   background-repeat: no-repeat;
   animation: float 20s infinite linear;
-  opacity: 0.7;
+  opacity: 0.5; /* Reduced opacity for cleaner look */
 }
 
 /* Place multiple eye-of-horus elements */
@@ -116,27 +113,9 @@ body {
  * - seba-star
  */
 
-/* Water ripple effect */
+/* Remove water ripple gradient effect */
 .water-ripple {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: 
-    radial-gradient(
-      circle at 30% 70%, 
-      rgba(174, 201, 232, 0.05) 0%, 
-      rgba(15, 23, 42, 0) 50%
-    ),
-    radial-gradient(
-      circle at 70% 30%, 
-      rgba(174, 201, 232, 0.05) 0%, 
-      rgba(15, 23, 42, 0) 50%
-    );
-  animation: ripple 15s infinite linear;
-  opacity: 0.8;
-  z-index: 0;
+  display: none; /* Removed for cleaner look */
 }
 
 .portal-container {
@@ -158,15 +137,10 @@ body {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: radial-gradient(
-    circle, 
-    rgba(174, 201, 232, 0.4) 0%, 
-    rgba(42, 92, 107, 0.3) 50%, 
-    rgba(27, 53, 94, 0.2) 70%
-  );
+  background: rgba(174, 201, 232, 0.2); /* Solid color with transparency instead of gradient */
   border-radius: 50%;
   animation: pulse 4s infinite;
-  box-shadow: 0 0 40px rgba(174, 201, 232, 0.3);
+  box-shadow: 0 0 20px rgba(174, 201, 232, 0.3);
 }
 
 .portal-ring {
@@ -176,7 +150,7 @@ body {
   border: 6px solid var(--lily-gold);
   border-radius: 50%;
   animation: rotate 20s linear infinite;
-  box-shadow: 0 0 30px rgba(216, 176, 86, 0.4);
+  box-shadow: 0 0 15px rgba(216, 176, 86, 0.3);
 }
 
 .portal-ring::before {
@@ -197,12 +171,7 @@ body {
   height: 90%;
   top: 5%;
   left: 5%;
-  background: radial-gradient(
-    circle, 
-    rgba(174, 201, 232, 0.3) 0%, 
-    rgba(58, 86, 131, 0.2) 40%, 
-    rgba(15, 23, 42, 0.1) 70%
-  );
+  background: rgba(174, 201, 232, 0.1); /* Solid color with transparency instead of gradient */
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -215,17 +184,7 @@ body {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: 
-    radial-gradient(
-      circle at 30% 30%, 
-      rgba(174, 201, 232, 0.4) 0%, 
-      transparent 20%
-    ),
-    radial-gradient(
-      circle at 70% 70%, 
-      rgba(42, 92, 107, 0.4) 0%, 
-      transparent 20%
-    );
+  background: transparent; /* Removed gradients */
   animation: shimmer 8s infinite linear;
 }
 
@@ -235,7 +194,7 @@ body {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  filter: drop-shadow(0 0 15px var(--lily-gold));
+  filter: drop-shadow(0 0 10px rgba(216, 176, 86, 0.5));
   z-index: 2;
   position: relative;
 }
@@ -245,19 +204,20 @@ body {
   max-width: 700px;
   z-index: 1;
   position: relative;
+  background: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
 h1 {
   font-family: var(--heading-font);
   font-size: 3rem;
   margin-bottom: 1rem;
-  background: linear-gradient(to right, var(--lily-gold), var(--lily-petal), var(--lily-light-blue));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 0 0 15px rgba(174, 201, 232, 0.5);
+  color: var(--header-color); /* Solid color instead of gradient */
   letter-spacing: 2px;
   position: relative;
+  text-shadow: none; /* Removed text shadow */
 }
 
 h1::after {
@@ -268,7 +228,7 @@ h1::after {
   transform: translateX(-50%);
   width: 150px;
   height: 3px;
-  background: linear-gradient(to right, var(--lily-gold), var(--lily-petal), var(--lily-light-blue));
+  background: var(--header-color); /* Solid color instead of gradient */
   border-radius: 3px;
 }
 
@@ -276,10 +236,10 @@ h1::after {
   font-family: var(--body-font);
   font-size: 1.3rem;
   margin-bottom: 2rem;
-  opacity: 0.9;
+  opacity: 1;
   font-style: italic;
-  color: var(--lily-petal);
-  text-shadow: 0 0 10px rgba(15, 23, 42, 0.5);
+  color: var(--lily-deep-blue);
+  text-shadow: none; /* Removed text shadow */
 }
 
 .subscription-info {
@@ -319,8 +279,8 @@ h1::after {
 }
 
 .enter-portal-button {
-  background: linear-gradient(45deg, var(--lily-gold), var(--water-teal));
-  color: var(--night-bg);
+  background: var(--lily-gold); /* Solid color instead of gradient */
+  color: white;
   border: none;
   padding: 1.2rem 2.5rem;
   font-size: 1.3rem;
@@ -331,7 +291,7 @@ h1::after {
   margin: 2rem 0;
   text-transform: uppercase;
   letter-spacing: 2px;
-  box-shadow: 0 0 20px rgba(42, 92, 107, 0.5);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   position: relative;
   z-index: 10;
   pointer-events: auto;
@@ -345,7 +305,7 @@ h1::after {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(174, 201, 232, 0.3), transparent);
+  background: rgba(255, 255, 255, 0.2); /* Solid white with transparency instead of gradient */
   transition: 0.5s;
 }
 
@@ -354,33 +314,25 @@ h1::after {
 }
 
 .enter-portal-button:hover {
-  background: linear-gradient(45deg, var(--water-teal), var(--lily-gold));
+  background: var(--water-teal); /* Solid color instead of gradient */
   transform: translateY(-3px);
-  box-shadow: 0 0 30px rgba(174, 201, 232, 0.7);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .portal-description {
-  background: rgba(27, 53, 94, 0.4);
-  backdrop-filter: blur(5px);
+  background: white; /* Solid white instead of transparent gradient */
   padding: 2.5rem;
   border-radius: 1.5rem;
   margin: 2.5rem 0;
   border: 1px solid rgba(174, 201, 232, 0.3);
   position: relative;
-  box-shadow: 0 0 30px rgba(15, 23, 42, 0.4);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
 
 .portal-description::before {
-  content: '';
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  top: -50%;
-  left: -50%;
-  background: radial-gradient(circle at center, transparent 0%, rgba(42, 92, 107, 0.1) 100%);
-  animation: rotate 30s linear infinite;
-  pointer-events: none;
+  content: ''; /* Removed */
+  display: none;
 }
 
 .portal-description h2 {
@@ -388,7 +340,7 @@ h1::after {
   color: var(--lily-gold);
   font-size: 1.8rem;
   margin-bottom: 1.5rem;
-  text-shadow: 0 0 10px rgba(216, 176, 86, 0.5);
+  text-shadow: none; /* Removed text shadow */
   letter-spacing: 2px;
 }
 
@@ -398,17 +350,18 @@ h1::after {
   margin-bottom: 1.2rem;
   position: relative;
   z-index: 1;
-  text-shadow: 0 0 10px rgba(15, 23, 42, 0.5);
+  text-shadow: none; /* Removed text shadow */
+  color: var(--lily-deep-blue);
 }
 
 .divine-signature {
   font-family: var(--heading-font);
-  color: var(--lily-petal);
+  color: var(--lily-gold);
   font-style: italic;
   margin-top: 2rem;
-  opacity: 0.9;
+  opacity: 1;
   font-size: 1.1rem;
-  text-shadow: 0 0 10px rgba(174, 201, 232, 0.5);
+  text-shadow: none; /* Removed text shadow */
   letter-spacing: 1px;
 }
 
