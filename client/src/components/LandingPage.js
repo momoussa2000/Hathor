@@ -18,15 +18,13 @@ const LandingPage = () => {
       {/* Water ripple effect */}
       <div className="water-ripple"></div>
       
-      {/* Magical floating elements */}
+      {/* Magical floating elements - keeping only Eye of Horus */}
       <div className="magical-elements">
-        <div className="lotus"></div>
-        <div className="lotus"></div>
-        <div className="lotus"></div>
         <div className="eye-of-horus"></div>
         <div className="eye-of-horus"></div>
-        <div className="ankh"></div>
-        <div className="ankh"></div>
+        <div className="eye-of-horus"></div>
+        <div className="eye-of-horus"></div>
+        <div className="eye-of-horus"></div>
       </div>
       
       <div 

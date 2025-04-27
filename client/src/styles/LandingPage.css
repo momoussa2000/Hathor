@@ -1,3 +1,26 @@
+/* Add these rules at the top to ensure no margins or padding on the html/body */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  position: relative;
+}
+
+body {
+  overflow-x: hidden;
+  width: 100vw; /* Force full viewport width */
+}
+
+#root {
+  width: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
 :root {
   --lily-blue: #3a5683;
   --lily-deep-blue: #1b355e;
@@ -12,18 +35,21 @@
 
 .landing-page {
   min-height: 100vh;
-  width: 100vw;
+  width: 100vw; /* Changed to 100vw to ensure full viewport width */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background: var(--night-bg); /* Fallback background */
   color: var(--papyrus);
-  padding: 2rem;
+  padding: 0; /* Remove all padding */
   position: relative;
   overflow-x: hidden; /* Prevent horizontal scrolling */
   font-family: var(--body-font);
   box-sizing: border-box; /* Include padding in width calculation */
+  margin: 0; /* Ensure no margins */
+  left: 0;
+  right: 0;
 }
 
 /* Blue lily background effect */
@@ -45,8 +71,12 @@
   opacity: 1;
   background-size: cover;
   background-position: center center;
-  width: 100vw;
+  width: 100vw; /* Using 100vw here to ensure full viewport width */
   height: 100vh;
+  transform: translateZ(0); /* Force hardware acceleration */
+  -webkit-transform: translateZ(0); /* For Safari */
+  will-change: transform; /* Optimize for animations */
+  margin: 0;
 }
 
 /* Magical floating elements */
@@ -61,17 +91,7 @@
   overflow: hidden;
 }
 
-.lotus {
-  position: absolute;
-  width: 80px;
-  height: 80px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,20c0,0-25,25-25,40c0,15,25,15,25,15s25,0,25-15C75,45,50,20,50,20z' fill='%23aec9e8' stroke='%23d8b056' stroke-width='2'/%3E%3Ccircle cx='50' cy='60' r='10' fill='%23d8b056'/%3E%3C/svg%3E");
-  background-size: contain;
-  background-repeat: no-repeat;
-  animation: float 15s infinite linear;
-  opacity: 0.7;
-}
-
+/* Eye of Horus - keeping only this element */
 .eye-of-horus {
   position: absolute;
   width: 60px;
@@ -80,28 +100,21 @@
   background-size: contain;
   background-repeat: no-repeat;
   animation: float 20s infinite linear;
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
-.ankh {
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,20v50M35,30c0-8,7-15,15-15s15,7,15,15s-7,15-15,15' stroke='%232a5c6b' stroke-width='5' fill='none'/%3E%3Cpath d='M30,45h40' stroke='%232a5c6b' stroke-width='5'/%3E%3C/svg%3E");
-  background-size: contain;
-  background-repeat: no-repeat;
-  animation: float 18s infinite linear;
-  opacity: 0.5;
-}
+/* Place multiple eye-of-horus elements */
+.eye-of-horus:nth-child(1) { top: 15%; left: 15%; animation-delay: 0s; }
+.eye-of-horus:nth-child(2) { top: 70%; left: 80%; animation-delay: -5s; }
+.eye-of-horus:nth-child(3) { top: 40%; left: 85%; animation-delay: -10s; }
+.eye-of-horus:nth-child(4) { top: 20%; left: 75%; animation-delay: -3s; }
+.eye-of-horus:nth-child(5) { top: 75%; left: 20%; animation-delay: -8s; }
 
-/* Place multiple elements */
-.lotus:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
-.lotus:nth-child(2) { top: 70%; left: 80%; animation-delay: -5s; }
-.lotus:nth-child(3) { top: 40%; left: 85%; animation-delay: -10s; }
-.eye-of-horus:nth-child(4) { top: 20%; left: 80%; animation-delay: -3s; }
-.eye-of-horus:nth-child(5) { top: 75%; left: 15%; animation-delay: -8s; }
-.ankh:nth-child(6) { top: 15%; left: 40%; animation-delay: -12s; }
-.ankh:nth-child(7) { top: 60%; left: 30%; animation-delay: -7s; }
+/* 
+ * Removed other interactive elements:
+ * - hathor-horns
+ * - seba-star
+ */
 
 /* Water ripple effect */
 .water-ripple {
