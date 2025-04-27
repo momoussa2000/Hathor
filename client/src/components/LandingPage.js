@@ -63,32 +63,31 @@ const LandingPage = () => {
         type="button"
         aria-label="Start chatting with Hathor"
       >
-        ✧ Enter Sacred Waters ✧
+        ✧ Receive Divine Remedy ✧
       </button>
 
       <div className="content">
         <h1>The Blue Lily of Hathor</h1>
-        <p className="subtitle">Sacred wisdom from the Egyptian Goddess of Beauty & Renewal</p>
+        <p className="subtitle">Sacred prescriptions from the Egyptian Goddess of Beauty & Healing</p>
         
         <div className="portal-description">
-          <h2>✧ Waters of Eternal Beauty ✧</h2>
+          <h2>✧ Divine Prescriptions for Your Unique Needs ✧</h2>
           <p>
-            Step into the sacred waters where the blue Egyptian water lily blooms — 
-            where Hathor, goddess of beauty, awaits to share ancient secrets 
-            preserved through millennia.
+            Enter the sacred waters and receive a <strong>personalized remedy</strong> crafted specifically 
+            for your unique beauty or wellness concern — a divine prescription from Hathor herself.
           </p>
           <p>
-            Like the water lily that opens with the morning sun, receive personalized beauty wisdom 
-            crafted especially for you. Each remedy harnesses the power of natural oils and essences 
-            that Hathor has blessed throughout the ages.
+            Simply share your ailment, and Hathor will reveal the exact natural ingredients, 
+            precise measurements, and step-by-step preparation methods for your custom treatment. 
+            Each remedy draws from her ancient knowledge of oils, herbs, and natural elements.
           </p>
           <p>
-            Share your beauty concerns with Hathor, and watch as she transforms them 
-            with the rejuvenating power of the blue lotus. Her divine knowledge flows 
-            like the Nile itself, bringing life and beauty to all who seek it.
+            Whether you seek relief for skin concerns, hair issues, or bodily discomfort, 
+            Hathor's prescriptions provide practical solutions using nature's gifts. 
+            Her divine wisdom transforms into tangible healing that you can create and apply today.
           </p>
           <div className="divine-signature">
-            ~ Blessed by Hathor, Goddess of the Sacred Blue Lotus ~
+            ~ Each Prescription Blessed by Hathor, Master of Natural Healing ~
           </div>
         </div>
       </div>
