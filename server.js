@@ -345,13 +345,169 @@ const products = {
           size: "15ml",
           price: "LE 480.00",
           dropsPerBottle: 300,
-          link: "https://hathororganics.com/products/rosemary-oil"
+          link: "https://hathororganics.com/collections/all/products/rosemary-oil"
         },
         {
           size: "30ml",
           price: "LE 850.00",
           dropsPerBottle: 600,
-          link: "https://hathororganics.com/products/rosemary-oil"
+          link: "https://hathororganics.com/collections/all/products/rosemary-oil"
+        }
+      ]
+    },
+    {
+      name: "Sweet Almond Oil",
+      benefits: ["moisturizing", "skin softening", "anti-inflammatory", "skin healing", "hair conditioning"],
+      description: "Pure cold-pressed sweet almond oil for skin and hair care",
+      properties: {
+        moisturizing: true,
+        antiInflammatory: true,
+        skinHealing: true,
+        hairConditioning: true
+      },
+      recommendedUses: ["facial oil", "body oil", "hair treatment", "massage oil"],
+      sizes: [
+        {
+          size: "15ml",
+          price: "LE 480.00",
+          dropsPerBottle: 300,
+          link: "https://hathororganics.com/collections/all/products/sweet-almond-oil"
+        },
+        {
+          size: "30ml",
+          price: "LE 850.00",
+          dropsPerBottle: 600,
+          link: "https://hathororganics.com/collections/all/products/sweet-almond-oil"
+        }
+      ]
+    },
+    {
+      name: "Rosehip Oil",
+      benefits: ["anti-aging", "scar healing", "skin brightening", "hair growth", "scalp health"],
+      description: "Cold-pressed rosehip oil rich in vitamins and essential fatty acids",
+      properties: {
+        antiAging: true,
+        scarHealing: true,
+        skinBrightening: true,
+        hairGrowth: true
+      },
+      recommendedUses: ["facial oil", "hair treatment", "scar treatment"],
+      sizes: [
+        {
+          size: "15ml",
+          price: "LE 480.00",
+          dropsPerBottle: 300,
+          link: "https://hathororganics.com/collections/all/products/rosehip-oil"
+        },
+        {
+          size: "30ml",
+          price: "LE 850.00",
+          dropsPerBottle: 600,
+          link: "https://hathororganics.com/collections/all/products/rosehip-oil"
+        }
+      ]
+    },
+    {
+      name: "Argan Oil",
+      benefits: ["hair conditioning", "skin moisturizing", "anti-aging", "nail health"],
+      description: "Pure cold-pressed argan oil for hair, skin, and nails",
+      properties: {
+        hairConditioning: true,
+        moisturizing: true,
+        antiAging: true,
+        nailHealth: true
+      },
+      recommendedUses: ["hair treatment", "facial oil", "body oil", "nail care"],
+      sizes: [
+        {
+          size: "15ml",
+          price: "LE 480.00",
+          dropsPerBottle: 300,
+          link: "https://hathororganics.com/collections/all/products/argan-oil"
+        },
+        {
+          size: "30ml",
+          price: "LE 850.00",
+          dropsPerBottle: 600,
+          link: "https://hathororganics.com/collections/all/products/argan-oil"
+        }
+      ]
+    },
+    {
+      name: "Lavender Essential Oil",
+      benefits: ["relaxation", "skin healing", "acne treatment", "hair growth"],
+      description: "Pure lavender essential oil for aromatherapy and skin care",
+      properties: {
+        relaxing: true,
+        skinHealing: true,
+        antibacterial: true,
+        hairGrowth: true
+      },
+      recommendedUses: ["aromatherapy", "skin treatment", "hair treatment"],
+      sizes: [
+        {
+          size: "15ml",
+          price: "LE 480.00",
+          dropsPerBottle: 300,
+          link: "https://hathororganics.com/collections/all/products/lavender-essential-oil"
+        },
+        {
+          size: "30ml",
+          price: "LE 850.00",
+          dropsPerBottle: 600,
+          link: "https://hathororganics.com/collections/all/products/lavender-essential-oil"
+        }
+      ]
+    },
+    {
+      name: "Peppermint Essential Oil",
+      benefits: ["pain relief", "energy boosting", "hair growth", "skin cooling"],
+      description: "Pure peppermint essential oil for pain relief and invigoration",
+      properties: {
+        painRelief: true,
+        energizing: true,
+        hairGrowth: true,
+        cooling: true
+      },
+      recommendedUses: ["pain relief", "hair treatment", "aromatherapy"],
+      sizes: [
+        {
+          size: "15ml",
+          price: "LE 480.00",
+          dropsPerBottle: 300,
+          link: "https://hathororganics.com/collections/all/products/peppermint-essential-oil"
+        },
+        {
+          size: "30ml",
+          price: "LE 850.00",
+          dropsPerBottle: 600,
+          link: "https://hathororganics.com/collections/all/products/peppermint-essential-oil"
+        }
+      ]
+    },
+    {
+      name: "Tea Tree Essential Oil",
+      benefits: ["acne treatment", "antifungal", "antibacterial", "scalp health"],
+      description: "Pure tea tree essential oil for skin and scalp care",
+      properties: {
+        antibacterial: true,
+        antifungal: true,
+        scalpHealth: true,
+        acneTreatment: true
+      },
+      recommendedUses: ["skin treatment", "scalp treatment", "acne treatment"],
+      sizes: [
+        {
+          size: "15ml",
+          price: "LE 480.00",
+          dropsPerBottle: 300,
+          link: "https://hathororganics.com/collections/all/products/tea-tree-essential-oil"
+        },
+        {
+          size: "30ml",
+          price: "LE 850.00",
+          dropsPerBottle: 600,
+          link: "https://hathororganics.com/collections/all/products/tea-tree-essential-oil"
         }
       ]
     }
@@ -362,126 +518,284 @@ const products = {
 const ailmentsKnowledgeBase = {
   "acne": {
     "description": "A common skin condition characterized by pimples, blackheads, and inflammation",
-    "recommended_oils": ["sesame", "moringa", "argan", "lavender", "rosemary"],
+    "recommended_oils": ["Sesame Oil", "Moringa Oil", "Argan Oil", "Lavender Essential Oil", "Rosemary Oil", "Tea Tree Essential Oil"],
     "treatment_plan": {
-      "primary_oils": ["sesame", "moringa"],
-      "supporting_oils": ["argan", "lavender", "rosemary"],
+      "primary_oils": ["Sesame Oil", "Moringa Oil", "Tea Tree Essential Oil"],
+      "supporting_oils": ["Argan Oil", "Lavender Essential Oil", "Rosemary Oil"],
       "application": "Evening ritual only",
       "duration": "4-6 weeks",
       "frequency": "Daily",
       "precautions": "Always dilute essential oils with carrier oils. Perform patch test before full application.",
       "benefits": "Purifies skin, regulates sebum production, reduces inflammation, prevents future breakouts",
       "measurements": {
-        "sesame": "2-3 drops (2-6ml)",
-        "moringa": "2-3 drops (2-6ml)",
-        "argan": "1-2 drops (1-4ml)",
-        "lavender": "1 drop (1-2ml)",
-        "rosemary": "1 drop (1-2ml)"
+        "Sesame Oil": "2-3 drops (2-6ml)",
+        "Moringa Oil": "2-3 drops (2-6ml)",
+        "Tea Tree Essential Oil": "1-2 drops (1-4ml) diluted",
+        "Argan Oil": "1-2 drops (1-4ml)",
+        "Lavender Essential Oil": "1 drop (1-2ml)",
+        "Rosemary Oil": "1 drop (1-2ml)"
       }
     },
-    "detailed_explanation": "Sesame oil's anti-inflammatory properties and non-comedogenic nature make it ideal for acne-prone skin. Moringa oil helps balance natural oils and detoxify pores. Argan oil's oleic and linoleic acids help balance the skin. Rosemary oil acts as a refreshing astringent that balances and tones the skin while preventing future breakouts."
+    "detailed_explanation": "Sesame oil's anti-inflammatory properties and non-comedogenic nature make it ideal for acne-prone skin. Moringa oil helps balance natural oils and detoxify pores. Tea Tree Essential Oil has antibacterial properties that help treat acne. Argan oil's oleic and linoleic acids help balance the skin. Lavender and Rosemary oils act as refreshing astringents that balance and tone the skin while preventing future breakouts."
   },
   "dry_skin": {
     "description": "Skin lacking moisture, often feeling tight and flaky",
-    "recommended_oils": ["almond", "sesame", "coconut", "lavender", "moringa"],
+    "recommended_oils": ["Sweet Almond Oil"],
     "treatment_plan": {
-      "primary_oils": ["almond", "sesame"],
-      "supporting_oils": ["coconut", "lavender", "moringa"],
+      "primary_oils": ["Sweet Almond Oil"],
+      "supporting_oils": [],
       "application": "Evening ritual only",
       "duration": "Ongoing",
       "frequency": "Daily",
       "precautions": "Use gentle application. Can be used more frequently if needed.",
       "benefits": "Deep hydration, improved skin barrier, reduced flakiness, enhanced skin tone",
       "measurements": {
-        "almond": "3-4 drops (3-8ml)",
-        "sesame": "2-3 drops (2-6ml)",
-        "coconut": "2-3 drops (2-6ml)",
-        "lavender": "1 drop (1-2ml)",
-        "moringa": "2-3 drops (2-6ml)"
+        "Sweet Almond Oil": "Apply a small amount to face and body after bathing (e.g., 3-4 drops for face)"
       }
     },
-    "detailed_explanation": "Almond oil's emollient properties improve both complexion and skin tone. Sesame oil's antioxidant properties soothe dry skin without clogging pores. Coconut oil helps bolster the skin's protective barrier layer, trapping moisture inside. Moringa oil's high oleic acid content provides significant moisturizing properties."
+    "detailed_explanation": "Sweet Almond Oil was used in ancient Egypt to moisturize and protect skin from arid conditions. Its emollient properties improve complexion and skin tone."
   },
   "sensitive_skin": {
     "description": "Skin prone to irritation, redness, and reactions",
-    "recommended_oils": ["sesame", "almond", "coconut"],
+    "recommended_oils": ["Sesame Oil", "Sweet Almond Oil", "Jojoba Oil"],
     "treatment_plan": {
-      "primary_oils": ["sesame", "almond"],
-      "supporting_oils": ["coconut"],
+      "primary_oils": ["Sesame Oil", "Sweet Almond Oil"],
+      "supporting_oils": ["Jojoba Oil"],
       "application": "Evening ritual only",
       "duration": "Ongoing",
       "frequency": "Daily",
       "precautions": "Always perform patch test. Start with minimal amounts.",
       "benefits": "Reduced irritation, improved skin barrier, gentle cleansing",
       "measurements": {
-        "sesame": "1-2 drops (1-4ml)",
-        "almond": "1-2 drops (1-4ml)",
-        "coconut": "1-2 drops (1-4ml)"
+        "Sesame Oil": "1-2 drops (1-4ml)",
+        "Sweet Almond Oil": "1-2 drops (1-4ml)",
+        "Jojoba Oil": "1-2 drops (1-4ml)"
       }
     },
-    "detailed_explanation": "Sesame oil is highly anti-inflammatory, making it ideal for sensitive skin. Almond oil is very mild and hypoallergenic, safe for almost all skin types. Coconut oil's soothing properties help alleviate temporary redness and irritation."
+    "detailed_explanation": "Sesame Oil is highly anti-inflammatory, making it ideal for sensitive skin. Sweet Almond Oil is very mild and hypoallergenic. Jojoba Oil mimics skin's natural sebum, providing hydration without irritation."
   },
-  "anti_aging": {
+  "aging_skin": {
     "description": "Concerns related to fine lines, wrinkles, and skin aging",
-    "recommended_oils": ["sesame", "moringa", "almond"],
+    "recommended_oils": ["Rosehip Oil", "Frankincense Essential Oil"],
     "treatment_plan": {
-      "primary_oils": ["sesame", "moringa"],
-      "supporting_oils": ["almond"],
+      "primary_oils": ["Rosehip Oil", "Frankincense Essential Oil"],
+      "supporting_oils": [],
       "application": "Evening ritual only",
       "duration": "Ongoing",
       "frequency": "Daily",
-      "precautions": "Use gentle application. Avoid eye area unless specified.",
+      "precautions": "Use gentle application. Avoid eye area unless specified. Dilute essential oils with carrier oils.",
       "benefits": "Reduced fine lines, improved skin elasticity, enhanced collagen production",
       "measurements": {
-        "sesame": "2-3 drops (2-6ml)",
-        "moringa": "2-3 drops (2-6ml)",
-        "almond": "2-3 drops (2-6ml)"
+        "Rosehip Oil": "1-2 drops to face and neck daily",
+        "Frankincense Essential Oil": "2-3 drops diluted in 1 tsp Sweet Almond Oil, apply to face"
       }
     },
-    "detailed_explanation": "Sesame oil's high zinc content helps skin produce collagen, improving elasticity. Moringa oil's rich vitamin content (A, C, E) improves skin elasticity and fights inflammation. Almond oil's vitamin A stimulates new skin cell production and smooths fine lines."
+    "detailed_explanation": "Rosehip Oil, known as the 'Oil of Youth,' was used for rejuvenation. Frankincense has anti-inflammatory and healing properties, supporting aging skin."
+  },
+  "sun_damage": {
+    "description": "Skin damage caused by sun exposure, including sunburn, hyperpigmentation, and premature aging",
+    "recommended_oils": ["Rosehip Oil"],
+    "treatment_plan": {
+      "primary_oils": ["Rosehip Oil"],
+      "supporting_oils": [],
+      "application": "Evening ritual only",
+      "duration": "Ongoing",
+      "frequency": "Daily",
+      "precautions": "Apply after sun exposure. Use sunscreen during the day.",
+      "benefits": "Heals sun-damaged skin, reduces hyperpigmentation, improves elasticity",
+      "measurements": {
+        "Rosehip Oil": "1-2 drops to affected areas daily"
+      }
+    },
+    "detailed_explanation": "Rosehip Oil was historically used to heal sun-damaged skin due to its high content of vitamins A and C, which promote skin repair and regeneration."
+  },
+  "spots_on_face": {
+    "description": "Dark spots or hyperpigmentation on the face",
+    "recommended_oils": ["Sweet Almond Oil"],
+    "treatment_plan": {
+      "primary_oils": ["Sweet Almond Oil"],
+      "supporting_oils": [],
+      "application": "Evening ritual only",
+      "duration": "4-6 weeks",
+      "frequency": "2-3 times per week",
+      "precautions": "Perform patch test. Avoid if allergic to honey.",
+      "benefits": "Improves complexion, reduces dark spots",
+      "measurements": {
+        "Sweet Almond Oil": "1 tbsp mixed with 1 tbsp honey for a mask"
+      }
+    },
+    "detailed_explanation": "Sweet Almond Oil, when combined with honey, creates a nourishing mask that helps even out skin tone and reduce dark spots, inspired by ancient Egyptian beauty rituals."
+  },
+  "general_moisturization": {
+    "description": "General skin hydration and nourishment",
+    "recommended_oils": ["Argan Oil", "Jojoba Oil"],
+    "treatment_plan": {
+      "primary_oils": ["Argan Oil", "Jojoba Oil"],
+      "supporting_oils": [],
+      "application": "Evening ritual only",
+      "duration": "Ongoing",
+      "frequency": "Daily",
+      "precautions": "Use gentle application. Can be used more frequently if needed.",
+      "benefits": "Hydrates and nourishes skin, improves skin barrier",
+      "measurements": {
+        "Argan Oil": "A few drops to face and body after cleansing",
+        "Jojoba Oil": "A few drops to face and body after cleansing"
+      }
+    },
+    "detailed_explanation": "Argan Oil and Jojoba Oil are excellent for general skin moisturization, providing deep hydration and nourishment without clogging pores."
   },
   "hair_loss": {
     "description": "Thinning hair or balding concerns",
-    "recommended_oils": ["garden_cress", "sesame", "rosemary", "frankincense", "argan"],
+    "recommended_oils": ["Garden Cress Oil", "Sesame Oil", "Rosemary Oil", "Frankincense Oil", "Argan Oil", "Rosehip Oil"],
     "treatment_plan": {
-      "primary_oils": ["garden_cress", "rosemary"],
-      "supporting_oils": ["sesame", "frankincense", "argan"],
+      "primary_oils": ["Garden Cress Oil", "Rosemary Oil", "Rosehip Oil"],
+      "supporting_oils": ["Sesame Oil", "Frankincense Oil", "Argan Oil"],
       "application": "Evening ritual only",
       "duration": "3-6 months",
       "frequency": "2-3 times per week",
       "precautions": "Massage gently into scalp. Avoid excessive pulling.",
       "benefits": "Stimulated hair growth, improved scalp circulation, strengthened hair follicles",
       "measurements": {
-        "garden_cress": "4-5 drops (4-10ml)",
-        "rosemary": "2-3 drops (2-6ml)",
-        "sesame": "2-3 drops (2-6ml)",
-        "frankincense": "1-2 drops (1-4ml)",
-        "argan": "2-3 drops (2-6ml)"
+        "Garden Cress Oil": "4-5 drops (4-10ml)",
+        "Rosemary Oil": "2-3 drops (2-6ml)",
+        "Rosehip Oil": "2-3 drops (2-6ml)",
+        "Sesame Oil": "2-3 drops (2-6ml)",
+        "Frankincense Oil": "1-2 drops (1-4ml)",
+        "Argan Oil": "2-3 drops (2-6ml)"
       }
     },
-    "detailed_explanation": "Garden cress oil is nutrient-rich and helps lengthen and grow hair. Rosemary oil stimulates scalp circulation and optimizes hair growth. Sesame oil's tranquilizing properties help relieve anxiety-related hair loss. Frankincense and argan oils provide additional nourishment and protection."
+    "detailed_explanation": "Garden Cress Oil is nutrient-rich and helps lengthen and grow hair. Rosemary Oil stimulates scalp circulation and optimizes hair growth. Rosehip Oil promotes healthy hair growth due to its vitamin content. Sesame Oil's tranquilizing properties help relieve anxiety-related hair loss. Frankincense and Argan Oils provide additional nourishment and protection."
   },
   "dandruff": {
     "description": "Flaky, itchy scalp condition",
-    "recommended_oils": ["sesame", "garden_cress", "moringa", "lavender", "argan", "rosemary"],
+    "recommended_oils": ["Sesame Oil", "Garden Cress Oil", "Moringa Oil", "Lavender Essential Oil", "Argan Oil", "Rosemary Oil", "Tea Tree Essential Oil", "Jojoba Oil"],
     "treatment_plan": {
-      "primary_oils": ["sesame", "garden_cress"],
-      "supporting_oils": ["moringa", "lavender", "argan", "rosemary"],
+      "primary_oils": ["Sesame Oil", "Garden Cress Oil", "Tea Tree Essential Oil"],
+      "supporting_oils": ["Moringa Oil", "Lavender Essential Oil", "Argan Oil", "Rosemary Oil", "Jojoba Oil"],
       "application": "Evening ritual only",
       "duration": "4-8 weeks",
       "frequency": "2-3 times per week",
       "precautions": "Massage gently. Rinse thoroughly.",
       "benefits": "Reduced flaking, improved scalp health, balanced moisture",
       "measurements": {
-        "sesame": "3-4 drops (3-8ml)",
-        "garden_cress": "3-4 drops (3-8ml)",
-        "moringa": "2-3 drops (2-6ml)",
-        "lavender": "1-2 drops (1-4ml)",
-        "argan": "2-3 drops (2-6ml)",
-        "rosemary": "1-2 drops (1-4ml)"
+        "Sesame Oil": "3-4 drops (3-8ml)",
+        "Garden Cress Oil": "3-4 drops (3-8ml)",
+        "Tea Tree Essential Oil": "2-3 drops (2-6ml) diluted",
+        "Moringa Oil": "2-3 drops (2-6ml)",
+        "Lavender Essential Oil": "1-2 drops (1-4ml)",
+        "Argan Oil": "2-3 drops (2-6ml)",
+        "Rosemary Oil": "1-2 drops (1-4ml)",
+        "Jojoba Oil": "1 tbsp for dilution"
       }
     },
-    "detailed_explanation": "Sesame oil's occlusive properties help the scalp stay moisturized. Garden cress oil helps decrease dandruff by moisturizing and healing the scalp. Lavender oil deep conditions the hair and helps control dandruff. Rosemary oil improves circulation in the scalp."
+    "detailed_explanation": "Sesame Oil's occlusive properties help the scalp stay moisturized. Garden Cress Oil helps decrease dandruff by moisturizing and healing the scalp. Tea Tree Essential Oil has antifungal properties that combat dandruff-causing fungi. Other oils like Moringa, Lavender, Argan, Rosemary, and Jojoba provide additional benefits for scalp health."
+  },
+  "dry_damaged_hair": {
+    "description": "Hair that is dry, brittle, or damaged",
+    "recommended_oils": ["Argan Oil", "Jojoba Oil"],
+    "treatment_plan": {
+      "primary_oils": ["Argan Oil", "Jojoba Oil"],
+      "supporting_oils": [],
+      "application": "Evening ritual only",
+      "duration": "Ongoing",
+      "frequency": "Weekly",
+      "precautions": "Use as a hair treatment. Rinse out after application.",
+      "benefits": "Restores moisture, repairs damage, adds shine",
+      "measurements": {
+        "Argan Oil": "Apply to hair and scalp post-wash, leave for 30 minutes, rinse",
+        "Jojoba Oil": "Apply to hair and scalp post-wash, leave for 30 minutes, rinse"
+      }
+    },
+    "detailed_explanation": "Argan Oil and Jojoba Oil are rich in fatty acids and vitamins that help restore moisture and repair damaged hair."
+  },
+  "hair_growth": {
+    "description": "Promoting hair growth and strengthening hair",
+    "recommended_oils": ["Rosehip Oil"],
+    "treatment_plan": {
+      "primary_oils": ["Rosehip Oil"],
+      "supporting_oils": [],
+      "application": "Evening ritual only",
+      "duration": "3-6 months",
+      "frequency": "1-2 times weekly",
+      "precautions": "Massage into scalp. Leave overnight if possible.",
+      "benefits": "Stimulates hair growth, strengthens hair follicles",
+      "measurements": {
+        "Rosehip Oil": "Massage into scalp, leave overnight, wash out in the morning"
+      }
+    },
+    "detailed_explanation": "Rosehip Oil's high content of vitamins A, C, and E promotes healthy hair growth and scalp health."
+  },
+  "scalp_health": {
+    "description": "Maintaining a healthy scalp, reducing itchiness or flakiness",
+    "recommended_oils": ["Tea Tree Essential Oil", "Jojoba Oil"],
+    "treatment_plan": {
+      "primary_oils": ["Tea Tree Essential Oil", "Jojoba Oil"],
+      "supporting_oils": [],
+      "application": "Evening ritual only",
+      "duration": "4-8 weeks",
+      "frequency": "2-3 times per week",
+      "precautions": "Dilute essential oils with carrier oils. Massage gently into scalp.",
+      "benefits": "Reduces flakiness, soothes itchiness, improves scalp health",
+      "measurements": {
+        "Tea Tree Essential Oil": "2-3 drops diluted in 1 tbsp Jojoba Oil",
+        "Jojoba Oil": "1 tbsp"
+      }
+    },
+    "detailed_explanation": "Tea Tree Essential Oil has antifungal properties that help with dandruff and scalp irritations, while Jojoba Oil moisturizes and balances the scalp."
+  },
+  "general_body_care": {
+    "description": "General body hydration and nourishment",
+    "recommended_oils": ["Sweet Almond Oil", "Argan Oil"],
+    "treatment_plan": {
+      "primary_oils": ["Sweet Almond Oil", "Argan Oil"],
+      "supporting_oils": [],
+      "application": "Evening ritual only",
+      "duration": "Ongoing",
+      "frequency": "Daily",
+      "precautions": "Use after showering. Can be used more frequently if needed.",
+      "benefits": "Hydrates skin, improves skin tone, reduces dryness",
+      "measurements": {
+        "Sweet Almond Oil": "Apply to body after showering",
+        "Argan Oil": "Apply to body after showering"
+      }
+    },
+    "detailed_explanation": "Sweet Almond Oil and Argan Oil provide deep hydration and nourishment for the body, leaving skin soft and smooth."
+  },
+  "muscle_pain_relief": {
+    "description": "Relieving sore muscles and joint pain",
+    "recommended_oils": ["Peppermint Essential Oil", "Sweet Almond Oil"],
+    "treatment_plan": {
+      "primary_oils": ["Peppermint Essential Oil"],
+      "supporting_oils": ["Sweet Almond Oil"],
+      "application": "Evening ritual only",
+      "duration": "As needed",
+      "frequency": "As needed",
+      "precautions": "Dilute essential oils with carrier oils. Avoid if sensitive to menthol.",
+      "benefits": "Provides cooling relief, reduces inflammation",
+      "measurements": {
+        "Peppermint Essential Oil": "2-3 drops",
+        "Sweet Almond Oil": "1 tsp"
+      }
+    },
+    "detailed_explanation": "Peppermint Essential Oil has analgesic properties that help relieve muscle pain when massaged into sore areas."
+  },
+  "relaxation": {
+    "description": "Promoting relaxation and stress relief",
+    "recommended_oils": ["Lavender Essential Oil", "Sweet Almond Oil"],
+    "treatment_plan": {
+      "primary_oils": ["Lavender Essential Oil"],
+      "supporting_oils": ["Sweet Almond Oil"],
+      "application": "Evening ritual only",
+      "duration": "As needed",
+      "frequency": "As needed",
+      "precautions": "Dilute essential oils with carrier oils. Can be used in diffusers or baths.",
+      "benefits": "Calms mind and body, promotes better sleep",
+      "measurements": {
+        "Lavender Essential Oil": "2-3 drops in diffuser or diluted in bath",
+        "Sweet Almond Oil": "1 tbsp for massage oil"
+      }
+    },
+    "detailed_explanation": "Lavender Essential Oil is well-known for its calming properties, helping to reduce stress and promote relaxation."
   }
 };
 
