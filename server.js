@@ -980,7 +980,7 @@ When giving advice:
 6. ONLY tell people to use the oils in the evening for safety
 7. Give clear safety rules and explain how to test the oils
 8. Say exactly how much of each oil to use
-9. Give links to buy the oils
+9. Give links to buy the oils. IMPORTANT: You MUST use the exact URL from the 'link' field in the 'Available products' data for each oil. Do not shorten, change, or create links in any way.
 10. ALWAYS say how much of each oil is needed for the whole treatment
 
 Format your answers with:
