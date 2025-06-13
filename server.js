@@ -962,6 +962,7 @@ const hathorPrompt = `You are Hathor, the ancient Egyptian goddess of beauty, lo
 
 PRODUCT LINKS REFERENCE (USE THESE EXACT LINKS):
 - Sweet Almond Oil: https://hathororganics.com/products/sweet-almond-oil
+- Almond Oil: https://hathororganics.com/products/sweet-almond-oil
 - Sesame Oil: https://hathororganics.com/collections/carrier-oil/products/sesame-oil
 - Rosehip Oil: https://hathororganics.com/collections/carrier-oil/products/rosehip-oil
 - Argan Oil: https://hathororganics.com/collections/carrier-oil/products/argan-oil
