@@ -196,13 +196,13 @@ const products = {
           size: "15ml",
           price: "LE 480.00",
           dropsPerBottle: 300,
-          link: "https://hathororganics.com/collections/all/products/moringa-oil"
+          link: "https://hathororganics.com/collections/carrier-oil/products/moringa-oil"
         },
         {
           size: "30ml",
           price: "LE 850.00",
           dropsPerBottle: 600,
-          link: "https://hathororganics.com/collections/all/products/moringa-oil"
+          link: "https://hathororganics.com/collections/carrier-oil/products/moringa-oil"
         }
       ]
     },
@@ -222,13 +222,13 @@ const products = {
           size: "15ml",
           price: "LE 450.00",
           dropsPerBottle: 300,
-          link: "https://hathororganics.com/collections/all/products/sesame-oil"
+          link: "https://hathororganics.com/collections/carrier-oil/products/sesame-oil"
         },
         {
           size: "30ml",
           price: "LE 800.00",
           dropsPerBottle: 600,
-          link: "https://hathororganics.com/collections/all/products/sesame-oil"
+          link: "https://hathororganics.com/collections/carrier-oil/products/sesame-oil"
         }
       ]
     },
@@ -248,13 +248,13 @@ const products = {
           size: "15ml",
           price: "LE 480.00",
           dropsPerBottle: 300,
-          link: "https://hathororganics.com/collections/all/products/jojoba-oil"
+          link: "https://hathororganics.com/collections/carrier-oil/products/jojoba-oil"
         },
         {
           size: "30ml",
           price: "LE 850.00",
           dropsPerBottle: 600,
-          link: "https://hathororganics.com/collections/all/products/jojoba-oil"
+          link: "https://hathororganics.com/collections/carrier-oil/products/jojoba-oil"
         }
       ]
     },
@@ -273,7 +273,7 @@ const products = {
         {
           size: "Set",
           price: "LE 985.00",
-          link: "https://hathororganics.com/collections/all/products/acne-set"
+          link: "https://hathororganics.com/collections/essential-oil/products/acne-set"
         }
       ]
     },
@@ -293,13 +293,13 @@ const products = {
           size: "15ml",
           price: "LE 480.00",
           dropsPerBottle: 300,
-          link: "https://hathororganics.com/collections/all/products/garden-cress-oil"
+          link: "https://hathororganics.com/collections/essential-oil/products/garden-cress-oil"
         },
         {
           size: "30ml",
           price: "LE 850.00",
           dropsPerBottle: 600,
-          link: "https://hathororganics.com/collections/all/products/garden-cress-oil"
+          link: "https://hathororganics.com/collections/essential-oil/products/garden-cress-oil"
         }
       ]
     },
@@ -319,13 +319,13 @@ const products = {
           size: "15ml",
           price: "LE 480.00",
           dropsPerBottle: 300,
-          link: "https://hathororganics.com/collections/all/products/frankincense-oil"
+          link: "https://hathororganics.com/collections/essential-oil/products/frankincense-oil"
         },
         {
           size: "30ml",
           price: "LE 850.00",
           dropsPerBottle: 600,
-          link: "https://hathororganics.com/collections/all/products/frankincense-oil"
+          link: "https://hathororganics.com/collections/essential-oil/products/frankincense-oil"
         }
       ]
     },
@@ -345,13 +345,13 @@ const products = {
           size: "15ml",
           price: "LE 480.00",
           dropsPerBottle: 300,
-          link: "https://hathororganics.com/collections/all/products/rosemary-oil"
+          link: "https://hathororganics.com/collections/essential-oil/products/rosemary-oil"
         },
         {
           size: "30ml",
           price: "LE 850.00",
           dropsPerBottle: 600,
-          link: "https://hathororganics.com/collections/all/products/rosemary-oil"
+          link: "https://hathororganics.com/collections/essential-oil/products/rosemary-oil"
         }
       ]
     },
@@ -371,13 +371,13 @@ const products = {
           size: "15ml",
           price: "LE 480.00",
           dropsPerBottle: 300,
-          link: "https://hathororganics.com/collections/all/products/almond-oil"
+          link: "https://hathororganics.com/collections/carrier-oil/products/sweet-almond-oil"
         },
         {
           size: "30ml",
           price: "LE 850.00",
           dropsPerBottle: 600,
-          link: "https://hathororganics.com/collections/all/products/almond-oil"
+          link: "https://hathororganics.com/collections/carrier-oil/products/sweet-almond-oil"
         }
       ]
     },
@@ -397,13 +397,13 @@ const products = {
           size: "15ml",
           price: "LE 480.00",
           dropsPerBottle: 300,
-          link: "https://hathororganics.com/collections/all/products/rosehip-oil"
+          link: "https://hathororganics.com/collections/carrier-oil/products/rosehip-oil"
         },
         {
           size: "30ml",
           price: "LE 850.00",
           dropsPerBottle: 600,
-          link: "https://hathororganics.com/collections/all/products/rosehip-oil"
+          link: "https://hathororganics.com/collections/carrier-oil/products/rosehip-oil"
         }
       ]
     },
@@ -423,13 +423,13 @@ const products = {
           size: "15ml",
           price: "LE 480.00",
           dropsPerBottle: 300,
-          link: "https://hathororganics.com/collections/all/products/argan-oil"
+          link: "https://hathororganics.com/collections/carrier-oil/products/argan-oil"
         },
         {
           size: "30ml",
           price: "LE 850.00",
           dropsPerBottle: 600,
-          link: "https://hathororganics.com/collections/all/products/argan-oil"
+          link: "https://hathororganics.com/collections/carrier-oil/products/argan-oil"
         }
       ]
     },
@@ -449,13 +449,13 @@ const products = {
           size: "15ml",
           price: "LE 480.00",
           dropsPerBottle: 300,
-          link: "https://hathororganics.com/collections/all/products/lavender-essential-oil"
+          link: "https://hathororganics.com/collections/essential-oil/products/lavender-essential-oil"
         },
         {
           size: "30ml",
           price: "LE 850.00",
           dropsPerBottle: 600,
-          link: "https://hathororganics.com/collections/all/products/lavender-essential-oil"
+          link: "https://hathororganics.com/collections/essential-oil/products/lavender-essential-oil"
         }
       ]
     },
@@ -475,13 +475,13 @@ const products = {
           size: "15ml",
           price: "LE 480.00",
           dropsPerBottle: 300,
-          link: "https://hathororganics.com/collections/all/products/peppermint-essential-oil"
+          link: "https://hathororganics.com/collections/essential-oil/products/peppermint-essential-oil"
         },
         {
           size: "30ml",
           price: "LE 850.00",
           dropsPerBottle: 600,
-          link: "https://hathororganics.com/collections/all/products/peppermint-essential-oil"
+          link: "https://hathororganics.com/collections/essential-oil/products/peppermint-essential-oil"
         }
       ]
     },
@@ -501,13 +501,13 @@ const products = {
           size: "15ml",
           price: "LE 480.00",
           dropsPerBottle: 300,
-          link: "https://hathororganics.com/collections/all/products/tea-tree-essential-oil"
+          link: "https://hathororganics.com/collections/essential-oil/products/tea-tree-essential-oil"
         },
         {
           size: "30ml",
           price: "LE 850.00",
           dropsPerBottle: 600,
-          link: "https://hathororganics.com/collections/all/products/tea-tree-essential-oil"
+          link: "https://hathororganics.com/collections/essential-oil/products/tea-tree-essential-oil"
         }
       ]
     }
