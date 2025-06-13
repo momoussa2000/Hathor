@@ -197,13 +197,13 @@ const products = {
           size: "15ml",
           price: "LE 480.00",
           dropsPerBottle: 300,
-          link: "https://hathororganics.com/collections/carrier-oil/products/sweet-almond-oil"
+          link: "https://hathororganics.com/products/sweet-almond-oil"
         },
         {
           size: "30ml",
           price: "LE 850.00",
           dropsPerBottle: 600,
-          link: "https://hathororganics.com/collections/carrier-oil/products/sweet-almond-oil"
+          link: "https://hathororganics.com/products/sweet-almond-oil"
         }
       ]
     },
@@ -1040,7 +1040,7 @@ Total: LE 2,130.00"]
 🔮 Where to Begin Your Journey
 [Format links as markdown links with the oil name as the link text:
 Example:
-"[Sweet Almond Oil](https://hathororganics.com/collections/carrier-oil/products/sweet-almond-oil)"
+"[Sweet Almond Oil](https://hathororganics.com/products/sweet-almond-oil)"
 "[Sesame Oil](https://hathororganics.com/collections/carrier-oil/products/sesame-oil)"
 "[Rosehip Oil](https://hathororganics.com/collections/carrier-oil/products/rosehip-oil)"
 "[Frankincense Oil](https://hathororganics.com/collections/essential-oil/products/frankincense-oil)"
