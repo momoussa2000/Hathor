@@ -181,181 +181,6 @@ app.use(express.json());
 const products = {
   oils: [
     {
-      name: "Moringa Oil",
-      benefits: ["hair growth", "anti-aging", "moisturizing", "dandruff prevention", "acne treatment", "skin brightening"],
-      description: "Cold-pressed moringa oil rich in antioxidants and vitamins",
-      properties: {
-        antiInflammatory: true,
-        antibacterial: true,
-        moisturizing: true,
-        antioxidant: true
-      },
-      recommendedUses: ["facial oil", "hair treatment", "body moisturizer"],
-      sizes: [
-        {
-          size: "15ml",
-          price: "LE 480.00",
-          dropsPerBottle: 300,
-          link: "https://hathororganics.com/collections/carrier-oil/products/moringa-oil"
-        },
-        {
-          size: "30ml",
-          price: "LE 850.00",
-          dropsPerBottle: 600,
-          link: "https://hathororganics.com/collections/carrier-oil/products/moringa-oil"
-        }
-      ]
-    },
-    {
-      name: "Sesame Oil",
-      benefits: ["hair growth", "moisturizing", "anti-inflammatory", "UV protection", "acne treatment", "skin healing"],
-      description: "Pure cold-pressed sesame oil with natural UV protection",
-      properties: {
-        antiInflammatory: true,
-        antibacterial: true,
-        moisturizing: true,
-        UVProtection: true
-      },
-      recommendedUses: ["facial oil", "body oil", "hair treatment"],
-      sizes: [
-        {
-          size: "15ml",
-          price: "LE 450.00",
-          dropsPerBottle: 300,
-          link: "https://hathororganics.com/collections/carrier-oil/products/sesame-oil"
-        },
-        {
-          size: "30ml",
-          price: "LE 800.00",
-          dropsPerBottle: 600,
-          link: "https://hathororganics.com/collections/carrier-oil/products/sesame-oil"
-        }
-      ]
-    },
-    {
-      name: "Jojoba Oil",
-      benefits: ["acne treatment", "moisturizing", "balancing", "anti-aging", "hair growth"],
-      description: "Pure jojoba oil that mimics skin's natural sebum",
-      properties: {
-        balancing: true,
-        moisturizing: true,
-        antibacterial: true,
-        nonComedogenic: true
-      },
-      recommendedUses: ["facial oil", "makeup remover", "hair treatment"],
-      sizes: [
-        {
-          size: "15ml",
-          price: "LE 480.00",
-          dropsPerBottle: 300,
-          link: "https://hathororganics.com/collections/carrier-oil/products/jojoba-oil"
-        },
-        {
-          size: "30ml",
-          price: "LE 850.00",
-          dropsPerBottle: 600,
-          link: "https://hathororganics.com/collections/carrier-oil/products/jojoba-oil"
-        }
-      ]
-    },
-    {
-      name: "Acne Set",
-      benefits: ["acne treatment", "skin balancing", "anti-inflammatory", "healing"],
-      description: "Complete acne treatment set with specially formulated oils",
-      properties: {
-        antiInflammatory: true,
-        antibacterial: true,
-        balancing: true,
-        healing: true
-      },
-      recommendedUses: ["facial treatment", "spot treatment"],
-      sizes: [
-        {
-          size: "Set",
-          price: "LE 985.00",
-          link: "https://hathororganics.com/collections/essential-oil/products/acne-set"
-        }
-      ]
-    },
-    {
-      name: "Garden Cress Oil",
-      benefits: ["hair growth", "scalp health", "dandruff prevention", "hair strengthening"],
-      description: "Cold-pressed garden cress oil rich in nutrients for hair growth",
-      properties: {
-        hairGrowth: true,
-        scalpHealth: true,
-        antiDandruff: true,
-        strengthening: true
-      },
-      recommendedUses: ["hair treatment", "scalp massage"],
-      sizes: [
-        {
-          size: "15ml",
-          price: "LE 480.00",
-          dropsPerBottle: 300,
-          link: "https://hathororganics.com/collections/essential-oil/products/garden-cress-oil"
-        },
-        {
-          size: "30ml",
-          price: "LE 850.00",
-          dropsPerBottle: 600,
-          link: "https://hathororganics.com/collections/essential-oil/products/garden-cress-oil"
-        }
-      ]
-    },
-    {
-      name: "Frankincense Oil",
-      benefits: ["hair growth", "scalp health", "anti-inflammatory", "stress relief"],
-      description: "Pure frankincense oil for hair and scalp health",
-      properties: {
-        antiInflammatory: true,
-        scalpHealth: true,
-        stressRelief: true,
-        hairGrowth: true
-      },
-      recommendedUses: ["hair treatment", "scalp massage", "aromatherapy"],
-      sizes: [
-        {
-          size: "15ml",
-          price: "LE 480.00",
-          dropsPerBottle: 300,
-          link: "https://hathororganics.com/collections/essential-oil/products/frankincense-oil"
-        },
-        {
-          size: "30ml",
-          price: "LE 850.00",
-          dropsPerBottle: 600,
-          link: "https://hathororganics.com/collections/essential-oil/products/frankincense-oil"
-        }
-      ]
-    },
-    {
-      name: "Rosemary Oil",
-      benefits: ["hair growth", "scalp circulation", "dandruff prevention", "hair strengthening"],
-      description: "Pure rosemary oil for stimulating hair growth and scalp health",
-      properties: {
-        hairGrowth: true,
-        scalpCirculation: true,
-        antiDandruff: true,
-        strengthening: true
-      },
-      recommendedUses: ["hair treatment", "scalp massage"],
-      sizes: [
-        {
-          size: "15ml",
-          price: "LE 480.00",
-          dropsPerBottle: 300,
-          link: "https://hathororganics.com/collections/essential-oil/products/rosemary-oil"
-        },
-        {
-          size: "30ml",
-          price: "LE 850.00",
-          dropsPerBottle: 600,
-          link: "https://hathororganics.com/collections/essential-oil/products/rosemary-oil"
-        }
-      ]
-    },
-    {
       name: "Sweet Almond Oil",
       benefits: ["moisturizing", "skin softening", "anti-inflammatory", "skin healing", "hair conditioning"],
       description: "Pure cold-pressed sweet almond oil for skin and hair care",
@@ -371,13 +196,13 @@ const products = {
           size: "15ml",
           price: "LE 480.00",
           dropsPerBottle: 300,
-          link: "https://hathororganics.com/collections/carrier-oil/products/almond-oil"
+          link: "https://hathororganics.com/collections/carrier-oil/products/sweet-almond-oil"
         },
         {
           size: "30ml",
           price: "LE 850.00",
           dropsPerBottle: 600,
-          link: "https://hathororganics.com/collections/carrier-oil/products/almond-oil"
+          link: "https://hathororganics.com/collections/carrier-oil/products/sweet-almond-oil"
         }
       ]
     },
@@ -430,6 +255,110 @@ const products = {
           price: "LE 850.00",
           dropsPerBottle: 600,
           link: "https://hathororganics.com/collections/carrier-oil/products/argan-oil"
+        }
+      ]
+    },
+    {
+      name: "Jojoba Oil",
+      benefits: ["acne treatment", "moisturizing", "balancing", "anti-aging", "hair growth"],
+      description: "Pure jojoba oil that mimics skin's natural sebum",
+      properties: {
+        balancing: true,
+        moisturizing: true,
+        antibacterial: true,
+        nonComedogenic: true
+      },
+      recommendedUses: ["facial oil", "makeup remover", "hair treatment"],
+      sizes: [
+        {
+          size: "15ml",
+          price: "LE 480.00",
+          dropsPerBottle: 300,
+          link: "https://hathororganics.com/collections/carrier-oil/products/jojoba-oil"
+        },
+        {
+          size: "30ml",
+          price: "LE 850.00",
+          dropsPerBottle: 600,
+          link: "https://hathororganics.com/collections/carrier-oil/products/jojoba-oil"
+        }
+      ]
+    },
+    {
+      name: "Sesame Oil",
+      benefits: ["hair growth", "moisturizing", "anti-inflammatory", "UV protection", "acne treatment", "skin healing"],
+      description: "Pure cold-pressed sesame oil with natural UV protection",
+      properties: {
+        antiInflammatory: true,
+        antibacterial: true,
+        moisturizing: true,
+        UVProtection: true
+      },
+      recommendedUses: ["facial oil", "body oil", "hair treatment"],
+      sizes: [
+        {
+          size: "15ml",
+          price: "LE 450.00",
+          dropsPerBottle: 300,
+          link: "https://hathororganics.com/collections/carrier-oil/products/sesame-oil"
+        },
+        {
+          size: "30ml",
+          price: "LE 800.00",
+          dropsPerBottle: 600,
+          link: "https://hathororganics.com/collections/carrier-oil/products/sesame-oil"
+        }
+      ]
+    },
+    {
+      name: "Moringa Oil",
+      benefits: ["hair growth", "anti-aging", "moisturizing", "dandruff prevention", "acne treatment", "skin brightening"],
+      description: "Cold-pressed moringa oil rich in antioxidants and vitamins",
+      properties: {
+        antiInflammatory: true,
+        antibacterial: true,
+        moisturizing: true,
+        antioxidant: true
+      },
+      recommendedUses: ["facial oil", "hair treatment", "body moisturizer"],
+      sizes: [
+        {
+          size: "15ml",
+          price: "LE 480.00",
+          dropsPerBottle: 300,
+          link: "https://hathororganics.com/collections/carrier-oil/products/moringa-oil"
+        },
+        {
+          size: "30ml",
+          price: "LE 850.00",
+          dropsPerBottle: 600,
+          link: "https://hathororganics.com/collections/carrier-oil/products/moringa-oil"
+        }
+      ]
+    },
+    {
+      name: "Avocado Oil",
+      benefits: ["deep moisturizing", "anti-aging", "skin healing", "hair conditioning", "nail strengthening"],
+      description: "Pure cold-pressed avocado oil rich in vitamins and fatty acids",
+      properties: {
+        moisturizing: true,
+        antiAging: true,
+        skinHealing: true,
+        hairConditioning: true
+      },
+      recommendedUses: ["facial oil", "body oil", "hair treatment", "nail care"],
+      sizes: [
+        {
+          size: "15ml",
+          price: "LE 480.00",
+          dropsPerBottle: 300,
+          link: "https://hathororganics.com/collections/carrier-oil/products/avocado-oil"
+        },
+        {
+          size: "30ml",
+          price: "LE 850.00",
+          dropsPerBottle: 600,
+          link: "https://hathororganics.com/collections/carrier-oil/products/avocado-oil"
         }
       ]
     },
@@ -508,6 +437,234 @@ const products = {
           price: "LE 850.00",
           dropsPerBottle: 600,
           link: "https://hathororganics.com/collections/essential-oil/products/tea-tree-essential-oil"
+        }
+      ]
+    },
+    {
+      name: "Frankincense Oil",
+      benefits: ["hair growth", "scalp health", "anti-inflammatory", "stress relief"],
+      description: "Pure frankincense oil for hair and scalp health",
+      properties: {
+        antiInflammatory: true,
+        scalpHealth: true,
+        stressRelief: true,
+        hairGrowth: true
+      },
+      recommendedUses: ["hair treatment", "scalp massage", "aromatherapy"],
+      sizes: [
+        {
+          size: "15ml",
+          price: "LE 480.00",
+          dropsPerBottle: 300,
+          link: "https://hathororganics.com/collections/essential-oil/products/frankincense-oil"
+        },
+        {
+          size: "30ml",
+          price: "LE 850.00",
+          dropsPerBottle: 600,
+          link: "https://hathororganics.com/collections/essential-oil/products/frankincense-oil"
+        }
+      ]
+    },
+    {
+      name: "Rosemary Oil",
+      benefits: ["hair growth", "scalp circulation", "dandruff prevention", "hair strengthening"],
+      description: "Pure rosemary oil for stimulating hair growth and scalp health",
+      properties: {
+        hairGrowth: true,
+        scalpCirculation: true,
+        antiDandruff: true,
+        strengthening: true
+      },
+      recommendedUses: ["hair treatment", "scalp massage"],
+      sizes: [
+        {
+          size: "15ml",
+          price: "LE 480.00",
+          dropsPerBottle: 300,
+          link: "https://hathororganics.com/collections/essential-oil/products/rosemary-oil"
+        },
+        {
+          size: "30ml",
+          price: "LE 850.00",
+          dropsPerBottle: 600,
+          link: "https://hathororganics.com/collections/essential-oil/products/rosemary-oil"
+        }
+      ]
+    },
+    {
+      name: "Garden Cress Oil",
+      benefits: ["hair growth", "scalp health", "dandruff prevention", "hair strengthening"],
+      description: "Cold-pressed garden cress oil rich in nutrients for hair growth",
+      properties: {
+        hairGrowth: true,
+        scalpHealth: true,
+        antiDandruff: true,
+        strengthening: true
+      },
+      recommendedUses: ["hair treatment", "scalp massage"],
+      sizes: [
+        {
+          size: "15ml",
+          price: "LE 480.00",
+          dropsPerBottle: 300,
+          link: "https://hathororganics.com/collections/essential-oil/products/garden-cress-oil"
+        },
+        {
+          size: "30ml",
+          price: "LE 850.00",
+          dropsPerBottle: 600,
+          link: "https://hathororganics.com/collections/essential-oil/products/garden-cress-oil"
+        }
+      ]
+    },
+    {
+      name: "Jasmine Oil",
+      benefits: ["mood enhancement", "skin healing", "anti-aging", "stress relief"],
+      description: "Pure jasmine essential oil for emotional and skin wellness",
+      properties: {
+        moodEnhancing: true,
+        skinHealing: true,
+        antiAging: true,
+        stressRelief: true
+      },
+      recommendedUses: ["aromatherapy", "skin treatment", "mood enhancement"],
+      sizes: [
+        {
+          size: "15ml",
+          price: "LE 480.00",
+          dropsPerBottle: 300,
+          link: "https://hathororganics.com/collections/essential-oil/products/jasmine-oil"
+        },
+        {
+          size: "30ml",
+          price: "LE 850.00",
+          dropsPerBottle: 600,
+          link: "https://hathororganics.com/collections/essential-oil/products/jasmine-oil"
+        }
+      ]
+    },
+    {
+      name: "Neroli Oil",
+      benefits: ["skin regeneration", "stress relief", "anti-aging", "mood enhancement"],
+      description: "Pure neroli essential oil for skin and emotional wellness",
+      properties: {
+        skinRegeneration: true,
+        stressRelief: true,
+        antiAging: true,
+        moodEnhancing: true
+      },
+      recommendedUses: ["facial treatment", "aromatherapy", "mood enhancement"],
+      sizes: [
+        {
+          size: "15ml",
+          price: "LE 480.00",
+          dropsPerBottle: 300,
+          link: "https://hathororganics.com/collections/essential-oil/products/neroli-oil"
+        },
+        {
+          size: "30ml",
+          price: "LE 850.00",
+          dropsPerBottle: 600,
+          link: "https://hathororganics.com/collections/essential-oil/products/neroli-oil"
+        }
+      ]
+    },
+    {
+      name: "Eucalyptus Oil",
+      benefits: ["respiratory support", "pain relief", "mental clarity", "skin healing"],
+      description: "Pure eucalyptus essential oil for respiratory and skin health",
+      properties: {
+        respiratorySupport: true,
+        painRelief: true,
+        mentalClarity: true,
+        skinHealing: true
+      },
+      recommendedUses: ["aromatherapy", "respiratory support", "pain relief"],
+      sizes: [
+        {
+          size: "15ml",
+          price: "LE 480.00",
+          dropsPerBottle: 300,
+          link: "https://hathororganics.com/collections/essential-oil/products/eucalyptus-oil"
+        },
+        {
+          size: "30ml",
+          price: "LE 850.00",
+          dropsPerBottle: 600,
+          link: "https://hathororganics.com/collections/essential-oil/products/eucalyptus-oil"
+        }
+      ]
+    },
+    {
+      name: "Sandalwood Oil",
+      benefits: ["meditation support", "skin healing", "anti-aging", "stress relief"],
+      description: "Pure sandalwood essential oil for spiritual and skin wellness",
+      properties: {
+        meditationSupport: true,
+        skinHealing: true,
+        antiAging: true,
+        stressRelief: true
+      },
+      recommendedUses: ["meditation", "skin treatment", "aromatherapy"],
+      sizes: [
+        {
+          size: "15ml",
+          price: "LE 480.00",
+          dropsPerBottle: 300,
+          link: "https://hathororganics.com/collections/essential-oil/products/sandalwood-oil"
+        },
+        {
+          size: "30ml",
+          price: "LE 850.00",
+          dropsPerBottle: 600,
+          link: "https://hathororganics.com/collections/essential-oil/products/sandalwood-oil"
+        }
+      ]
+    },
+    {
+      name: "Rose Oil",
+      benefits: ["skin rejuvenation", "emotional balance", "anti-aging", "mood enhancement"],
+      description: "Pure rose essential oil for skin and emotional wellness",
+      properties: {
+        skinRejuvenation: true,
+        emotionalBalance: true,
+        antiAging: true,
+        moodEnhancing: true
+      },
+      recommendedUses: ["facial treatment", "aromatherapy", "mood enhancement"],
+      sizes: [
+        {
+          size: "15ml",
+          price: "LE 480.00",
+          dropsPerBottle: 300,
+          link: "https://hathororganics.com/collections/essential-oil/products/rose-oil"
+        },
+        {
+          size: "30ml",
+          price: "LE 850.00",
+          dropsPerBottle: 600,
+          link: "https://hathororganics.com/collections/essential-oil/products/rose-oil"
+        }
+      ]
+    },
+    {
+      name: "Acne Set",
+      benefits: ["acne treatment", "skin balancing", "anti-inflammatory", "healing"],
+      description: "Complete acne treatment set with specially formulated oils",
+      properties: {
+        antiInflammatory: true,
+        antibacterial: true,
+        balancing: true,
+        healing: true
+      },
+      recommendedUses: ["facial treatment", "spot treatment"],
+      sizes: [
+        {
+          size: "Set",
+          price: "LE 1200.00",
+          dropsPerBottle: 900,
+          link: "https://hathororganics.com/collections/essential-oil/products/acne-set"
         }
       ]
     }
