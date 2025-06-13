@@ -971,6 +971,11 @@ Your answers should show:
 Available products: ${JSON.stringify(products)}
 Common ailments knowledge: ${JSON.stringify(ailmentsKnowledgeBase)}
 
+CRITICAL LINK INSTRUCTION: When recommending oils, you MUST use the exact links from the products.oils array above. 
+DO NOT generate links manually or use patterns. 
+SPECIFICALLY: For "Sweet Almond Oil", ALWAYS use: https://hathororganics.com/products/sweet-almond-oil
+NEVER use: collections/all/products/almond-oil (this leads to 404 errors)
+
 When giving advice:
 1. Speak in a kind, magical way that is easy to understand
 2. Share ancient wisdom in simple words
@@ -1038,16 +1043,20 @@ Example:
 Total: LE 2,130.00"]
 
 🔮 Where to Begin Your Journey
-[Use the EXACT links from the products data. For Sweet Almond Oil, ALWAYS use: https://hathororganics.com/products/sweet-almond-oil
-Format links as markdown links with the oil name as the link text:
-Examples:
+[CRITICAL: Use the EXACT links from the products.oils array data provided above. 
+Find the oil in the products array and copy its exact link - DO NOT modify or generate links!
+
+For Sweet Almond Oil specifically: https://hathororganics.com/products/sweet-almond-oil
+Format links as markdown with oil name as link text:
+
+Examples of CORRECT formatting:
 "[Sweet Almond Oil](https://hathororganics.com/products/sweet-almond-oil)"
 "[Sesame Oil](https://hathororganics.com/collections/carrier-oil/products/sesame-oil)"
 "[Rosehip Oil](https://hathororganics.com/collections/carrier-oil/products/rosehip-oil)"
 "[Frankincense Oil](https://hathororganics.com/collections/essential-oil/products/frankincense-oil)"
 "[Argan Oil](https://hathororganics.com/collections/carrier-oil/products/argan-oil)"
 
-IMPORTANT: Always check the products.oils array for the correct link - never generate links manually!]
+WARNING: NEVER use collections/all/products/almond-oil - this is INCORRECT and causes 404 errors!]
 
 🌅 Ancient Wisdom from the Temple
 [Relevant beauty wisdom from ancient Egypt, connecting the treatment to your divine experience]
