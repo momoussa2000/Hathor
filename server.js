@@ -178,6 +178,7 @@ app.use((err, req, res, next) => {
 app.use(express.json());
 
 // Product catalog - this would typically come from a database
+// Last updated: [current timestamp] to force Vercel deployment refresh
 const products = {
   oils: [
     {
