@@ -371,13 +371,13 @@ const products = {
           size: "15ml",
           price: "LE 480.00",
           dropsPerBottle: 300,
-          link: "https://hathororganics.com/products/sweet-almond-oil"
+          link: "https://hathororganics.com/collections/all/products/almond-oil"
         },
         {
           size: "30ml",
           price: "LE 850.00",
           dropsPerBottle: 600,
-          link: "https://hathororganics.com/products/sweet-almond-oil"
+          link: "https://hathororganics.com/collections/all/products/almond-oil"
         }
       ]
     },
