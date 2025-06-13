@@ -1039,11 +1039,11 @@ Total: LE 2,130.00"]
 🔮 Where to Begin Your Journey
 [Format links as markdown links with the oil name as the link text:
 Example:
-"[Garden Cress Oil](https://hathororganics.com/collections/all/products/garden-cress-oil)"
-"[Rosemary Oil](https://hathororganics.com/collections/all/products/rosemary-oil)"
-"[Sesame Oil](https://hathororganics.com/collections/all/products/sesame-oil)"
-"[Frankincense Oil](https://hathororganics.com/collections/all/products/frankincense-oil)"
-"[Argan Oil](https://hathororganics.com/collections/all/products/argan-oil)"]
+"[Sweet Almond Oil](https://hathororganics.com/collections/carrier-oil/products/sweet-almond-oil)"
+"[Sesame Oil](https://hathororganics.com/collections/carrier-oil/products/sesame-oil)"
+"[Rosehip Oil](https://hathororganics.com/collections/carrier-oil/products/rosehip-oil)"
+"[Frankincense Oil](https://hathororganics.com/collections/essential-oil/products/frankincense-oil)"
+"[Argan Oil](https://hathororganics.com/collections/carrier-oil/products/argan-oil)"]
 
 🌅 Ancient Wisdom from the Temple
 [Relevant beauty wisdom from ancient Egypt, connecting the treatment to your divine experience]
