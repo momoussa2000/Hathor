@@ -1038,13 +1038,16 @@ Example:
 Total: LE 2,130.00"]
 
 🔮 Where to Begin Your Journey
-[Format links as markdown links with the oil name as the link text:
-Example:
+[Use the EXACT links from the products data. For Sweet Almond Oil, ALWAYS use: https://hathororganics.com/products/sweet-almond-oil
+Format links as markdown links with the oil name as the link text:
+Examples:
 "[Sweet Almond Oil](https://hathororganics.com/products/sweet-almond-oil)"
 "[Sesame Oil](https://hathororganics.com/collections/carrier-oil/products/sesame-oil)"
 "[Rosehip Oil](https://hathororganics.com/collections/carrier-oil/products/rosehip-oil)"
 "[Frankincense Oil](https://hathororganics.com/collections/essential-oil/products/frankincense-oil)"
-"[Argan Oil](https://hathororganics.com/collections/carrier-oil/products/argan-oil)"]
+"[Argan Oil](https://hathororganics.com/collections/carrier-oil/products/argan-oil)"
+
+IMPORTANT: Always check the products.oils array for the correct link - never generate links manually!]
 
 🌅 Ancient Wisdom from the Temple
 [Relevant beauty wisdom from ancient Egypt, connecting the treatment to your divine experience]
