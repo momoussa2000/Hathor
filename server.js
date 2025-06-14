@@ -1174,20 +1174,20 @@ const FULL_INVENTORY = [
   { name: "Cellulite Oil Mix", category: "Carrier Oils", benefits: ["cellulite reduction", "skin tightening", "circulation improvement", "body contouring"], link: "https://hathororganics.com/products/cellulite-oil-mix", prices: "15ml LE 360.00, 30ml LE 720.00", soldOut: false },
   { name: "Garden Cress Oil", category: "Carrier Oils", benefits: ["hair growth", "scalp health", "dandruff prevention", "hair strengthening"], link: "https://hathororganics.com/products/garden-cress-oil", prices: "15ml LE 300.00, 30ml LE 600.00", soldOut: false },
   { name: "Black Seed Oil", category: "Carrier Oils", benefits: ["immune support", "anti-inflammatory", "skin healing", "hair growth", "respiratory health"], link: "https://hathororganics.com/products/black-seed-oil", prices: "15ml LE 500.00, 30ml LE 1,000.00", soldOut: false },
-  { name: "Virgin Olive Oil", category: "Carrier Oils", benefits: ["moisturizing", "anti-aging", "skin healing", "hair conditioning"], link: "https://hathororganics.com/products/virgin-olive-oil", prices: "15ml LE 240.00, 30ml LE 480.00", soldOut: true },
+  { name: "Virgin Olive Oil", category: "Carrier Oils", benefits: ["moisturizing", "anti-aging", "skin healing", "hair conditioning"], link: "https://hathororganics.com/products/virgin-olive-oil", prices: "15ml LE 240.00, 30ml LE 480.00", soldOut: false },
   // Essential Oils
   { name: "Rosemary Oil", category: "Essential Oils", benefits: ["hair growth", "scalp circulation", "dandruff prevention", "hair strengthening"], link: "https://hathororganics.com/products/rosemary-oil", prices: "15ml LE 380.00, 30ml LE 760.00", soldOut: false },
   { name: "Frankincense Oil", category: "Essential Oils", benefits: ["anti-aging", "skin regeneration", "stress relief", "meditation support"], link: "https://hathororganics.com/products/frankincense-oil", prices: "15ml LE 1,000.00, 30ml LE 2,000.00", soldOut: false },
   { name: "Lavender Oil", category: "Essential Oils", benefits: ["relaxation", "skin healing", "acne treatment", "sleep support"], link: "https://hathororganics.com/products/lavender-oil", prices: "15ml LE 450.00, 30ml LE 900.00", soldOut: false },
   { name: "Rose Oil", category: "Essential Oils", benefits: ["skin rejuvenation", "emotional balance", "anti-aging", "mood enhancement"], link: "https://hathororganics.com/products/rose-oil", prices: "15ml LE 750.00, 30ml LE 1,500.00", soldOut: false },
-  { name: "Cinnamon Oil", category: "Essential Oils", benefits: ["circulation improvement", "warming", "antimicrobial", "digestive support"], link: "https://hathororganics.com/products/cinnamon-oil", prices: "15ml LE 700.00, 30ml LE 1,400.00", soldOut: true },
-  { name: "Jasmine Oil", category: "Essential Oils", benefits: ["mood enhancement", "skin healing", "anti-aging", "stress relief"], link: "https://hathororganics.com/products/jasmine-oil", prices: "15ml LE 1,800.00, 30ml LE 3,600.00", soldOut: true },
+  { name: "Cinnamon Oil", category: "Essential Oils", benefits: ["circulation improvement", "warming", "antimicrobial", "digestive support"], link: "https://hathororganics.com/products/cinnamon-oil", prices: "15ml LE 700.00, 30ml LE 1,400.00", soldOut: false },
+  { name: "Jasmine Oil", category: "Essential Oils", benefits: ["mood enhancement", "skin healing", "anti-aging", "stress relief"], link: "https://hathororganics.com/products/jasmine-oil", prices: "15ml LE 1,800.00, 30ml LE 3,600.00", soldOut: false },
   { name: "Tea Tree Oil", category: "Essential Oils", benefits: ["acne treatment", "antifungal", "antibacterial", "scalp health"], link: "https://hathororganics.com/products/tea-tree-oil", prices: "15ml LE 650.00, 30ml LE 1,300.00", soldOut: false },
   { name: "Peppermint Oil", category: "Essential Oils", benefits: ["pain relief", "energy boosting", "cooling", "digestive support"], link: "https://hathororganics.com/products/peppermint-oil", prices: "15ml LE 350.00, 30ml LE 700.00", soldOut: false },
   { name: "Clove Oil", category: "Essential Oils", benefits: ["pain relief", "antimicrobial", "dental health", "circulation improvement"], link: "https://hathororganics.com/products/clove-oil", prices: "15ml LE 700.00, 30ml LE 1,400.00", soldOut: false },
   // Special Oils
   { name: "Acne Set", category: "Special Oils", benefits: ["acne treatment", "skin balancing", "anti-inflammatory", "healing"], link: "https://hathororganics.com/products/acne-set", prices: "Set LE 1,200.00, 900 drops", soldOut: false },
-  { name: "Queen Tiye Hair Oil", category: "Special Oils", benefits: ["hair growth", "scalp health", "hair strengthening", "ancient Egyptian formula"], link: "https://hathororganics.com/products/queen-tiye-hair-oil", prices: "15ml LE 240.00, 30ml LE 480.00", soldOut: true }
+  { name: "Queen Tiye Hair Oil", category: "Special Oils", benefits: ["hair growth", "scalp health", "hair strengthening", "ancient Egyptian formula"], link: "https://hathororganics.com/products/queen-tiye-hair-oil", prices: "15ml LE 240.00, 30ml LE 480.00", soldOut: false }
 ];
 
 // Context storage for conversation continuity
@@ -1210,22 +1210,19 @@ You wish to know about my sacred collection of oils! Let me share with you our c
 `;
   
   carrierOils.forEach((oil, index) => {
-    const soldOutText = oil.soldOut ? " **CURRENTLY SOLD OUT**" : "";
-    response += `${index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})${soldOutText}\n`;
+    response += `${index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})\n`;
   });
   
   response += `\n**ESSENTIAL OILS (${essentialOils.length} oils):**\n`;
   
   essentialOils.forEach((oil, index) => {
-    const soldOutText = oil.soldOut ? " **CURRENTLY SOLD OUT**" : "";
-    response += `${carrierOils.length + index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})${soldOutText}\n`;
+    response += `${carrierOils.length + index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})\n`;
   });
   
   response += `\n**SPECIAL OILS (${specialOils.length} oils):**\n`;
   
   specialOils.forEach((oil, index) => {
-    const soldOutText = oil.soldOut ? " **CURRENTLY SOLD OUT**" : "";
-    response += `${carrierOils.length + essentialOils.length + index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})${soldOutText}\n`;
+    response += `${carrierOils.length + essentialOils.length + index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})\n`;
   });
   
   response += `
@@ -1313,9 +1310,9 @@ app.post('/api/chat', async (req, res) => {
 Yes, beloved seeker! The sacred collection I just shared with you represents our complete inventory of all 20 divine oils. This is our entire treasured collection:
 
 🌿 Complete Summary
-- **9 Carrier Oils** (including 1 currently sold out)
-- **9 Essential Oils** (including 2 currently sold out) 
-- **2 Special Oils** (including 1 currently sold out)
+- **9 Carrier Oils** - all available for your beauty journey
+- **9 Essential Oils** - each one ready to transform your wellness 
+- **2 Special Oils** - unique formulations blessed with ancient wisdom
 
 **Total: 20 sacred oils** - this is our complete offering, each one carefully crafted with ancient Egyptian wisdom and modern purity standards.
 
