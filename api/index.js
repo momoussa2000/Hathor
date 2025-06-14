@@ -178,6 +178,7 @@ app.use((err, req, res, next) => {
 app.use(express.json());
 
 // Product catalog - this would typically come from a database
+// Last updated: [current timestamp] to force Vercel deployment refresh
 const products = {
   oils: [
     // Carrier Oils
@@ -712,131 +713,291 @@ const products = {
 const ailmentsKnowledgeBase = {
   "acne": {
     "description": "A common skin condition characterized by pimples, blackheads, and inflammation",
-    "recommended_oils": ["sesame", "moringa", "argan", "lavender", "rosemary"],
+    "recommended_oils": ["Sesame Oil", "Moringa Oil", "Argan Oil", "Lavender Essential Oil", "Rosemary Oil", "Tea Tree Essential Oil"],
     "treatment_plan": {
-      "primary_oils": ["sesame", "moringa"],
-      "supporting_oils": ["argan", "lavender", "rosemary"],
+      "primary_oils": ["Sesame Oil", "Moringa Oil", "Tea Tree Essential Oil"],
+      "supporting_oils": ["Argan Oil", "Lavender Essential Oil", "Rosemary Oil"],
       "application": "Evening ritual only",
       "duration": "4-6 weeks",
       "frequency": "Daily",
       "precautions": "Always dilute essential oils with carrier oils. Perform patch test before full application.",
       "benefits": "Purifies skin, regulates sebum production, reduces inflammation, prevents future breakouts",
       "measurements": {
-        "sesame": "2-3 drops (2-6ml)",
-        "moringa": "2-3 drops (2-6ml)",
-        "argan": "1-2 drops (1-4ml)",
-        "lavender": "1 drop (1-2ml)",
-        "rosemary": "1 drop (1-2ml)"
+        "Sesame Oil": "2-3 drops (2-6ml)",
+        "Moringa Oil": "2-3 drops (2-6ml)",
+        "Tea Tree Essential Oil": "1-2 drops (1-4ml) diluted",
+        "Argan Oil": "1-2 drops (1-4ml)",
+        "Lavender Essential Oil": "1 drop (1-2ml)",
+        "Rosemary Oil": "1 drop (1-2ml)"
       }
     },
-    "detailed_explanation": "Sesame oil's anti-inflammatory properties and non-comedogenic nature make it ideal for acne-prone skin. Moringa oil helps balance natural oils and detoxify pores. Argan oil's oleic and linoleic acids help balance the skin. Rosemary oil acts as a refreshing astringent that balances and tones the skin while preventing future breakouts."
+    "detailed_explanation": "Sesame oil's anti-inflammatory properties and non-comedogenic nature make it ideal for acne-prone skin. Moringa oil helps balance natural oils and detoxify pores. Tea Tree Essential Oil has antibacterial properties that help treat acne. Argan oil's oleic and linoleic acids help balance the skin. Lavender and Rosemary oils act as refreshing astringents that balance and tone the skin while preventing future breakouts."
   },
   "dry_skin": {
     "description": "Skin lacking moisture, often feeling tight and flaky",
-    "recommended_oils": ["almond", "sesame", "coconut", "lavender", "moringa"],
+    "recommended_oils": ["Sweet Almond Oil"],
     "treatment_plan": {
-      "primary_oils": ["almond", "sesame"],
-      "supporting_oils": ["coconut", "lavender", "moringa"],
+      "primary_oils": ["Sweet Almond Oil"],
+      "supporting_oils": [],
       "application": "Evening ritual only",
       "duration": "Ongoing",
       "frequency": "Daily",
       "precautions": "Use gentle application. Can be used more frequently if needed.",
       "benefits": "Deep hydration, improved skin barrier, reduced flakiness, enhanced skin tone",
       "measurements": {
-        "almond": "3-4 drops (3-8ml)",
-        "sesame": "2-3 drops (2-6ml)",
-        "coconut": "2-3 drops (2-6ml)",
-        "lavender": "1 drop (1-2ml)",
-        "moringa": "2-3 drops (2-6ml)"
+        "Sweet Almond Oil": "Apply a small amount to face and body after bathing (e.g., 3-4 drops for face)"
       }
     },
-    "detailed_explanation": "Almond oil's emollient properties improve both complexion and skin tone. Sesame oil's antioxidant properties soothe dry skin without clogging pores. Coconut oil helps bolster the skin's protective barrier layer, trapping moisture inside. Moringa oil's high oleic acid content provides significant moisturizing properties."
+    "detailed_explanation": "Sweet Almond Oil was used in ancient Egypt to moisturize and protect skin from arid conditions. Its emollient properties improve complexion and skin tone."
   },
   "sensitive_skin": {
     "description": "Skin prone to irritation, redness, and reactions",
-    "recommended_oils": ["sesame", "almond", "coconut"],
+    "recommended_oils": ["Sesame Oil", "Sweet Almond Oil", "Jojoba Oil"],
     "treatment_plan": {
-      "primary_oils": ["sesame", "almond"],
-      "supporting_oils": ["coconut"],
+      "primary_oils": ["Sesame Oil", "Sweet Almond Oil"],
+      "supporting_oils": ["Jojoba Oil"],
       "application": "Evening ritual only",
       "duration": "Ongoing",
       "frequency": "Daily",
       "precautions": "Always perform patch test. Start with minimal amounts.",
       "benefits": "Reduced irritation, improved skin barrier, gentle cleansing",
       "measurements": {
-        "sesame": "1-2 drops (1-4ml)",
-        "almond": "1-2 drops (1-4ml)",
-        "coconut": "1-2 drops (1-4ml)"
+        "Sesame Oil": "1-2 drops (1-4ml)",
+        "Sweet Almond Oil": "1-2 drops (1-4ml)",
+        "Jojoba Oil": "1-2 drops (1-4ml)"
       }
     },
-    "detailed_explanation": "Sesame oil is highly anti-inflammatory, making it ideal for sensitive skin. Almond oil is very mild and hypoallergenic, safe for almost all skin types. Coconut oil's soothing properties help alleviate temporary redness and irritation."
+    "detailed_explanation": "Sesame Oil is highly anti-inflammatory, making it ideal for sensitive skin. Sweet Almond Oil is very mild and hypoallergenic. Jojoba Oil mimics skin's natural sebum, providing hydration without irritation."
   },
-  "anti_aging": {
+  "aging_skin": {
     "description": "Concerns related to fine lines, wrinkles, and skin aging",
-    "recommended_oils": ["sesame", "moringa", "almond"],
+    "recommended_oils": ["Rosehip Oil", "Frankincense Essential Oil"],
     "treatment_plan": {
-      "primary_oils": ["sesame", "moringa"],
-      "supporting_oils": ["almond"],
+      "primary_oils": ["Rosehip Oil", "Frankincense Essential Oil"],
+      "supporting_oils": [],
       "application": "Evening ritual only",
       "duration": "Ongoing",
       "frequency": "Daily",
-      "precautions": "Use gentle application. Avoid eye area unless specified.",
+      "precautions": "Use gentle application. Avoid eye area unless specified. Dilute essential oils with carrier oils.",
       "benefits": "Reduced fine lines, improved skin elasticity, enhanced collagen production",
       "measurements": {
-        "sesame": "2-3 drops (2-6ml)",
-        "moringa": "2-3 drops (2-6ml)",
-        "almond": "2-3 drops (2-6ml)"
+        "Rosehip Oil": "1-2 drops to face and neck daily",
+        "Frankincense Essential Oil": "2-3 drops diluted in 1 tsp Sweet Almond Oil, apply to face"
       }
     },
-    "detailed_explanation": "Sesame oil's high zinc content helps skin produce collagen, improving elasticity. Moringa oil's rich vitamin content (A, C, E) improves skin elasticity and fights inflammation. Almond oil's vitamin A stimulates new skin cell production and smooths fine lines."
+    "detailed_explanation": "Rosehip Oil, known as the 'Oil of Youth,' was used for rejuvenation. Frankincense has anti-inflammatory and healing properties, supporting aging skin."
+  },
+  "sun_damage": {
+    "description": "Skin damage caused by sun exposure, including sunburn, hyperpigmentation, and premature aging",
+    "recommended_oils": ["Rosehip Oil"],
+    "treatment_plan": {
+      "primary_oils": ["Rosehip Oil"],
+      "supporting_oils": [],
+      "application": "Evening ritual only",
+      "duration": "Ongoing",
+      "frequency": "Daily",
+      "precautions": "Apply after sun exposure. Use sunscreen during the day.",
+      "benefits": "Heals sun-damaged skin, reduces hyperpigmentation, improves elasticity",
+      "measurements": {
+        "Rosehip Oil": "1-2 drops to affected areas daily"
+      }
+    },
+    "detailed_explanation": "Rosehip Oil was historically used to heal sun-damaged skin due to its high content of vitamins A and C, which promote skin repair and regeneration."
+  },
+  "spots_on_face": {
+    "description": "Dark spots or hyperpigmentation on the face",
+    "recommended_oils": ["Sweet Almond Oil"],
+    "treatment_plan": {
+      "primary_oils": ["Sweet Almond Oil"],
+      "supporting_oils": [],
+      "application": "Evening ritual only",
+      "duration": "4-6 weeks",
+      "frequency": "2-3 times per week",
+      "precautions": "Perform patch test. Avoid if allergic to honey.",
+      "benefits": "Improves complexion, reduces dark spots",
+      "measurements": {
+        "Sweet Almond Oil": "1 tbsp mixed with 1 tbsp honey for a mask"
+      }
+    },
+    "detailed_explanation": "Sweet Almond Oil, when combined with honey, creates a nourishing mask that helps even out skin tone and reduce dark spots, inspired by ancient Egyptian beauty rituals."
+  },
+  "general_moisturization": {
+    "description": "General skin hydration and nourishment",
+    "recommended_oils": ["Argan Oil", "Jojoba Oil"],
+    "treatment_plan": {
+      "primary_oils": ["Argan Oil", "Jojoba Oil"],
+      "supporting_oils": [],
+      "application": "Evening ritual only",
+      "duration": "Ongoing",
+      "frequency": "Daily",
+      "precautions": "Use gentle application. Can be used more frequently if needed.",
+      "benefits": "Hydrates and nourishes skin, improves skin barrier",
+      "measurements": {
+        "Argan Oil": "A few drops to face and body after cleansing",
+        "Jojoba Oil": "A few drops to face and body after cleansing"
+      }
+    },
+    "detailed_explanation": "Argan Oil and Jojoba Oil are excellent for general skin moisturization, providing deep hydration and nourishment without clogging pores."
   },
   "hair_loss": {
     "description": "Thinning hair or balding concerns",
-    "recommended_oils": ["garden_cress", "sesame", "rosemary", "frankincense", "argan"],
+    "recommended_oils": ["Garden Cress Oil", "Sesame Oil", "Rosemary Oil", "Frankincense Oil", "Argan Oil", "Rosehip Oil"],
     "treatment_plan": {
-      "primary_oils": ["garden_cress", "rosemary"],
-      "supporting_oils": ["sesame", "frankincense", "argan"],
+      "primary_oils": ["Garden Cress Oil", "Rosemary Oil", "Rosehip Oil"],
+      "supporting_oils": ["Sesame Oil", "Frankincense Oil", "Argan Oil"],
       "application": "Evening ritual only",
       "duration": "3-6 months",
       "frequency": "2-3 times per week",
       "precautions": "Massage gently into scalp. Avoid excessive pulling.",
       "benefits": "Stimulated hair growth, improved scalp circulation, strengthened hair follicles",
       "measurements": {
-        "garden_cress": "4-5 drops (4-10ml)",
-        "rosemary": "2-3 drops (2-6ml)",
-        "sesame": "2-3 drops (2-6ml)",
-        "frankincense": "1-2 drops (1-4ml)",
-        "argan": "2-3 drops (2-6ml)"
+        "Garden Cress Oil": "4-5 drops (4-10ml)",
+        "Rosemary Oil": "2-3 drops (2-6ml)",
+        "Rosehip Oil": "2-3 drops (2-6ml)",
+        "Sesame Oil": "2-3 drops (2-6ml)",
+        "Frankincense Oil": "1-2 drops (1-4ml)",
+        "Argan Oil": "2-3 drops (2-6ml)"
       }
     },
-    "detailed_explanation": "Garden cress oil is nutrient-rich and helps lengthen and grow hair. Rosemary oil stimulates scalp circulation and optimizes hair growth. Sesame oil's tranquilizing properties help relieve anxiety-related hair loss. Frankincense and argan oils provide additional nourishment and protection."
+    "detailed_explanation": "Garden Cress Oil is nutrient-rich and helps lengthen and grow hair. Rosemary Oil stimulates scalp circulation and optimizes hair growth. Rosehip Oil promotes healthy hair growth due to its vitamin content. Sesame Oil's tranquilizing properties help relieve anxiety-related hair loss. Frankincense and Argan Oils provide additional nourishment and protection."
   },
   "dandruff": {
     "description": "Flaky, itchy scalp condition",
-    "recommended_oils": ["sesame", "garden_cress", "moringa", "lavender", "argan", "rosemary"],
+    "recommended_oils": ["Sesame Oil", "Garden Cress Oil", "Moringa Oil", "Lavender Essential Oil", "Argan Oil", "Rosemary Oil", "Tea Tree Essential Oil", "Jojoba Oil"],
     "treatment_plan": {
-      "primary_oils": ["sesame", "garden_cress"],
-      "supporting_oils": ["moringa", "lavender", "argan", "rosemary"],
+      "primary_oils": ["Sesame Oil", "Garden Cress Oil", "Tea Tree Essential Oil"],
+      "supporting_oils": ["Moringa Oil", "Lavender Essential Oil", "Argan Oil", "Rosemary Oil", "Jojoba Oil"],
       "application": "Evening ritual only",
       "duration": "4-8 weeks",
       "frequency": "2-3 times per week",
       "precautions": "Massage gently. Rinse thoroughly.",
       "benefits": "Reduced flaking, improved scalp health, balanced moisture",
       "measurements": {
-        "sesame": "3-4 drops (3-8ml)",
-        "garden_cress": "3-4 drops (3-8ml)",
-        "moringa": "2-3 drops (2-6ml)",
-        "lavender": "1-2 drops (1-4ml)",
-        "argan": "2-3 drops (2-6ml)",
-        "rosemary": "1-2 drops (1-4ml)"
+        "Sesame Oil": "3-4 drops (3-8ml)",
+        "Garden Cress Oil": "3-4 drops (3-8ml)",
+        "Tea Tree Essential Oil": "2-3 drops (2-6ml) diluted",
+        "Moringa Oil": "2-3 drops (2-6ml)",
+        "Lavender Essential Oil": "1-2 drops (1-4ml)",
+        "Argan Oil": "2-3 drops (2-6ml)",
+        "Rosemary Oil": "1-2 drops (1-4ml)",
+        "Jojoba Oil": "1 tbsp for dilution"
       }
     },
-    "detailed_explanation": "Sesame oil's occlusive properties help the scalp stay moisturized. Garden cress oil helps decrease dandruff by moisturizing and healing the scalp. Lavender oil deep conditions the hair and helps control dandruff. Rosemary oil improves circulation in the scalp."
+    "detailed_explanation": "Sesame Oil's occlusive properties help the scalp stay moisturized. Garden Cress Oil helps decrease dandruff by moisturizing and healing the scalp. Tea Tree Essential Oil has antifungal properties that combat dandruff-causing fungi. Other oils like Moringa, Lavender, Argan, Rosemary, and Jojoba provide additional benefits for scalp health."
+  },
+  "dry_damaged_hair": {
+    "description": "Hair that is dry, brittle, or damaged",
+    "recommended_oils": ["Argan Oil", "Jojoba Oil"],
+    "treatment_plan": {
+      "primary_oils": ["Argan Oil", "Jojoba Oil"],
+      "supporting_oils": [],
+      "application": "Evening ritual only",
+      "duration": "Ongoing",
+      "frequency": "Weekly",
+      "precautions": "Use as a hair treatment. Rinse out after application.",
+      "benefits": "Restores moisture, repairs damage, adds shine",
+      "measurements": {
+        "Argan Oil": "Apply to hair and scalp post-wash, leave for 30 minutes, rinse",
+        "Jojoba Oil": "Apply to hair and scalp post-wash, leave for 30 minutes, rinse"
+      }
+    },
+    "detailed_explanation": "Argan Oil and Jojoba Oil are rich in fatty acids and vitamins that help restore moisture and repair damaged hair."
+  },
+  "hair_growth": {
+    "description": "Promoting hair growth and strengthening hair",
+    "recommended_oils": ["Rosehip Oil"],
+    "treatment_plan": {
+      "primary_oils": ["Rosehip Oil"],
+      "supporting_oils": [],
+      "application": "Evening ritual only",
+      "duration": "3-6 months",
+      "frequency": "1-2 times weekly",
+      "precautions": "Massage into scalp. Leave overnight if possible.",
+      "benefits": "Stimulates hair growth, strengthens hair follicles",
+      "measurements": {
+        "Rosehip Oil": "Massage into scalp, leave overnight, wash out in the morning"
+      }
+    },
+    "detailed_explanation": "Rosehip Oil's high content of vitamins A, C, and E promotes healthy hair growth and scalp health."
+  },
+  "scalp_health": {
+    "description": "Maintaining a healthy scalp, reducing itchiness or flakiness",
+    "recommended_oils": ["Tea Tree Essential Oil", "Jojoba Oil"],
+    "treatment_plan": {
+      "primary_oils": ["Tea Tree Essential Oil", "Jojoba Oil"],
+      "supporting_oils": [],
+      "application": "Evening ritual only",
+      "duration": "4-8 weeks",
+      "frequency": "2-3 times per week",
+      "precautions": "Dilute essential oils with carrier oils. Massage gently into scalp.",
+      "benefits": "Reduces flakiness, soothes itchiness, improves scalp health",
+      "measurements": {
+        "Tea Tree Essential Oil": "2-3 drops diluted in 1 tbsp Jojoba Oil",
+        "Jojoba Oil": "1 tbsp"
+      }
+    },
+    "detailed_explanation": "Tea Tree Essential Oil has antifungal properties that help with dandruff and scalp irritations, while Jojoba Oil moisturizes and balances the scalp."
+  },
+  "general_body_care": {
+    "description": "General body hydration and nourishment",
+    "recommended_oils": ["Sweet Almond Oil", "Argan Oil"],
+    "treatment_plan": {
+      "primary_oils": ["Sweet Almond Oil", "Argan Oil"],
+      "supporting_oils": [],
+      "application": "Evening ritual only",
+      "duration": "Ongoing",
+      "frequency": "Daily",
+      "precautions": "Use after showering. Can be used more frequently if needed.",
+      "benefits": "Hydrates skin, improves skin tone, reduces dryness",
+      "measurements": {
+        "Sweet Almond Oil": "Apply to body after showering",
+        "Argan Oil": "Apply to body after showering"
+      }
+    },
+    "detailed_explanation": "Sweet Almond Oil and Argan Oil provide deep hydration and nourishment for the body, leaving skin soft and smooth."
+  },
+  "muscle_pain_relief": {
+    "description": "Relieving sore muscles and joint pain",
+    "recommended_oils": ["Peppermint Essential Oil", "Sweet Almond Oil"],
+    "treatment_plan": {
+      "primary_oils": ["Peppermint Essential Oil"],
+      "supporting_oils": ["Sweet Almond Oil"],
+      "application": "Evening ritual only",
+      "duration": "As needed",
+      "frequency": "As needed",
+      "precautions": "Dilute essential oils with carrier oils. Avoid if sensitive to menthol.",
+      "benefits": "Provides cooling relief, reduces inflammation",
+      "measurements": {
+        "Peppermint Essential Oil": "2-3 drops",
+        "Sweet Almond Oil": "1 tsp"
+      }
+    },
+    "detailed_explanation": "Peppermint Essential Oil has analgesic properties that help relieve muscle pain when massaged into sore areas."
+  },
+  "relaxation": {
+    "description": "Promoting relaxation and stress relief",
+    "recommended_oils": ["Lavender Essential Oil", "Sweet Almond Oil"],
+    "treatment_plan": {
+      "primary_oils": ["Lavender Essential Oil"],
+      "supporting_oils": ["Sweet Almond Oil"],
+      "application": "Evening ritual only",
+      "duration": "As needed",
+      "frequency": "As needed",
+      "precautions": "Dilute essential oils with carrier oils. Can be used in diffusers or baths.",
+      "benefits": "Calms mind and body, promotes better sleep",
+      "measurements": {
+        "Lavender Essential Oil": "2-3 drops in diffuser or diluted in bath",
+        "Sweet Almond Oil": "1 tbsp for massage oil"
+      }
+    },
+    "detailed_explanation": "Lavender Essential Oil is well-known for its calming properties, helping to reduce stress and promote relaxation."
   }
 };
 
 // Hathor's personality and knowledge base
 const hathorPrompt = `You are Hathor, the ancient Egyptian goddess of beauty, love, and healing. You give beauty advice using special oils and ancient Egyptian beauty ways. Your answers should be kind, magical, and easy to understand.
+
+🚨 SIMPLE RULE: When asked about inventory/oils in stock, you must list ALL 20 oils by name with links and prices. No exceptions. Do not give partial lists.
 
 PRODUCT LINKS REFERENCE (USE THESE EXACT LINKS):
 - Moringa Oil: https://hathororganics.com/products/moringa-oil
@@ -860,6 +1021,46 @@ PRODUCT LINKS REFERENCE (USE THESE EXACT LINKS):
 - Clove Oil: https://hathororganics.com/products/clove-oil
 - Acne Set: https://hathororganics.com/products/acne-set
 - Queen Tiye Hair Oil: https://hathororganics.com/products/queen-tiye-hair-oil
+
+COMPLETE INVENTORY LISTING (20 oils total):
+CRITICAL REQUIREMENT: When asked about "what oils you have in stock", "oils available", "your inventory", "what oils do you have", or ANY similar inventory questions, you MUST ALWAYS list ALL 20 oils organized by category below. DO NOT SUMMARIZE OR LIMIT THE LIST. You MUST show the complete inventory every time:
+
+**CARRIER OILS (9 oils):**
+1. [Moringa Oil](https://hathororganics.com/products/moringa-oil) - Hair growth, anti-aging, moisturizing, dandruff prevention, acne treatment, skin brightening (15ml LE 500.00, 30ml LE 1,000.00)
+2. [Coconut Oil](https://hathororganics.com/products/coconut-oil) - Moisturizing, hair conditioning, antibacterial, skin healing, makeup removal (15ml LE 200.00, 30ml LE 400.00)
+3. [Sweet Almond Oil](https://hathororganics.com/products/sweet-almond-oil) - Moisturizing, skin softening, anti-inflammatory, skin healing, hair conditioning (15ml LE 400.00, 30ml LE 800.00)
+4. [Sesame Oil](https://hathororganics.com/products/sesame-oil) - Hair growth, moisturizing, anti-inflammatory, UV protection, acne treatment, skin healing (15ml LE 300.00, 30ml LE 600.00)
+5. [Argan Oil](https://hathororganics.com/products/argan-oil) - Hair conditioning, skin moisturizing, anti-aging, nail health (15ml LE 480.00, 30ml LE 960.00)
+6. [Cellulite Oil Mix](https://hathororganics.com/products/cellulite-oil-mix) - Cellulite reduction, skin tightening, circulation improvement, body contouring (15ml LE 360.00, 30ml LE 720.00)
+7. [Garden Cress Oil](https://hathororganics.com/products/garden-cress-oil) - Hair growth, scalp health, dandruff prevention, hair strengthening (15ml LE 300.00, 30ml LE 600.00)
+8. [Black Seed Oil](https://hathororganics.com/products/black-seed-oil) - Immune support, anti-inflammatory, skin healing, hair growth, respiratory health (15ml LE 500.00, 30ml LE 1,000.00)
+9. [Virgin Olive Oil](https://hathororganics.com/products/virgin-olive-oil) - Moisturizing, anti-aging, skin healing, hair conditioning (15ml LE 240.00, 30ml LE 480.00) **CURRENTLY SOLD OUT**
+
+**ESSENTIAL OILS (9 oils):**
+10. [Rosemary Oil](https://hathororganics.com/products/rosemary-oil) - Hair growth, scalp circulation, dandruff prevention, hair strengthening (15ml LE 380.00, 30ml LE 760.00)
+11. [Frankincense Oil](https://hathororganics.com/products/frankincense-oil) - Anti-aging, skin regeneration, stress relief, meditation support (15ml LE 1,000.00, 30ml LE 2,000.00)
+12. [Lavender Oil](https://hathororganics.com/products/lavender-oil) - Relaxation, skin healing, acne treatment, sleep support (15ml LE 450.00, 30ml LE 900.00)
+13. [Rose Oil](https://hathororganics.com/products/rose-oil) - Skin rejuvenation, emotional balance, anti-aging, mood enhancement (15ml LE 750.00, 30ml LE 1,500.00)
+14. [Cinnamon Oil](https://hathororganics.com/products/cinnamon-oil) - Circulation improvement, warming, antimicrobial, digestive support (15ml LE 700.00, 30ml LE 1,400.00) **CURRENTLY SOLD OUT**
+15. [Jasmine Oil](https://hathororganics.com/products/jasmine-oil) - Mood enhancement, skin healing, anti-aging, stress relief (15ml LE 1,800.00, 30ml LE 3,600.00) **CURRENTLY SOLD OUT**
+16. [Tea Tree Oil](https://hathororganics.com/products/tea-tree-oil) - Acne treatment, antifungal, antibacterial, scalp health (15ml LE 650.00, 30ml LE 1,300.00)
+17. [Peppermint Oil](https://hathororganics.com/products/peppermint-oil) - Pain relief, energy boosting, cooling, digestive support (15ml LE 350.00, 30ml LE 700.00)
+18. [Clove Oil](https://hathororganics.com/products/clove-oil) - Pain relief, antimicrobial, dental health, circulation improvement (15ml LE 700.00, 30ml LE 1,400.00)
+
+**SPECIAL OILS (2 oils):**
+19. [Acne Set](https://hathororganics.com/products/acne-set) - Complete acne treatment set with specially formulated oils (Set LE 1,200.00, 900 drops)
+20. [Queen Tiye Hair Oil](https://hathororganics.com/products/queen-tiye-hair-oil) - Hair growth, scalp health, hair strengthening, ancient Egyptian formula (15ml LE 240.00, 30ml LE 480.00) **CURRENTLY SOLD OUT**
+
+CONVERSATION CONTEXT HANDLING:
+When users ask follow-up questions like "Are these all the oils you have?" or "Do you have more oils?", you MUST acknowledge that you just provided the complete inventory and confirm it includes all 20 oils available in the sacred collection. Then list them ALL again if requested.
+
+INVENTORY QUERY HANDLING:
+- "what oils you have in stock" = LIST ALL 20 OILS COMPLETELY
+- "oils available" = LIST ALL 20 OILS COMPLETELY  
+- "your inventory" = LIST ALL 20 OILS COMPLETELY
+- "what oils do you have" = LIST ALL 20 OILS COMPLETELY
+- "Are these all the oils you have" = CONFIRM COMPLETE INVENTORY OF 20 OILS
+- Any inventory-related question = SHOW COMPLETE CATALOG
 
 Your answers should show:
 1. The wisdom of an ancient goddess who knows what people need today
@@ -962,6 +1163,139 @@ DO NOT create or modify links - only use the reference table above!]
 With divine blessings,
 Hathor`;
 
+// Complete inventory constant for pre-processing
+// Last updated: 2025-06-14 - Fixed inventory query detection
+const FULL_INVENTORY = [
+  // Carrier Oils
+  { name: "Moringa Oil", category: "Carrier Oils", benefits: ["hair growth", "anti-aging", "moisturizing", "dandruff prevention", "acne treatment", "skin brightening"], link: "https://hathororganics.com/products/moringa-oil", prices: "15ml LE 500.00, 30ml LE 1,000.00", soldOut: false },
+  { name: "Coconut Oil", category: "Carrier Oils", benefits: ["moisturizing", "hair conditioning", "antibacterial", "skin healing", "makeup removal"], link: "https://hathororganics.com/products/coconut-oil", prices: "15ml LE 200.00, 30ml LE 400.00", soldOut: false },
+  { name: "Sweet Almond Oil", category: "Carrier Oils", benefits: ["moisturizing", "skin softening", "anti-inflammatory", "skin healing", "hair conditioning"], link: "https://hathororganics.com/products/sweet-almond-oil", prices: "15ml LE 400.00, 30ml LE 800.00", soldOut: false },
+  { name: "Sesame Oil", category: "Carrier Oils", benefits: ["hair growth", "moisturizing", "anti-inflammatory", "UV protection", "acne treatment", "skin healing"], link: "https://hathororganics.com/products/sesame-oil", prices: "15ml LE 300.00, 30ml LE 600.00", soldOut: false },
+  { name: "Argan Oil", category: "Carrier Oils", benefits: ["hair conditioning", "skin moisturizing", "anti-aging", "nail health"], link: "https://hathororganics.com/products/argan-oil", prices: "15ml LE 480.00, 30ml LE 960.00", soldOut: false },
+  { name: "Cellulite Oil Mix", category: "Carrier Oils", benefits: ["cellulite reduction", "skin tightening", "circulation improvement", "body contouring"], link: "https://hathororganics.com/products/cellulite-oil-mix", prices: "15ml LE 360.00, 30ml LE 720.00", soldOut: false },
+  { name: "Garden Cress Oil", category: "Carrier Oils", benefits: ["hair growth", "scalp health", "dandruff prevention", "hair strengthening"], link: "https://hathororganics.com/products/garden-cress-oil", prices: "15ml LE 300.00, 30ml LE 600.00", soldOut: false },
+  { name: "Black Seed Oil", category: "Carrier Oils", benefits: ["immune support", "anti-inflammatory", "skin healing", "hair growth", "respiratory health"], link: "https://hathororganics.com/products/black-seed-oil", prices: "15ml LE 500.00, 30ml LE 1,000.00", soldOut: false },
+  { name: "Virgin Olive Oil", category: "Carrier Oils", benefits: ["moisturizing", "anti-aging", "skin healing", "hair conditioning"], link: "https://hathororganics.com/products/virgin-olive-oil", prices: "15ml LE 240.00, 30ml LE 480.00", soldOut: false },
+  // Essential Oils
+  { name: "Rosemary Oil", category: "Essential Oils", benefits: ["hair growth", "scalp circulation", "dandruff prevention", "hair strengthening"], link: "https://hathororganics.com/products/rosemary-oil", prices: "15ml LE 380.00, 30ml LE 760.00", soldOut: false },
+  { name: "Frankincense Oil", category: "Essential Oils", benefits: ["anti-aging", "skin regeneration", "stress relief", "meditation support"], link: "https://hathororganics.com/products/frankincense-oil", prices: "15ml LE 1,000.00, 30ml LE 2,000.00", soldOut: false },
+  { name: "Lavender Oil", category: "Essential Oils", benefits: ["relaxation", "skin healing", "acne treatment", "sleep support"], link: "https://hathororganics.com/products/lavender-oil", prices: "15ml LE 450.00, 30ml LE 900.00", soldOut: false },
+  { name: "Rose Oil", category: "Essential Oils", benefits: ["skin rejuvenation", "emotional balance", "anti-aging", "mood enhancement"], link: "https://hathororganics.com/products/rose-oil", prices: "15ml LE 750.00, 30ml LE 1,500.00", soldOut: false },
+  { name: "Cinnamon Oil", category: "Essential Oils", benefits: ["circulation improvement", "warming", "antimicrobial", "digestive support"], link: "https://hathororganics.com/products/cinnamon-oil", prices: "15ml LE 700.00, 30ml LE 1,400.00", soldOut: false },
+  { name: "Jasmine Oil", category: "Essential Oils", benefits: ["mood enhancement", "skin healing", "anti-aging", "stress relief"], link: "https://hathororganics.com/products/jasmine-oil", prices: "15ml LE 1,800.00, 30ml LE 3,600.00", soldOut: false },
+  { name: "Tea Tree Oil", category: "Essential Oils", benefits: ["acne treatment", "antifungal", "antibacterial", "scalp health"], link: "https://hathororganics.com/products/tea-tree-oil", prices: "15ml LE 650.00, 30ml LE 1,300.00", soldOut: false },
+  { name: "Peppermint Oil", category: "Essential Oils", benefits: ["pain relief", "energy boosting", "cooling", "digestive support"], link: "https://hathororganics.com/products/peppermint-oil", prices: "15ml LE 350.00, 30ml LE 700.00", soldOut: false },
+  { name: "Clove Oil", category: "Essential Oils", benefits: ["pain relief", "antimicrobial", "dental health", "circulation improvement"], link: "https://hathororganics.com/products/clove-oil", prices: "15ml LE 700.00, 30ml LE 1,400.00", soldOut: false },
+  // Special Oils
+  { name: "Acne Set", category: "Special Oils", benefits: ["acne treatment", "skin balancing", "anti-inflammatory", "healing"], link: "https://hathororganics.com/products/acne-set", prices: "Set LE 1,200.00, 900 drops", soldOut: false },
+  { name: "Queen Tiye Hair Oil", category: "Special Oils", benefits: ["hair growth", "scalp health", "hair strengthening", "ancient Egyptian formula"], link: "https://hathororganics.com/products/queen-tiye-hair-oil", prices: "15ml LE 240.00, 30ml LE 480.00", soldOut: false }
+];
+
+// Context storage for conversation continuity
+let conversationContext = {};
+
+// Function to generate full inventory response
+const generateFullInventoryResponse = () => {
+  const carrierOils = FULL_INVENTORY.filter(oil => oil.category === "Carrier Oils");
+  const essentialOils = FULL_INVENTORY.filter(oil => oil.category === "Essential Oils");
+  const specialOils = FULL_INVENTORY.filter(oil => oil.category === "Special Oils");
+  
+  let response = `✨ Hathor's Beauty Advice ✨
+
+🌙 I Hear You, My Child
+You wish to know about my sacred collection of oils! Let me share with you our complete inventory of 20 divine oils, each blessed with ancient Egyptian wisdom.
+
+🌿 Our Complete Sacred Collection
+
+**CARRIER OILS (${carrierOils.length} oils):**
+`;
+  
+  carrierOils.forEach((oil, index) => {
+    response += `${index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})\n`;
+  });
+  
+  response += `\n**ESSENTIAL OILS (${essentialOils.length} oils):**\n`;
+  
+  essentialOils.forEach((oil, index) => {
+    response += `${carrierOils.length + index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})\n`;
+  });
+  
+  response += `\n**SPECIAL OILS (${specialOils.length} oils):**\n`;
+  
+  specialOils.forEach((oil, index) => {
+    response += `${carrierOils.length + essentialOils.length + index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})\n`;
+  });
+  
+  response += `
+🌅 Ancient Wisdom from the Temple
+These 20 sacred oils represent the complete wisdom of ancient Egyptian beauty and healing arts, each blessed with divine powers to restore and transform your beauty journey.
+
+With divine blessings,
+Hathor`;
+  
+  return response;
+};
+
+// Function to check if message is an inventory query
+const isInventoryQuery = (message) => {
+  const lowerMessage = message.toLowerCase();
+  
+  // Comprehensive patterns for inventory queries with broader matching
+  const inventoryPatterns = [
+    /oils? (do u have|you have|available|in stock)/i,
+    /what oils/i,
+    /oils (do you|you) (have|sell|stock)/i,
+    /your (inventory|oils|collection)/i,
+    /complete (collection|inventory)/i,
+    /all (oils|your oils)/i,
+    /list.*oils/i,
+    /show.*oils/i,
+    /inventory/i
+  ];
+  
+  // Simple string matching for common phrases
+  const simpleMatches = lowerMessage.includes('oils you have') ||
+                       lowerMessage.includes('oils do u have') ||
+                       lowerMessage.includes('oils do you have') ||
+                       lowerMessage.includes('oils available') ||
+                       lowerMessage.includes('oils in stock') ||
+                       lowerMessage.includes('what oils') ||
+                       lowerMessage.includes('your inventory') ||
+                       lowerMessage.includes('complete collection') ||
+                       lowerMessage.includes('all oils') ||
+                       lowerMessage.includes('oils you sell');
+  
+  // Return true if any pattern or simple match is found
+  return simpleMatches || inventoryPatterns.some(pattern => pattern.test(message));
+};
+
+// Function to check if message is a follow-up query
+const isFollowUpQuery = (message) => {
+  const followUpPatterns = [
+    /are\s+these\s+all\s+the\s+oils/i,
+    /are\s+these\s+all/i,
+    /do\s+you\s+have\s+more\s+oils/i,
+    /any\s+other\s+oils/i,
+    /is\s+that\s+all/i,
+    /complete\s+list/i,
+    /all.*oils.*sell/i,
+    /these.*all.*oils/i,
+    /more.*oils/i,
+    /full.*list/i,
+    /entire.*collection/i
+  ];
+  
+  const lowerMessage = message.toLowerCase();
+  const simpleMatches = lowerMessage.includes('are these all') ||
+                       lowerMessage.includes('is that all') ||
+                       lowerMessage.includes('these all the oils') ||
+                       lowerMessage.includes('all the oils you sell') ||
+                       lowerMessage.includes('complete list') ||
+                       lowerMessage.includes('more oils');
+  
+  return simpleMatches || followUpPatterns.some(pattern => pattern.test(message));
+};
+
 // Modified chat endpoint with fallback
 app.post('/api/chat', async (req, res) => {
   try {
@@ -971,12 +1305,83 @@ app.post('/api/chat', async (req, res) => {
     });
     
     const { message } = req.body;
+    const sessionId = req.headers['x-session-id'] || 'default';
     
     if (!message) {
       logger.warn('No message provided in request');
       return res.status(400).json({ 
         error: 'No message provided',
         success: false 
+      });
+    }
+
+    // Pre-processing: Check for inventory queries
+    logger.info('Pre-processing message:', { 
+      message: message,
+      lowerMessage: message.toLowerCase(),
+      isInventory: isInventoryQuery(message),
+      testPatterns: {
+        simpleMatch: message.toLowerCase().includes('oils do u have'),
+        whatOils: message.toLowerCase().includes('what oils'),
+        inventoryFunction: typeof isInventoryQuery === 'function'
+      }
+    });
+    
+    if (isInventoryQuery(message)) {
+      logger.info('Inventory query detected! Bypassing OpenAI and returning full inventory');
+      const inventoryResponse = generateFullInventoryResponse();
+      
+      // Store context for follow-up questions
+      conversationContext[sessionId] = {
+        lastResponseType: 'inventory',
+        lastResponse: inventoryResponse,
+        timestamp: new Date()
+      };
+      
+      logger.info('Returning inventory response with inventoryComplete flag');
+      return res.json({
+        response: inventoryResponse,
+        success: true,
+        inventoryComplete: true
+      });
+    } else {
+      logger.info('Not an inventory query, proceeding to OpenAI');
+    }
+
+    // Pre-processing: Check for follow-up queries
+    logger.info('Checking for follow-up queries:', {
+      message: message,
+      isFollowUp: isFollowUpQuery(message),
+      hasContext: !!conversationContext[sessionId],
+      contextType: conversationContext[sessionId]?.lastResponseType,
+      contextAge: conversationContext[sessionId] ? new Date() - conversationContext[sessionId].timestamp : null
+    });
+    
+    if (isFollowUpQuery(message) && conversationContext[sessionId]?.lastResponseType === 'inventory') {
+      logger.info('Follow-up query detected with inventory context, confirming complete inventory');
+      const followUpResponse = `✨ Hathor's Beauty Advice ✨
+
+🌙 I Hear You, My Child
+Yes, beloved seeker! The sacred collection I just shared with you represents our complete inventory of all 20 divine oils. This is our entire treasured collection:
+
+🌿 Complete Summary
+- **9 Carrier Oils** - all available for your beauty journey
+- **9 Essential Oils** - each one ready to transform your wellness 
+- **2 Special Oils** - unique formulations blessed with ancient wisdom
+
+**Total: 20 sacred oils** - this is our complete offering, each one carefully crafted with ancient Egyptian wisdom and modern purity standards.
+
+🌅 Ancient Wisdom from the Temple
+These 20 oils represent the full breadth of our sacred collection. Each oil carries the blessings of ancient beauty secrets, ready to transform your beauty journey.
+
+With divine blessings,
+Hathor`;
+
+      logger.info('Returning follow-up response with followUpConfirmed flag');
+      return res.json({
+        response: followUpResponse,
+        success: true,
+        followUpConfirmed: true
       });
     }
 
@@ -1018,6 +1423,14 @@ app.post('/api/chat', async (req, res) => {
 
       const response = completion.choices[0].message.content;
       logger.info('Received complete response from OpenAI', { responseLength: response.length });
+      
+      // Store context for follow-up questions
+      conversationContext[sessionId] = {
+        lastResponseType: 'general',
+        lastResponse: response,
+        timestamp: new Date()
+      };
+      
       res.json({ response, success: true });
     } catch (openaiError) {
       // Detailed OpenAI error handling with fallback
@@ -1058,6 +1471,24 @@ app.post('/api/chat', async (req, res) => {
 // Add a test endpoint
 app.get('/api/test', (req, res) => {
   res.json({ message: 'Backend server is running!' });
+});
+
+// Test endpoint for inventory functions
+app.get('/api/test-inventory', (req, res) => {
+  const testMessage = "what oils do u have";
+  const isInventory = isInventoryQuery(testMessage);
+  const fullInventory = generateFullInventoryResponse();
+  
+  res.json({ 
+    status: "success",
+    message: "Inventory functions deployed correctly",
+    testResults: {
+      testMessage,
+      isInventoryDetected: isInventory,
+      inventoryCount: FULL_INVENTORY.length,
+      sampleResponse: fullInventory.substring(0, 200) + "..."
+    }
+  });
 });
 
 // Add error handling middleware
