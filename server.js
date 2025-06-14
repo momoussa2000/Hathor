@@ -1164,6 +1164,7 @@ With divine blessings,
 Hathor`;
 
 // Complete inventory constant for pre-processing
+// Last updated: 2025-06-14 - Fixed inventory query detection
 const FULL_INVENTORY = [
   // Carrier Oils
   { name: "Moringa Oil", category: "Carrier Oils", benefits: ["hair growth", "anti-aging", "moisturizing", "dandruff prevention", "acne treatment", "skin brightening"], link: "https://hathororganics.com/products/moringa-oil", prices: "15ml LE 500.00, 30ml LE 1,000.00", soldOut: false },
