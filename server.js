@@ -1420,6 +1420,21 @@ app.get('/api/test', (req, res) => {
   res.json({ message: 'Backend server is running!' });
 });
 
+// Test endpoint for inventory functions
+app.get('/api/test-inventory', (req, res) => {
+  const testMessage = "what oils you have in stock";
+  const isInventory = isInventoryQuery(testMessage);
+  const fullInventory = generateFullInventoryResponse();
+  
+  res.json({ 
+    message: 'Inventory test endpoint',
+    testMessage,
+    isInventoryDetected: isInventory,
+    inventoryCount: FULL_INVENTORY.length,
+    sampleResponse: fullInventory.substring(0, 200) + "..."
+  });
+});
+
 // Add error handling middleware
 app.use((err, req, res, next) => {
   console.error('Error:', err);
