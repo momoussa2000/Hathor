@@ -1240,15 +1240,16 @@ Hathor`;
 
 // Function to check if message is an inventory query
 const isInventoryQuery = (message) => {
-  const inventoryPatterns = [
-    /what\s+oils?\s+(you\s+have|available|in\s+stock)/i,
-    /oils?\s+(you\s+have|available|in\s+stock)/i,
-    /your\s+inventory/i,
-    /complete\s+collection/i,
-    /all\s+oils/i
-  ];
+  const lowerMessage = message.toLowerCase();
   
-  return inventoryPatterns.some(pattern => pattern.test(message));
+  // Simple string matching for more reliable detection
+  return lowerMessage.includes('oils you have') ||
+         lowerMessage.includes('oils available') ||
+         lowerMessage.includes('oils in stock') ||
+         lowerMessage.includes('what oils') ||
+         lowerMessage.includes('your inventory') ||
+         lowerMessage.includes('complete collection') ||
+         lowerMessage.includes('all oils');
 };
 
 // Function to check if message is a follow-up query
@@ -1284,6 +1285,7 @@ app.post('/api/chat', async (req, res) => {
     }
 
     // Pre-processing: Check for inventory queries
+    logger.info('Checking if message is inventory query', { message, isInventory: isInventoryQuery(message) });
     if (isInventoryQuery(message)) {
       logger.info('Inventory query detected, returning full inventory');
       const inventoryResponse = generateFullInventoryResponse();
