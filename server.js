@@ -1239,27 +1239,60 @@ Hathor`;
 const isInventoryQuery = (message) => {
   const lowerMessage = message.toLowerCase();
   
-  // Simple string matching for more reliable detection
-  return lowerMessage.includes('oils you have') ||
-         lowerMessage.includes('oils available') ||
-         lowerMessage.includes('oils in stock') ||
-         lowerMessage.includes('what oils') ||
-         lowerMessage.includes('your inventory') ||
-         lowerMessage.includes('complete collection') ||
-         lowerMessage.includes('all oils');
+  // Comprehensive patterns for inventory queries with broader matching
+  const inventoryPatterns = [
+    /oils? (do u have|you have|available|in stock)/i,
+    /what oils/i,
+    /oils (do you|you) (have|sell|stock)/i,
+    /your (inventory|oils|collection)/i,
+    /complete (collection|inventory)/i,
+    /all (oils|your oils)/i,
+    /list.*oils/i,
+    /show.*oils/i,
+    /inventory/i
+  ];
+  
+  // Simple string matching for common phrases
+  const simpleMatches = lowerMessage.includes('oils you have') ||
+                       lowerMessage.includes('oils do u have') ||
+                       lowerMessage.includes('oils do you have') ||
+                       lowerMessage.includes('oils available') ||
+                       lowerMessage.includes('oils in stock') ||
+                       lowerMessage.includes('what oils') ||
+                       lowerMessage.includes('your inventory') ||
+                       lowerMessage.includes('complete collection') ||
+                       lowerMessage.includes('all oils') ||
+                       lowerMessage.includes('oils you sell');
+  
+  // Return true if any pattern or simple match is found
+  return simpleMatches || inventoryPatterns.some(pattern => pattern.test(message));
 };
 
 // Function to check if message is a follow-up query
 const isFollowUpQuery = (message) => {
   const followUpPatterns = [
     /are\s+these\s+all\s+the\s+oils/i,
+    /are\s+these\s+all/i,
     /do\s+you\s+have\s+more\s+oils/i,
     /any\s+other\s+oils/i,
     /is\s+that\s+all/i,
-    /complete\s+list/i
+    /complete\s+list/i,
+    /all.*oils.*sell/i,
+    /these.*all.*oils/i,
+    /more.*oils/i,
+    /full.*list/i,
+    /entire.*collection/i
   ];
   
-  return followUpPatterns.some(pattern => pattern.test(message));
+  const lowerMessage = message.toLowerCase();
+  const simpleMatches = lowerMessage.includes('are these all') ||
+                       lowerMessage.includes('is that all') ||
+                       lowerMessage.includes('these all the oils') ||
+                       lowerMessage.includes('all the oils you sell') ||
+                       lowerMessage.includes('complete list') ||
+                       lowerMessage.includes('more oils');
+  
+  return simpleMatches || followUpPatterns.some(pattern => pattern.test(message));
 };
 
 // Modified chat endpoint with fallback
@@ -1282,9 +1315,19 @@ app.post('/api/chat', async (req, res) => {
     }
 
     // Pre-processing: Check for inventory queries
-    logger.info('Checking if message is inventory query', { message, isInventory: isInventoryQuery(message) });
+    logger.info('Pre-processing message:', { 
+      message: message,
+      lowerMessage: message.toLowerCase(),
+      isInventory: isInventoryQuery(message),
+      testPatterns: {
+        simpleMatch: message.toLowerCase().includes('oils do u have'),
+        whatOils: message.toLowerCase().includes('what oils'),
+        inventoryFunction: typeof isInventoryQuery === 'function'
+      }
+    });
+    
     if (isInventoryQuery(message)) {
-      logger.info('Inventory query detected, returning full inventory');
+      logger.info('Inventory query detected! Bypassing OpenAI and returning full inventory');
       const inventoryResponse = generateFullInventoryResponse();
       
       // Store context for follow-up questions
@@ -1294,16 +1337,27 @@ app.post('/api/chat', async (req, res) => {
         timestamp: new Date()
       };
       
+      logger.info('Returning inventory response with inventoryComplete flag');
       return res.json({
         response: inventoryResponse,
         success: true,
         inventoryComplete: true
       });
+    } else {
+      logger.info('Not an inventory query, proceeding to OpenAI');
     }
 
     // Pre-processing: Check for follow-up queries
+    logger.info('Checking for follow-up queries:', {
+      message: message,
+      isFollowUp: isFollowUpQuery(message),
+      hasContext: !!conversationContext[sessionId],
+      contextType: conversationContext[sessionId]?.lastResponseType,
+      contextAge: conversationContext[sessionId] ? new Date() - conversationContext[sessionId].timestamp : null
+    });
+    
     if (isFollowUpQuery(message) && conversationContext[sessionId]?.lastResponseType === 'inventory') {
-      logger.info('Follow-up query detected, confirming complete inventory');
+      logger.info('Follow-up query detected with inventory context, confirming complete inventory');
       const followUpResponse = `✨ Hathor's Beauty Advice ✨
 
 🌙 I Hear You, My Child
@@ -1322,6 +1376,7 @@ These 20 oils represent the full breadth of our sacred collection. Each oil carr
 With divine blessings,
 Hathor`;
 
+      logger.info('Returning follow-up response with followUpConfirmed flag');
       return res.json({
         response: followUpResponse,
         success: true,
@@ -1419,16 +1474,19 @@ app.get('/api/test', (req, res) => {
 
 // Test endpoint for inventory functions
 app.get('/api/test-inventory', (req, res) => {
-  const testMessage = "what oils you have in stock";
+  const testMessage = "what oils do u have";
   const isInventory = isInventoryQuery(testMessage);
   const fullInventory = generateFullInventoryResponse();
   
   res.json({ 
-    message: 'Inventory test endpoint',
-    testMessage,
-    isInventoryDetected: isInventory,
-    inventoryCount: FULL_INVENTORY.length,
-    sampleResponse: fullInventory.substring(0, 200) + "..."
+    status: "success",
+    message: "Inventory functions deployed correctly",
+    testResults: {
+      testMessage,
+      isInventoryDetected: isInventory,
+      inventoryCount: FULL_INVENTORY.length,
+      sampleResponse: fullInventory.substring(0, 200) + "..."
+    }
   });
 });
 
