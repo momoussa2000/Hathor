@@ -1163,6 +1163,107 @@ DO NOT create or modify links - only use the reference table above!]
 With divine blessings,
 Hathor`;
 
+// Complete inventory constant for pre-processing
+const FULL_INVENTORY = [
+  // Carrier Oils
+  { name: "Moringa Oil", category: "Carrier Oils", benefits: ["hair growth", "anti-aging", "moisturizing", "dandruff prevention", "acne treatment", "skin brightening"], link: "https://hathororganics.com/products/moringa-oil", prices: "15ml LE 500.00, 30ml LE 1,000.00", soldOut: false },
+  { name: "Coconut Oil", category: "Carrier Oils", benefits: ["moisturizing", "hair conditioning", "antibacterial", "skin healing", "makeup removal"], link: "https://hathororganics.com/products/coconut-oil", prices: "15ml LE 200.00, 30ml LE 400.00", soldOut: false },
+  { name: "Sweet Almond Oil", category: "Carrier Oils", benefits: ["moisturizing", "skin softening", "anti-inflammatory", "skin healing", "hair conditioning"], link: "https://hathororganics.com/products/sweet-almond-oil", prices: "15ml LE 400.00, 30ml LE 800.00", soldOut: false },
+  { name: "Sesame Oil", category: "Carrier Oils", benefits: ["hair growth", "moisturizing", "anti-inflammatory", "UV protection", "acne treatment", "skin healing"], link: "https://hathororganics.com/products/sesame-oil", prices: "15ml LE 300.00, 30ml LE 600.00", soldOut: false },
+  { name: "Argan Oil", category: "Carrier Oils", benefits: ["hair conditioning", "skin moisturizing", "anti-aging", "nail health"], link: "https://hathororganics.com/products/argan-oil", prices: "15ml LE 480.00, 30ml LE 960.00", soldOut: false },
+  { name: "Cellulite Oil Mix", category: "Carrier Oils", benefits: ["cellulite reduction", "skin tightening", "circulation improvement", "body contouring"], link: "https://hathororganics.com/products/cellulite-oil-mix", prices: "15ml LE 360.00, 30ml LE 720.00", soldOut: false },
+  { name: "Garden Cress Oil", category: "Carrier Oils", benefits: ["hair growth", "scalp health", "dandruff prevention", "hair strengthening"], link: "https://hathororganics.com/products/garden-cress-oil", prices: "15ml LE 300.00, 30ml LE 600.00", soldOut: false },
+  { name: "Black Seed Oil", category: "Carrier Oils", benefits: ["immune support", "anti-inflammatory", "skin healing", "hair growth", "respiratory health"], link: "https://hathororganics.com/products/black-seed-oil", prices: "15ml LE 500.00, 30ml LE 1,000.00", soldOut: false },
+  { name: "Virgin Olive Oil", category: "Carrier Oils", benefits: ["moisturizing", "anti-aging", "skin healing", "hair conditioning"], link: "https://hathororganics.com/products/virgin-olive-oil", prices: "15ml LE 240.00, 30ml LE 480.00", soldOut: true },
+  // Essential Oils
+  { name: "Rosemary Oil", category: "Essential Oils", benefits: ["hair growth", "scalp circulation", "dandruff prevention", "hair strengthening"], link: "https://hathororganics.com/products/rosemary-oil", prices: "15ml LE 380.00, 30ml LE 760.00", soldOut: false },
+  { name: "Frankincense Oil", category: "Essential Oils", benefits: ["anti-aging", "skin regeneration", "stress relief", "meditation support"], link: "https://hathororganics.com/products/frankincense-oil", prices: "15ml LE 1,000.00, 30ml LE 2,000.00", soldOut: false },
+  { name: "Lavender Oil", category: "Essential Oils", benefits: ["relaxation", "skin healing", "acne treatment", "sleep support"], link: "https://hathororganics.com/products/lavender-oil", prices: "15ml LE 450.00, 30ml LE 900.00", soldOut: false },
+  { name: "Rose Oil", category: "Essential Oils", benefits: ["skin rejuvenation", "emotional balance", "anti-aging", "mood enhancement"], link: "https://hathororganics.com/products/rose-oil", prices: "15ml LE 750.00, 30ml LE 1,500.00", soldOut: false },
+  { name: "Cinnamon Oil", category: "Essential Oils", benefits: ["circulation improvement", "warming", "antimicrobial", "digestive support"], link: "https://hathororganics.com/products/cinnamon-oil", prices: "15ml LE 700.00, 30ml LE 1,400.00", soldOut: true },
+  { name: "Jasmine Oil", category: "Essential Oils", benefits: ["mood enhancement", "skin healing", "anti-aging", "stress relief"], link: "https://hathororganics.com/products/jasmine-oil", prices: "15ml LE 1,800.00, 30ml LE 3,600.00", soldOut: true },
+  { name: "Tea Tree Oil", category: "Essential Oils", benefits: ["acne treatment", "antifungal", "antibacterial", "scalp health"], link: "https://hathororganics.com/products/tea-tree-oil", prices: "15ml LE 650.00, 30ml LE 1,300.00", soldOut: false },
+  { name: "Peppermint Oil", category: "Essential Oils", benefits: ["pain relief", "energy boosting", "cooling", "digestive support"], link: "https://hathororganics.com/products/peppermint-oil", prices: "15ml LE 350.00, 30ml LE 700.00", soldOut: false },
+  { name: "Clove Oil", category: "Essential Oils", benefits: ["pain relief", "antimicrobial", "dental health", "circulation improvement"], link: "https://hathororganics.com/products/clove-oil", prices: "15ml LE 700.00, 30ml LE 1,400.00", soldOut: false },
+  // Special Oils
+  { name: "Acne Set", category: "Special Oils", benefits: ["acne treatment", "skin balancing", "anti-inflammatory", "healing"], link: "https://hathororganics.com/products/acne-set", prices: "Set LE 1,200.00, 900 drops", soldOut: false },
+  { name: "Queen Tiye Hair Oil", category: "Special Oils", benefits: ["hair growth", "scalp health", "hair strengthening", "ancient Egyptian formula"], link: "https://hathororganics.com/products/queen-tiye-hair-oil", prices: "15ml LE 240.00, 30ml LE 480.00", soldOut: true }
+];
+
+// Context storage for conversation continuity
+let conversationContext = {};
+
+// Function to generate full inventory response
+const generateFullInventoryResponse = () => {
+  const carrierOils = FULL_INVENTORY.filter(oil => oil.category === "Carrier Oils");
+  const essentialOils = FULL_INVENTORY.filter(oil => oil.category === "Essential Oils");
+  const specialOils = FULL_INVENTORY.filter(oil => oil.category === "Special Oils");
+  
+  let response = `✨ Hathor's Beauty Advice ✨
+
+🌙 I Hear You, My Child
+You wish to know about my sacred collection of oils! Let me share with you our complete inventory of 20 divine oils, each blessed with ancient Egyptian wisdom.
+
+🌿 Our Complete Sacred Collection
+
+**CARRIER OILS (${carrierOils.length} oils):**
+`;
+  
+  carrierOils.forEach((oil, index) => {
+    const soldOutText = oil.soldOut ? " **CURRENTLY SOLD OUT**" : "";
+    response += `${index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})${soldOutText}\n`;
+  });
+  
+  response += `\n**ESSENTIAL OILS (${essentialOils.length} oils):**\n`;
+  
+  essentialOils.forEach((oil, index) => {
+    const soldOutText = oil.soldOut ? " **CURRENTLY SOLD OUT**" : "";
+    response += `${carrierOils.length + index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})${soldOutText}\n`;
+  });
+  
+  response += `\n**SPECIAL OILS (${specialOils.length} oils):**\n`;
+  
+  specialOils.forEach((oil, index) => {
+    const soldOutText = oil.soldOut ? " **CURRENTLY SOLD OUT**" : "";
+    response += `${carrierOils.length + essentialOils.length + index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})${soldOutText}\n`;
+  });
+  
+  response += `
+🌅 Ancient Wisdom from the Temple
+These 20 sacred oils represent the complete wisdom of ancient Egyptian beauty and healing arts, each blessed with divine powers to restore and transform your beauty journey.
+
+With divine blessings,
+Hathor`;
+  
+  return response;
+};
+
+// Function to check if message is an inventory query
+const isInventoryQuery = (message) => {
+  const inventoryPatterns = [
+    /what\s+oils?\s+(you\s+have|available|in\s+stock)/i,
+    /oils?\s+(you\s+have|available|in\s+stock)/i,
+    /your\s+inventory/i,
+    /complete\s+collection/i,
+    /all\s+oils/i
+  ];
+  
+  return inventoryPatterns.some(pattern => pattern.test(message));
+};
+
+// Function to check if message is a follow-up query
+const isFollowUpQuery = (message) => {
+  const followUpPatterns = [
+    /are\s+these\s+all\s+the\s+oils/i,
+    /do\s+you\s+have\s+more\s+oils/i,
+    /any\s+other\s+oils/i,
+    /is\s+that\s+all/i,
+    /complete\s+list/i
+  ];
+  
+  return followUpPatterns.some(pattern => pattern.test(message));
+};
+
 // Modified chat endpoint with fallback
 app.post('/api/chat', async (req, res) => {
   try {
@@ -1172,12 +1273,60 @@ app.post('/api/chat', async (req, res) => {
     });
     
     const { message } = req.body;
+    const sessionId = req.headers['x-session-id'] || 'default';
     
     if (!message) {
       logger.warn('No message provided in request');
       return res.status(400).json({ 
         error: 'No message provided',
         success: false 
+      });
+    }
+
+    // Pre-processing: Check for inventory queries
+    if (isInventoryQuery(message)) {
+      logger.info('Inventory query detected, returning full inventory');
+      const inventoryResponse = generateFullInventoryResponse();
+      
+      // Store context for follow-up questions
+      conversationContext[sessionId] = {
+        lastResponseType: 'inventory',
+        lastResponse: inventoryResponse,
+        timestamp: new Date()
+      };
+      
+      return res.json({
+        response: inventoryResponse,
+        success: true,
+        inventoryComplete: true
+      });
+    }
+
+    // Pre-processing: Check for follow-up queries
+    if (isFollowUpQuery(message) && conversationContext[sessionId]?.lastResponseType === 'inventory') {
+      logger.info('Follow-up query detected, confirming complete inventory');
+      const followUpResponse = `✨ Hathor's Beauty Advice ✨
+
+🌙 I Hear You, My Child
+Yes, beloved seeker! The sacred collection I just shared with you represents our complete inventory of all 20 divine oils. This is our entire treasured collection:
+
+🌿 Complete Summary
+- **9 Carrier Oils** (including 1 currently sold out)
+- **9 Essential Oils** (including 2 currently sold out) 
+- **2 Special Oils** (including 1 currently sold out)
+
+**Total: 20 sacred oils** - this is our complete offering, each one carefully crafted with ancient Egyptian wisdom and modern purity standards.
+
+🌅 Ancient Wisdom from the Temple
+These 20 oils represent the full breadth of our sacred collection. Each oil carries the blessings of ancient beauty secrets, ready to transform your beauty journey.
+
+With divine blessings,
+Hathor`;
+
+      return res.json({
+        response: followUpResponse,
+        success: true,
+        followUpConfirmed: true
       });
     }
 
@@ -1219,6 +1368,14 @@ app.post('/api/chat', async (req, res) => {
 
       const response = completion.choices[0].message.content;
       logger.info('Received complete response from OpenAI', { responseLength: response.length });
+      
+      // Store context for follow-up questions
+      conversationContext[sessionId] = {
+        lastResponseType: 'general',
+        lastResponse: response,
+        timestamp: new Date()
+      };
+      
       res.json({ response, success: true });
     } catch (openaiError) {
       // Detailed OpenAI error handling with fallback
