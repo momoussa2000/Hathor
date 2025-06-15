@@ -771,9 +771,9 @@ const ailmentsKnowledgeBase = {
   },
   "aging_skin": {
     "description": "Concerns related to fine lines, wrinkles, and skin aging",
-    "recommended_oils": ["Rosehip Oil", "Frankincense Essential Oil"],
+    "recommended_oils": ["Argan Oil", "Frankincense Essential Oil"],
     "treatment_plan": {
-      "primary_oils": ["Rosehip Oil", "Frankincense Essential Oil"],
+      "primary_oils": ["Argan Oil", "Frankincense Essential Oil"],
       "supporting_oils": [],
       "application": "Evening ritual only",
       "duration": "Ongoing",
@@ -781,17 +781,17 @@ const ailmentsKnowledgeBase = {
       "precautions": "Use gentle application. Avoid eye area unless specified. Dilute essential oils with carrier oils.",
       "benefits": "Reduced fine lines, improved skin elasticity, enhanced collagen production",
       "measurements": {
-        "Rosehip Oil": "1-2 drops to face and neck daily",
+        "Argan Oil": "2-3 drops to face and neck daily",
         "Frankincense Essential Oil": "2-3 drops diluted in 1 tsp Sweet Almond Oil, apply to face"
       }
     },
-    "detailed_explanation": "Rosehip Oil, known as the 'Oil of Youth,' was used for rejuvenation. Frankincense has anti-inflammatory and healing properties, supporting aging skin."
+    "detailed_explanation": "Argan Oil is rich in vitamin E and antioxidants, making it excellent for anti-aging. Frankincense has anti-inflammatory and healing properties, supporting aging skin."
   },
   "sun_damage": {
     "description": "Skin damage caused by sun exposure, including sunburn, hyperpigmentation, and premature aging",
-    "recommended_oils": ["Rosehip Oil"],
+    "recommended_oils": ["Argan Oil"],
     "treatment_plan": {
-      "primary_oils": ["Rosehip Oil"],
+      "primary_oils": ["Argan Oil"],
       "supporting_oils": [],
       "application": "Evening ritual only",
       "duration": "Ongoing",
@@ -799,10 +799,10 @@ const ailmentsKnowledgeBase = {
       "precautions": "Apply after sun exposure. Use sunscreen during the day.",
       "benefits": "Heals sun-damaged skin, reduces hyperpigmentation, improves elasticity",
       "measurements": {
-        "Rosehip Oil": "1-2 drops to affected areas daily"
+        "Argan Oil": "2-3 drops to affected areas daily"
       }
     },
-    "detailed_explanation": "Rosehip Oil was historically used to heal sun-damaged skin due to its high content of vitamins A and C, which promote skin repair and regeneration."
+    "detailed_explanation": "Argan Oil was historically used to heal sun-damaged skin due to its high content of vitamin E and antioxidants, which promote skin repair and regeneration."
   },
   "spots_on_face": {
     "description": "Dark spots or hyperpigmentation on the face",
@@ -841,9 +841,9 @@ const ailmentsKnowledgeBase = {
   },
   "hair_loss": {
     "description": "Thinning hair or balding concerns",
-    "recommended_oils": ["Garden Cress Oil", "Sesame Oil", "Rosemary Oil", "Frankincense Oil", "Argan Oil", "Rosehip Oil"],
+    "recommended_oils": ["Garden Cress Oil", "Sesame Oil", "Rosemary Oil", "Frankincense Oil", "Argan Oil", "Black Seed Oil"],
     "treatment_plan": {
-      "primary_oils": ["Garden Cress Oil", "Rosemary Oil", "Rosehip Oil"],
+      "primary_oils": ["Garden Cress Oil", "Rosemary Oil", "Black Seed Oil"],
       "supporting_oils": ["Sesame Oil", "Frankincense Oil", "Argan Oil"],
       "application": "Evening ritual only",
       "duration": "3-6 months",
@@ -853,13 +853,13 @@ const ailmentsKnowledgeBase = {
       "measurements": {
         "Garden Cress Oil": "4-5 drops (4-10ml)",
         "Rosemary Oil": "2-3 drops (2-6ml)",
-        "Rosehip Oil": "2-3 drops (2-6ml)",
+        "Black Seed Oil": "2-3 drops (2-6ml)",
         "Sesame Oil": "2-3 drops (2-6ml)",
         "Frankincense Oil": "1-2 drops (1-4ml)",
         "Argan Oil": "2-3 drops (2-6ml)"
       }
     },
-    "detailed_explanation": "Garden Cress Oil is nutrient-rich and helps lengthen and grow hair. Rosemary Oil stimulates scalp circulation and optimizes hair growth. Rosehip Oil promotes healthy hair growth due to its vitamin content. Sesame Oil's tranquilizing properties help relieve anxiety-related hair loss. Frankincense and Argan Oils provide additional nourishment and protection."
+    "detailed_explanation": "Garden Cress Oil is nutrient-rich and helps lengthen and grow hair. Rosemary Oil stimulates scalp circulation and optimizes hair growth. Black Seed Oil promotes healthy hair growth due to its nutrient content and strengthening properties. Sesame Oil's tranquilizing properties help relieve anxiety-related hair loss. Frankincense and Argan Oils provide additional nourishment and protection."
   },
   "dandruff": {
     "description": "Flaky, itchy scalp condition",
@@ -905,9 +905,9 @@ const ailmentsKnowledgeBase = {
   },
   "hair_growth": {
     "description": "Promoting hair growth and strengthening hair",
-    "recommended_oils": ["Rosehip Oil"],
+    "recommended_oils": ["Garden Cress Oil"],
     "treatment_plan": {
-      "primary_oils": ["Rosehip Oil"],
+      "primary_oils": ["Garden Cress Oil"],
       "supporting_oils": [],
       "application": "Evening ritual only",
       "duration": "3-6 months",
@@ -915,10 +915,10 @@ const ailmentsKnowledgeBase = {
       "precautions": "Massage into scalp. Leave overnight if possible.",
       "benefits": "Stimulates hair growth, strengthens hair follicles",
       "measurements": {
-        "Rosehip Oil": "Massage into scalp, leave overnight, wash out in the morning"
+        "Garden Cress Oil": "Massage into scalp, leave overnight, wash out in the morning"
       }
     },
-    "detailed_explanation": "Rosehip Oil's high content of vitamins A, C, and E promotes healthy hair growth and scalp health."
+    "detailed_explanation": "Garden Cress Oil is nutrient-rich and specifically formulated to promote healthy hair growth and strengthen hair follicles."
   },
   "scalp_health": {
     "description": "Maintaining a healthy scalp, reducing itchiness or flakiness",
