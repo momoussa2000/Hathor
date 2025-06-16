@@ -15,6 +15,7 @@ const expressWinston = require('express-winston');
 const { format } = require('winston');
 const PDFDocument = require('pdfkit');
 const path = require('path');
+const fs = require('fs');
 
 // Configure MongoDB connection with proper error handling
 const connectToDatabase = async () => {
@@ -1379,6 +1380,13 @@ app.post('/api/chat', async (req, res) => {
         timestamp: new Date()
       };
       
+      console.log('Stored inventory prescription data for session:', {
+        sessionId,
+        prescriptionOilCount: prescriptionData.oils.length,
+        hasInstructions: !!prescriptionData.instructions,
+        hasPrecautions: !!prescriptionData.precautions
+      });
+      
       // Add prescription download hint to response
       const responseWithHint = inventoryResponse + '\n\n💫 Sacred Scroll Available\nTo download your complete prescription as a beautiful PDF scroll, simply say "download my prescription".\n\nWith divine blessings,\nHathor';
       
@@ -1509,6 +1517,16 @@ Hathor`;
         timestamp: new Date()
       };
       
+      if (prescriptionData) {
+        console.log('Stored recommendation prescription data for session:', {
+          sessionId,
+          prescriptionOilCount: prescriptionData.oils.length,
+          oilNames: prescriptionData.oils.map(oil => oil.name),
+          hasInstructions: !!prescriptionData.instructions,
+          hasPrecautions: !!prescriptionData.precautions
+        });
+      }
+      
       // Add prescription hint if oils were recommended
       let finalResponse = response;
       if (prescriptionData) {
@@ -1584,14 +1602,31 @@ app.get('/api/download-prescription', (req, res) => {
   try {
     const sessionId = req.headers['x-session-id'] || 'default';
     
+    // Debug logging
+    console.log('PDF Download Request:', {
+      sessionId,
+      hasContext: !!conversationContext[sessionId],
+      hasPrescription: !!(conversationContext[sessionId] && conversationContext[sessionId].prescription),
+      contextKeys: conversationContext[sessionId] ? Object.keys(conversationContext[sessionId]) : [],
+      prescriptionData: conversationContext[sessionId] ? conversationContext[sessionId].prescription : null
+    });
+    
     // Check if prescription data exists in session
     if (!conversationContext[sessionId] || !conversationContext[sessionId].prescription) {
+      logger.warn('No prescription data found for session:', { sessionId });
       return res.status(400).json({ 
-        error: "No prescription data available. Please ask for a recommendation first." 
+        error: "No prescription data available. Please ask for a recommendation first.",
+        sessionId: sessionId,
+        availableSessions: Object.keys(conversationContext)
       });
     }
     
     const prescription = conversationContext[sessionId].prescription;
+    console.log('Prescription data found:', {
+      oilCount: prescription.oils ? prescription.oils.length : 0,
+      hasInstructions: !!prescription.instructions,
+      hasPrecautions: !!prescription.precautions
+    });
     
     // Create PDF document
     const doc = new PDFDocument({ size: 'A4' });
@@ -1600,22 +1635,38 @@ app.get('/api/download-prescription', (req, res) => {
     doc.info.Title = 'Hathor Prescription';
     doc.info.Author = 'Hathor Organics';
     
-    // Set response headers
+    console.log('Setting PDF response headers...');
+    
+    // Set response headers BEFORE piping
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename="hathor-prescription.pdf"');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     
     // Pipe PDF to response
     doc.pipe(res);
+    
+    console.log('PDF document piped to response');
     
     // Set background color to light beige
     doc.rect(0, 0, 595, 842).fill('#F5F1E9');
     
     // Add header
     try {
-      // Try to add logo
       const logoPath = path.join(__dirname, 'public', 'hathor-logo-02.png');
-      doc.image(logoPath, 80, 20, { width: 50 });
+      console.log('Attempting to load logo from:', logoPath);
+      
+             // Check if file exists
+       if (fs.existsSync(logoPath)) {
+        doc.image(logoPath, 80, 20, { width: 50 });
+        console.log('Logo loaded successfully');
+      } else {
+        console.log('Logo file not found at:', logoPath);
+        // Continue without logo
+      }
     } catch (error) {
+      console.log('Error loading logo:', error.message);
       logger.warn('Could not load logo image:', error.message);
       // Continue without logo
     }
