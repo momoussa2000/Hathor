@@ -13,6 +13,8 @@ const morgan = require('morgan');
 const winston = require('winston');
 const expressWinston = require('express-winston');
 const { format } = require('winston');
+const PDFDocument = require('pdfkit');
+const path = require('path');
 
 // Configure MongoDB connection with proper error handling
 const connectToDatabase = async () => {
@@ -1315,6 +1317,28 @@ app.post('/api/chat', async (req, res) => {
       });
     }
 
+    // Check for prescription download request
+    if (message.toLowerCase().includes('download my prescription') || 
+        message.toLowerCase().includes('download prescription') ||
+        message.toLowerCase().includes('get my prescription')) {
+      logger.info('Prescription download request detected');
+      
+      if (!conversationContext[sessionId] || !conversationContext[sessionId].prescription) {
+        return res.json({
+          response: "✨ Hathor's Beauty Advice ✨\n\n🌙 I Hear You, My Child\nI don't have any prescription data for you yet. Please first ask me for oil recommendations, such as 'I have dry skin' or 'what oils do you have', and then I can create your personalized prescription.\n\nWith divine blessings,\nHathor",
+          success: true,
+          prescriptionAvailable: false
+        });
+      }
+      
+      return res.json({
+        response: "✨ Hathor's Beauty Advice ✨\n\n🌙 I Hear You, My Child\nYour sacred prescription is ready! Please visit https://hathor.vercel.app/api/download-prescription to download your personalized PDF with all your recommended oils, usage instructions, and safety precautions.\n\n🌿 Divine Wisdom Awaits\nYour prescription includes detailed information about each oil, pricing, and sacred usage instructions to guide your beauty journey.\n\nWith divine blessings,\nHathor",
+        success: true,
+        prescriptionReady: true,
+        downloadUrl: '/api/download-prescription'
+      });
+    }
+
     // Pre-processing: Check for inventory queries
     logger.info('Pre-processing message:', { 
       message: message,
@@ -1331,18 +1355,39 @@ app.post('/api/chat', async (req, res) => {
       logger.info('Inventory query detected! Bypassing OpenAI and returning full inventory');
       const inventoryResponse = generateFullInventoryResponse();
       
-      // Store context for follow-up questions
+      // Store prescription data for PDF generation
+      const prescriptionData = {
+        oils: FULL_INVENTORY,
+        instructions: {
+          frequency: 'daily evening',
+          application: 'massage onto clean skin/scalp before bedtime',
+          duration: 'ongoing'
+        },
+        precautions: [
+          'Perform a patch test before full application to ensure harmony with your being.',
+          'Use gentle motions while massaging to avoid irritation.',
+          'Dilute essential oils with carrier oils as recommended.',
+          'Discontinue use if any adverse reactions occur.'
+        ]
+      };
+      
+      // Store context for follow-up questions and prescription
       conversationContext[sessionId] = {
         lastResponseType: 'inventory',
         lastResponse: inventoryResponse,
+        prescription: prescriptionData,
         timestamp: new Date()
       };
       
-      logger.info('Returning inventory response with inventoryComplete flag');
+      // Add prescription download hint to response
+      const responseWithHint = inventoryResponse + '\n\n💫 Sacred Scroll Available\nTo download your complete prescription as a beautiful PDF scroll, simply say "download my prescription".\n\nWith divine blessings,\nHathor';
+      
+      logger.info('Returning inventory response with inventoryComplete flag and prescription data stored');
       return res.json({
-        response: inventoryResponse,
+        response: responseWithHint,
         success: true,
-        inventoryComplete: true
+        inventoryComplete: true,
+        prescriptionAvailable: true
       });
     } else {
       logger.info('Not an inventory query, proceeding to OpenAI');
@@ -1424,14 +1469,57 @@ Hathor`;
       const response = completion.choices[0].message.content;
       logger.info('Received complete response from OpenAI', { responseLength: response.length });
       
-      // Store context for follow-up questions
+      // Check if response contains oil recommendations and store prescription data
+      let prescriptionData = null;
+      const responseForPrescription = response.toLowerCase();
+      
+      // Find recommended oils in the response
+      const recommendedOils = FULL_INVENTORY.filter(oil => {
+        return responseForPrescription.includes(oil.name.toLowerCase()) ||
+               oil.benefits.some(benefit => responseForPrescription.includes(benefit.toLowerCase()));
+      });
+      
+      if (recommendedOils.length > 0) {
+        prescriptionData = {
+          oils: recommendedOils,
+          instructions: {
+            frequency: 'daily evening',
+            application: 'massage onto clean skin/scalp before bedtime',
+            duration: 'ongoing for best results'
+          },
+          precautions: [
+            'Perform a patch test before full application to ensure harmony with your being.',
+            'Use gentle motions while massaging to avoid irritation.',
+            'Dilute essential oils with carrier oils as recommended.',
+            'Discontinue use if any adverse reactions occur.'
+          ]
+        };
+        
+        logger.info('Prescription data created from OpenAI response', { 
+          oilCount: recommendedOils.length,
+          oilNames: recommendedOils.map(oil => oil.name)
+        });
+      }
+      
+      // Store context for follow-up questions and prescription if applicable
       conversationContext[sessionId] = {
         lastResponseType: 'general',
         lastResponse: response,
+        prescription: prescriptionData,
         timestamp: new Date()
       };
       
-      res.json({ response, success: true });
+      // Add prescription hint if oils were recommended
+      let finalResponse = response;
+      if (prescriptionData) {
+        finalResponse += '\n\n💫 Sacred Scroll Available\nTo download your personalized prescription as a beautiful PDF scroll, simply say "download my prescription".';
+      }
+      
+      res.json({ 
+        response: finalResponse, 
+        success: true,
+        prescriptionAvailable: !!prescriptionData
+      });
     } catch (openaiError) {
       // Detailed OpenAI error handling with fallback
       logger.error('OpenAI API call failed:', { 
@@ -1489,6 +1577,183 @@ app.get('/api/test-inventory', (req, res) => {
       sampleResponse: fullInventory.substring(0, 200) + "..."
     }
   });
+});
+
+// PDF prescription download endpoint
+app.get('/api/download-prescription', (req, res) => {
+  try {
+    const sessionId = req.headers['x-session-id'] || 'default';
+    
+    // Check if prescription data exists in session
+    if (!conversationContext[sessionId] || !conversationContext[sessionId].prescription) {
+      return res.status(400).json({ 
+        error: "No prescription data available. Please ask for a recommendation first." 
+      });
+    }
+    
+    const prescription = conversationContext[sessionId].prescription;
+    
+    // Create PDF document
+    const doc = new PDFDocument({ size: 'A4' });
+    
+    // Set document metadata
+    doc.info.Title = 'Hathor Prescription';
+    doc.info.Author = 'Hathor Organics';
+    
+    // Set response headers
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename="hathor-prescription.pdf"');
+    
+    // Pipe PDF to response
+    doc.pipe(res);
+    
+    // Set background color to light beige
+    doc.rect(0, 0, 595, 842).fill('#F5F1E9');
+    
+    // Add header
+    try {
+      // Try to add logo
+      const logoPath = path.join(__dirname, 'public', 'hathor-logo-02.png');
+      doc.image(logoPath, 80, 20, { width: 50 });
+    } catch (error) {
+      logger.warn('Could not load logo image:', error.message);
+      // Continue without logo
+    }
+    
+    // Add title
+    doc.font('Times-Roman')
+       .fontSize(16)
+       .fill('#D4AF37')
+       .text('✨ Hathor\'s Sacred Prescription ✨', 0, 80, { align: 'center' });
+    
+    // Add subtitle
+    doc.fontSize(12)
+       .fill('black')
+       .text('A Divine Gift for Your Beauty and Wellness', 0, 100, { align: 'center' });
+    
+    // Add body content
+    let yPos = 130;
+    
+    // Recommended Oils section
+    doc.fontSize(14)
+       .fill('#D4AF37')
+       .text('Recommended Sacred Oils:', 40, yPos);
+    yPos += 25;
+    
+    // Create table for oils
+    prescription.oils.forEach((oil, index) => {
+      if (yPos > 750) { // Start new page if needed
+        doc.addPage();
+        doc.rect(0, 0, 595, 842).fill('#F5F1E9');
+        yPos = 50;
+      }
+      
+      doc.fontSize(11)
+         .fill('black')
+         .text(`${index + 1}. ${oil.name}`, 50, yPos);
+      
+      if (oil.link) {
+        doc.fillColor('blue')
+           .text(oil.link, 50, yPos + 15, { 
+             link: oil.link,
+             underline: true 
+           });
+      }
+      
+      if (oil.prices) {
+        doc.fillColor('black')
+           .text(`Prices: ${oil.prices}`, 50, yPos + 30);
+      }
+      
+      if (oil.benefits && oil.benefits.length > 0) {
+        doc.text(`Benefits: ${oil.benefits.join(', ')}`, 50, yPos + 45);
+      }
+      
+      yPos += 75;
+    });
+    
+    // Usage Instructions section
+    if (yPos > 650) {
+      doc.addPage();
+      doc.rect(0, 0, 595, 842).fill('#F5F1E9');
+      yPos = 50;
+    }
+    
+    yPos += 20;
+    doc.fontSize(14)
+       .fill('#D4AF37')
+       .text('Sacred Usage Instructions:', 40, yPos);
+    yPos += 25;
+    
+    const instructions = [
+      'Gently massage the oil blend onto clean skin or scalp before bedtime.',
+      'Apply daily in the evening for ongoing benefits.',
+      'Allow the oils to work their magic overnight.',
+      'Use with intention and gratitude for best results.'
+    ];
+    
+    doc.fontSize(11)
+       .fill('black');
+    
+    instructions.forEach(instruction => {
+      doc.text(`• ${instruction}`, 50, yPos);
+      yPos += 20;
+    });
+    
+    // Safety Precautions section
+    yPos += 20;
+    doc.fontSize(14)
+       .fill('#D4AF37')
+       .text('Sacred Safety Precautions:', 40, yPos);
+    yPos += 25;
+    
+    const precautions = [
+      'Perform a patch test before full application to ensure harmony with your being.',
+      'Use gentle motions while massaging to avoid irritation.',
+      'Dilute essential oils with carrier oils as recommended.',
+      'Discontinue use if any adverse reactions occur.'
+    ];
+    
+    doc.fontSize(11)
+       .fill('black');
+    
+    precautions.forEach(precaution => {
+      doc.text(`• ${precaution}`, 50, yPos);
+      yPos += 20;
+    });
+    
+    // Add footer
+    doc.fontSize(10)
+       .fill('black')
+       .text('With love and light, Hathor - https://hathororganics.com', 40, 750, { 
+         link: 'https://hathororganics.com'
+       });
+    
+    doc.fontSize(8)
+       .text(`Generated on: ${new Date().toLocaleDateString('en-US', { 
+         year: 'numeric', 
+         month: 'long', 
+         day: 'numeric' 
+       })}`, 40, 770);
+    
+    // Try to add small logo in footer
+    try {
+      const logoPath = path.join(__dirname, 'public', 'hathor-logo-02.png');
+      doc.image(logoPath, 500, 760, { width: 20 });
+    } catch (error) {
+      logger.warn('Could not load footer logo:', error.message);
+    }
+    
+    // Finalize PDF
+    doc.end();
+    
+  } catch (error) {
+    logger.error('Error generating PDF:', error);
+    res.status(500).json({ 
+      error: 'Failed to generate prescription PDF',
+      details: error.message 
+    });
+  }
 });
 
 // Add error handling middleware
