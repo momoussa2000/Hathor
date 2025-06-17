@@ -1324,19 +1324,22 @@ app.post('/api/chat', async (req, res) => {
         message.toLowerCase().includes('get my prescription')) {
       logger.info('Prescription download request detected');
       
+      const downloadLink = 'https://hathor.vercel.app/api/download-prescription';
+      
       if (!conversationContext[sessionId] || !conversationContext[sessionId].prescription) {
         return res.json({
-          response: "✨ Hathor's Beauty Advice ✨\n\n🌙 I Hear You, My Child\nI don't have any prescription data for you yet. Please first ask me for oil recommendations, such as 'I have dry skin' or 'what oils do you have', and then I can create your personalized prescription.\n\nWith divine blessings,\nHathor",
+          response: "✨ Hathor's Beauty Advice ✨\n\n🌙 I Hear You, My Child\nI will create a general prescription scroll for you with our most beloved oil.\n\n📜 Download Your Prescription\nClick here to download: <a href=\"" + downloadLink + "\" target=\"_blank\">Download General Prescription PDF</a>\n\nThis beautiful PDF contains Sweet Almond Oil recommendations and ancient wisdom for your beauty journey. For personalized recommendations, simply tell me about your specific concerns!\n\nWith divine blessings,\nHathor",
           success: true,
-          prescriptionAvailable: false
+          prescriptionAvailable: true,
+          downloadUrl: downloadLink
         });
       }
       
       return res.json({
-        response: "✨ Hathor's Beauty Advice ✨\n\n🌙 I Hear You, My Child\nYour sacred prescription is ready! Please visit https://hathor.vercel.app/api/download-prescription to download your personalized PDF with all your recommended oils, usage instructions, and safety precautions.\n\n🌿 Divine Wisdom Awaits\nYour prescription includes detailed information about each oil, pricing, and sacred usage instructions to guide your beauty journey.\n\nWith divine blessings,\nHathor",
+        response: "✨ Hathor's Beauty Advice ✨\n\n🌙 I Hear You, My Child\nYour sacred prescription is ready!\n\n📜 Download Your Prescription\nClick here to download: <a href=\"" + downloadLink + "\" target=\"_blank\">Download Prescription PDF</a>\n\nThis beautiful PDF contains all your recommended oils, detailed usage instructions, and safety precautions to guide your beauty journey.\n\nWith divine blessings,\nHathor",
         success: true,
         prescriptionReady: true,
-        downloadUrl: '/api/download-prescription'
+        downloadUrl: downloadLink
       });
     }
 
@@ -1549,13 +1552,14 @@ Hathor`;
       // Add prescription hint if oils were recommended
       let finalResponse = response;
       if (prescriptionData) {
-        finalResponse += '\n\n💫 Sacred Scroll Available\nTo download your personalized prescription as a beautiful PDF scroll, simply say "download my prescription".';
+        finalResponse += '\n\n💫 Sacred Scroll Available\nTo download your personalized prescription as a beautiful PDF scroll, <a href="https://hathor.vercel.app/api/download-prescription" target="_blank">click here</a> or say "download my prescription".';
       }
       
       res.json({ 
         response: finalResponse, 
         success: true,
-        prescriptionAvailable: !!prescriptionData
+        prescriptionAvailable: !!prescriptionData,
+        prescriptionData: prescriptionData // Include prescription data in response
       });
     } catch (openaiError) {
       // Detailed OpenAI error handling with fallback
@@ -1630,17 +1634,34 @@ app.get('/api/download-prescription', (req, res) => {
       prescriptionData: conversationContext[sessionId] ? conversationContext[sessionId].prescription : null
     });
     
-    // Check if prescription data exists in session
-    if (!conversationContext[sessionId] || !conversationContext[sessionId].prescription) {
-      logger.warn('No prescription data found for session:', { sessionId });
-      return res.status(400).json({ 
-        error: "No prescription data available. Please ask for a recommendation first.",
-        sessionId: sessionId,
-        availableSessions: Object.keys(conversationContext)
-      });
-    }
+    let prescription = null;
     
-    const prescription = conversationContext[sessionId].prescription;
+    // Try to get prescription from session first
+    if (conversationContext[sessionId] && conversationContext[sessionId].prescription) {
+      prescription = conversationContext[sessionId].prescription;
+      console.log('Found prescription in session');
+    } else {
+      // If no session data, create a default prescription with Sweet Almond Oil as fallback
+      console.log('No session data found, creating default prescription');
+      prescription = {
+        oils: [{
+          name: 'Sweet Almond Oil',
+          link: 'https://hathororganics.com/products/sweet-almond-oil',
+          prices: { '15ml': 'LE 280.00', '30ml': 'LE 560.00' },
+          benefits: ['Deeply moisturizes dry skin', 'Rich in vitamins A and E']
+        }],
+        instructions: {
+          frequency: 'daily evening',
+          application: 'massage onto clean skin before bedtime',
+          duration: 'ongoing for best results'
+        },
+        precautions: [
+          'Perform a patch test before full application to ensure harmony with your being.',
+          'Use gentle motions while massaging to avoid irritation.',
+          'Discontinue use if any adverse reactions occur.'
+        ]
+      };
+    }
     console.log('Prescription data found:', {
       oilCount: prescription.oils ? prescription.oils.length : 0,
       hasInstructions: !!prescription.instructions,
