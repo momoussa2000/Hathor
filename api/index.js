@@ -1479,12 +1479,31 @@ Hathor`;
       
       // Check if response contains oil recommendations and store prescription data
       let prescriptionData = null;
-      const responseForPrescription = response.toLowerCase();
+      // Clean the response of markdown formatting for better oil detection
+      const responseForPrescription = response.toLowerCase()
+        .replace(/\*\*/g, '') // Remove bold markdown
+        .replace(/\*/g, '')   // Remove italic markdown
+        .replace(/\[|\]/g, '') // Remove brackets
+        .replace(/\(.*?\)/g, ''); // Remove links in parentheses
+      
+      console.log('Cleaned response for oil detection:', responseForPrescription.substring(0, 200));
       
       // Find recommended oils in the response
       const recommendedOils = FULL_INVENTORY.filter(oil => {
-        return responseForPrescription.includes(oil.name.toLowerCase()) ||
-               oil.benefits.some(benefit => responseForPrescription.includes(benefit.toLowerCase()));
+        const oilNameMatch = responseForPrescription.includes(oil.name.toLowerCase());
+        const benefitMatch = oil.benefits.some(benefit => 
+          responseForPrescription.includes(benefit.toLowerCase())
+        );
+        
+        if (oilNameMatch || benefitMatch) {
+          console.log('Oil detected:', {
+            name: oil.name,
+            nameMatch: oilNameMatch,
+            benefitMatch: benefitMatch
+          });
+        }
+        
+        return oilNameMatch || benefitMatch;
       });
       
       if (recommendedOils.length > 0) {
