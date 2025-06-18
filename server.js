@@ -1202,44 +1202,49 @@ const generateFullInventoryResponse = () => {
   const carrierOils = FULL_INVENTORY.filter(oil => oil.category === "Carrier Oils");
   const essentialOils = FULL_INVENTORY.filter(oil => oil.category === "Essential Oils");
   const specialOils = FULL_INVENTORY.filter(oil => oil.category === "Special Oils");
-  
-  let response = `✨ Hathor's Beauty Advice ✨
+
+  const carrierOilsFormatted = carrierOils.map((oil, index) => 
+    `${index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})`
+  ).join('\n');
+
+  const essentialOilsFormatted = essentialOils.map((oil, index) => 
+    `${carrierOils.length + index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})`
+  ).join('\n');
+
+  const specialOilsFormatted = specialOils.map((oil, index) => 
+    `${carrierOils.length + essentialOils.length + index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})`
+  ).join('\n');
+
+  return `✨ Hathor's Beauty Advice ✨
 
 🌙 I Hear You, My Child
-You wish to know about my sacred collection of oils! Let me share with you our complete inventory of 20 divine oils, each blessed with ancient Egyptian wisdom.
+You wish to know about my sacred collection of oils! Let me share with you our complete inventory of 20 divine oils, each blessed with ancient Egyptian wisdom and modern purity standards.
 
-🌿 Our Complete Sacred Collection
+🌿 Complete Sacred Collection
 
-**CARRIER OILS (${carrierOils.length} oils):**
-`;
-  
-  carrierOils.forEach((oil, index) => {
-    response += `${index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})\n`;
-  });
-  
-  response += `\n**ESSENTIAL OILS (${essentialOils.length} oils):**\n`;
-  
-  essentialOils.forEach((oil, index) => {
-    response += `${carrierOils.length + index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})\n`;
-  });
-  
-  response += `\n**SPECIAL OILS (${specialOils.length} oils):**\n`;
-  
-  specialOils.forEach((oil, index) => {
-    response += `${carrierOils.length + essentialOils.length + index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})\n`;
-  });
-  
-  response += `
+**Carrier Oils (9 treasures):**
+${carrierOilsFormatted}
+
+**Essential Oils (9 essences):**
+${essentialOilsFormatted}
+
+**Special Oils (2 unique formulations):**
+${specialOilsFormatted}
+
 🌅 Ancient Wisdom from the Temple
-These 20 sacred oils represent the complete wisdom of ancient Egyptian beauty and healing arts, each blessed with divine powers to restore and transform your beauty journey.
+This complete collection of 20 sacred oils represents our entire treasured inventory. Each oil carries the blessings of ancient beauty secrets, ready to transform your beauty journey with divine essence and healing power.
 
 With divine blessings,
 Hathor`;
-  
-  return response;
 };
 
-// Function to check if message is an inventory query
+// Function to convert markdown links to HTML links
+const convertMarkdownLinksToHTML = (text) => {
+  // Convert markdown links [text](url) to HTML links <a href="url" target="_blank">text</a>
+  return text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+};
+
+// Function to check if message is asking for inventory
 const isInventoryQuery = (message) => {
   const lowerMessage = message.toLowerCase();
   
@@ -1391,7 +1396,7 @@ app.post('/api/chat', async (req, res) => {
       });
       
       // Add prescription download hint to response
-      const responseWithHint = inventoryResponse + '\n\n💫 Sacred Scroll Available\nTo download your complete prescription as a beautiful PDF scroll, <a href="https://hathor.vercel.app/api/download-prescription" target="_blank">click here</a>.\n\nWith divine blessings,\nHathor';
+      const responseWithHint = inventoryResponse + '\n\n💫 Sacred Scroll Available\nTo download your complete prescription as a beautiful PDF scroll, simply say "download my prescription".\n\nWith divine blessings,\nHathor';
       
       logger.info('Returning inventory response with inventoryComplete flag and prescription data stored');
       return res.json({
@@ -1597,6 +1602,9 @@ Hathor`;
         finalResponse += '\n\n💫 Sacred Scroll Available\nTo download your personalized prescription as a beautiful PDF scroll, <a href="https://hathor.vercel.app/api/download-prescription" target="_blank">click here</a>.';
       }
       
+      // Convert markdown links to HTML links for better rendering
+      finalResponse = convertMarkdownLinksToHTML(finalResponse);
+      
       res.json({ 
         response: finalResponse, 
         success: true,
@@ -1669,6 +1677,7 @@ app.get('/api/download-prescription', (req, res) => {
     
     // Debug logging as requested
     console.log('Prescription data:', req.session?.prescription);
+    console.log('Serving PDF for prescription:', req.session?.prescription);
     console.log('PDF Download Request:', {
       sessionId,
       hasContext: !!conversationContext[sessionId],
