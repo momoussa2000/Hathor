@@ -1578,10 +1578,19 @@ Hathor`;
         }
       }
       
+      // Add prescription hint if oils were recommended
+      let finalResponse = response;
+      if (prescriptionData) {
+        finalResponse += '\n\n💫 Sacred Scroll Available\nTo download your personalized prescription as a beautiful PDF scroll, <a href="https://hathor.vercel.app/api/download-prescription" target="_blank">click here</a>.';
+      }
+      
+      // Convert markdown links to HTML links for better rendering
+      finalResponse = convertMarkdownLinksToHTML(finalResponse);
+      
       // Store context for follow-up questions and prescription if applicable
       conversationContext[sessionId] = {
         lastResponseType: 'general',
-        lastResponse: response,
+        lastResponse: finalResponse,  // Store the full response text including download link
         prescription: prescriptionData,
         timestamp: new Date()
       };
@@ -1592,18 +1601,10 @@ Hathor`;
           prescriptionOilCount: prescriptionData.oils.length,
           oilNames: prescriptionData.oils.map(oil => oil.name),
           hasInstructions: !!prescriptionData.instructions,
-          hasPrecautions: !!prescriptionData.precautions
+          hasPrecautions: !!prescriptionData.precautions,
+          lastResponseLength: finalResponse.length
         });
       }
-      
-      // Add prescription hint if oils were recommended
-      let finalResponse = response;
-      if (prescriptionData) {
-        finalResponse += '\n\n💫 Sacred Scroll Available\nTo download your personalized prescription as a beautiful PDF scroll, <a href="https://hathor.vercel.app/api/download-prescription" target="_blank">click here</a>.';
-      }
-      
-      // Convert markdown links to HTML links for better rendering
-      finalResponse = convertMarkdownLinksToHTML(finalResponse);
       
       res.json({ 
         response: finalResponse, 
@@ -1701,51 +1702,53 @@ app.get('/api/download-prescription', (req, res) => {
   try {
     const sessionId = req.headers['x-session-id'] || 'default';
     
-    // Debug logging
     console.log('PDF Download Request:', {
       sessionId,
       hasContext: !!conversationContext[sessionId],
-      hasPrescription: !!(conversationContext[sessionId] && conversationContext[sessionId].prescription),
-      contextKeys: conversationContext[sessionId] ? Object.keys(conversationContext[sessionId]) : [],
-      prescriptionData: conversationContext[sessionId] ? conversationContext[sessionId].prescription : null
+      hasLastResponse: !!(conversationContext[sessionId] && conversationContext[sessionId].lastResponse),
+      contextKeys: conversationContext[sessionId] ? Object.keys(conversationContext[sessionId]) : []
     });
     
-    let prescription = null;
+    // Get the full chat response text to replicate exactly in PDF
+    let lastResponseText = null;
     
-    // Try to get prescription from session first
-    if (conversationContext[sessionId] && conversationContext[sessionId].prescription) {
-      prescription = conversationContext[sessionId].prescription;
-      console.log('Found prescription in session');
+    if (conversationContext[sessionId] && conversationContext[sessionId].lastResponse) {
+      lastResponseText = conversationContext[sessionId].lastResponse;
+      console.log('Found lastResponse text in session, length:', lastResponseText.length);
     } else {
-      // If no session data, create a default prescription with Sweet Almond Oil as fallback
-      console.log('No session data found, creating default prescription');
-      prescription = {
-        oils: [{
-          name: 'Sweet Almond Oil',
-          link: 'https://hathororganics.com/products/sweet-almond-oil',
-          prices: { '15ml': 'LE 280.00', '30ml': 'LE 560.00' },
-          benefits: ['Deeply moisturizes dry skin', 'Rich in vitamins A and E']
-        }],
-        instructions: {
-          frequency: 'daily evening',
-          application: 'massage onto clean skin before bedtime',
-          duration: 'ongoing for best results'
-        },
-        precautions: [
-          'Perform a patch test before full application to ensure harmony with your being.',
-          'Use gentle motions while massaging to avoid irritation.',
-          'Discontinue use if any adverse reactions occur.'
-        ]
-      };
+      // Default fallback response if no session data
+      console.log('No session data found, creating default response');
+      lastResponseText = `✨ Hathor's Beauty Advice ✨
+
+🌙 I Hear You, My Child
+Welcome to the realm of ancient beauty wisdom. I sense you seek guidance on your journey to wellness and radiance.
+
+🌿 General Recommendation
+Sweet Almond Oil - A gentle, nourishing oil perfect for all skin types, blessed with vitamins A and E.
+
+⚱️ How to Use the Oil
+• Getting Ready: Use 3-4 drops of Sweet Almond Oil
+• How to Put On: Gently massage onto clean skin before bedtime
+• How Often: Apply daily in the evening
+• How Long: Continue for ongoing benefits
+• After Using: Allow the oil to absorb overnight
+• Safety Rules: Perform a patch test and use gentle motions
+
+🔮 Where to Begin Your Journey
+Visit https://hathororganics.com/products/sweet-almond-oil
+
+🌅 Ancient Wisdom from the Temple
+In ancient Egypt, we treasured the gifts of nature to enhance our beauty and well-being.
+
+With divine blessings,
+Hathor`;
     }
-    console.log('Prescription data found:', {
-      oilCount: prescription.oils ? prescription.oils.length : 0,
-      hasInstructions: !!prescription.instructions,
-      hasPrecautions: !!prescription.precautions
-    });
     
-    // Create PDF document
-    const doc = new PDFDocument({ size: 'A4' });
+    // Create PDF document with A4 size
+    const doc = new PDFDocument({ 
+      size: 'A4',
+      margins: { top: 20, bottom: 20, left: 20, right: 20 }
+    });
     
     // Set document metadata
     doc.info.Title = 'Hathor Prescription';
@@ -1765,159 +1768,135 @@ app.get('/api/download-prescription', (req, res) => {
     
     console.log('PDF document piped to response');
     
-    // Set background color to light beige
-    doc.rect(0, 0, 595, 842).fill('#F5F1E9');
+    // Set background color to light beige (#F5F1E9)
+    doc.rect(0, 0, 595.28, 841.89).fill('#F5F1E9');
     
-    // Add header
+    // Add header with logo
     try {
       const logoPath = path.join(__dirname, 'public', 'hathor-logo-02.png');
       console.log('Attempting to load logo from:', logoPath);
       
-             // Check if file exists
-       if (fs.existsSync(logoPath)) {
+      if (fs.existsSync(logoPath)) {
         doc.image(logoPath, 80, 20, { width: 50 });
         console.log('Logo loaded successfully');
       } else {
-        console.log('Logo file not found at:', logoPath);
-        // Continue without logo
+        console.log('Logo file not found, continuing without logo');
       }
-    } catch (error) {
-      console.log('Error loading logo:', error.message);
-      logger.warn('Could not load logo image:', error.message);
-      // Continue without logo
+    } catch (err) {
+      console.error('Logo error:', err);
     }
     
-    // Add title
+    // Add header title
     doc.font('Times-Roman')
        .fontSize(16)
        .fill('#D4AF37')
-       .text('✨ Hathor\'s Sacred Prescription ✨', 0, 80, { align: 'center' });
+       .text('✨ Hathor\'s Beauty Advice ✨', 0, 80, { align: 'center' });
     
-    // Add subtitle
-    doc.fontSize(12)
-       .fill('black')
-       .text('A Divine Gift for Your Beauty and Wellness', 0, 100, { align: 'center' });
+    // Process the lastResponse text to replicate the exact chat format
+    let yPos = 120;
+    const pageWidth = 555; // A4 width minus margins
+    const leftMargin = 20;
     
-    // Add body content
-    let yPos = 130;
+    // Remove HTML tags and clean the text for PDF
+    const cleanText = lastResponseText
+      .replace(/<a href="[^"]*" target="_blank">([^<]*)<\/a>/g, '$1') // Remove HTML links but keep text
+      .replace(/💫 Sacred Scroll Available[\s\S]*$/g, '') // Remove download hint section
+      .trim();
     
-    // Recommended Oils section
-    doc.fontSize(14)
-       .fill('#D4AF37')
-       .text('Recommended Sacred Oils:', 40, yPos);
-    yPos += 25;
+    // Split text into lines and sections
+    const lines = cleanText.split('\n');
     
-    // Create table for oils
-    prescription.oils.forEach((oil, index) => {
-      if (yPos > 750) { // Start new page if needed
+    lines.forEach((line, index) => {
+      // Check if we need a new page
+      if (yPos > 750) {
         doc.addPage();
-        doc.rect(0, 0, 595, 842).fill('#F5F1E9');
+        doc.rect(0, 0, 595.28, 841.89).fill('#F5F1E9');
         yPos = 50;
       }
       
-      doc.fontSize(11)
-         .fill('black')
-         .text(`${index + 1}. ${oil.name}`, 50, yPos);
+      const trimmedLine = line.trim();
       
-      if (oil.link) {
-        doc.fillColor('blue')
-           .text(oil.link, 50, yPos + 15, { 
-             link: oil.link,
-             underline: true 
-           });
+      if (!trimmedLine) {
+        yPos += 8; // Add spacing for empty lines
+        return;
       }
       
-      if (oil.prices) {
-        doc.fillColor('black')
-           .text(`Prices: ${oil.prices}`, 50, yPos + 30);
+      // Handle different types of lines
+      if (trimmedLine.startsWith('✨') || trimmedLine.includes('✨')) {
+        // Header/title lines
+        doc.font('Times-Roman')
+           .fontSize(16)
+           .fill('#D4AF37')
+           .text(trimmedLine, leftMargin, yPos, { width: pageWidth, align: 'center' });
+        yPos += 25;
+      } else if (trimmedLine.startsWith('🌙') || trimmedLine.startsWith('🌿') || 
+                 trimmedLine.startsWith('⚱️') || trimmedLine.startsWith('🔮') || 
+                 trimmedLine.startsWith('🌅')) {
+        // Section headers with emojis
+        doc.font('Times-Roman')
+           .fontSize(14)
+           .fill('#D4AF37')
+           .text(trimmedLine, leftMargin, yPos, { width: pageWidth });
+        yPos += 22;
+      } else if (trimmedLine.startsWith('• ')) {
+        // Bullet points
+        doc.font('Times-Roman')
+           .fontSize(12)
+           .fill('black')
+           .text(trimmedLine, leftMargin + 10, yPos, { width: pageWidth - 10 });
+        yPos += 18;
+      } else if (trimmedLine.startsWith('- ')) {
+        // Dash lists (like oil recommendations)
+        doc.font('Times-Roman')
+           .fontSize(12)
+           .fill('black')
+           .text('• ' + trimmedLine.substring(2), leftMargin + 10, yPos, { width: pageWidth - 10 });
+        yPos += 18;
+      } else {
+        // Regular text
+        doc.font('Times-Roman')
+           .fontSize(12)
+           .fill('black')
+           .text(trimmedLine, leftMargin, yPos, { width: pageWidth });
+        yPos += 18;
       }
-      
-      if (oil.benefits && oil.benefits.length > 0) {
-        doc.text(`Benefits: ${oil.benefits.join(', ')}`, 50, yPos + 45);
-      }
-      
-      yPos += 75;
-    });
-    
-    // Usage Instructions section
-    if (yPos > 650) {
-      doc.addPage();
-      doc.rect(0, 0, 595, 842).fill('#F5F1E9');
-      yPos = 50;
-    }
-    
-    yPos += 20;
-    doc.fontSize(14)
-       .fill('#D4AF37')
-       .text('Sacred Usage Instructions:', 40, yPos);
-    yPos += 25;
-    
-    const instructions = [
-      'Gently massage the oil blend onto clean skin or scalp before bedtime.',
-      'Apply daily in the evening for ongoing benefits.',
-      'Allow the oils to work their magic overnight.',
-      'Use with intention and gratitude for best results.'
-    ];
-    
-    doc.fontSize(11)
-       .fill('black');
-    
-    instructions.forEach(instruction => {
-      doc.text(`• ${instruction}`, 50, yPos);
-      yPos += 20;
-    });
-    
-    // Safety Precautions section
-    yPos += 20;
-    doc.fontSize(14)
-       .fill('#D4AF37')
-       .text('Sacred Safety Precautions:', 40, yPos);
-    yPos += 25;
-    
-    const precautions = [
-      'Perform a patch test before full application to ensure harmony with your being.',
-      'Use gentle motions while massaging to avoid irritation.',
-      'Dilute essential oils with carrier oils as recommended.',
-      'Discontinue use if any adverse reactions occur.'
-    ];
-    
-    doc.fontSize(11)
-       .fill('black');
-    
-    precautions.forEach(precaution => {
-      doc.text(`• ${precaution}`, 50, yPos);
-      yPos += 20;
     });
     
     // Add footer
+    yPos = Math.max(yPos + 30, 260); // Ensure footer is positioned properly
+    
     doc.fontSize(10)
        .fill('black')
-       .text('With love and light, Hathor - https://hathororganics.com', 40, 750, { 
-         link: 'https://hathororganics.com'
+       .text('With love and light, Hathor - https://hathororganics.com', leftMargin, yPos, { 
+         width: pageWidth,
+         italics: true 
        });
     
+    yPos += 20;
     doc.fontSize(8)
        .text(`Generated on: ${new Date().toLocaleDateString('en-US', { 
          year: 'numeric', 
          month: 'long', 
          day: 'numeric' 
-       })}`, 40, 770);
+       })}`, leftMargin, yPos);
     
     // Try to add small logo in footer
     try {
       const logoPath = path.join(__dirname, 'public', 'hathor-logo-02.png');
-      doc.image(logoPath, 500, 760, { width: 20 });
+      if (fs.existsSync(logoPath)) {
+        doc.image(logoPath, 140, yPos - 5, { width: 20 });
+      }
     } catch (error) {
-      logger.warn('Could not load footer logo:', error.message);
+      console.error('Footer logo error:', error);
     }
     
     // Finalize PDF
     doc.end();
     
   } catch (error) {
-    logger.error('Error generating PDF:', error);
+    console.error('PDF generation failed:', error);
     res.status(500).json({ 
-      error: 'Failed to generate prescription PDF',
+      error: "Failed to generate PDF",
       details: error.message 
     });
   }
