@@ -1702,12 +1702,23 @@ app.get('/api/download-prescription', (req, res) => {
   try {
     const sessionId = req.headers['x-session-id'] || 'default';
     
+    // Enhanced debugging: Log session data
     console.log('PDF Download Request:', {
       sessionId,
       hasContext: !!conversationContext[sessionId],
       hasLastResponse: !!(conversationContext[sessionId] && conversationContext[sessionId].lastResponse),
       contextKeys: conversationContext[sessionId] ? Object.keys(conversationContext[sessionId]) : []
     });
+    
+    // Debug logging for session data
+    if (conversationContext[sessionId]) {
+      console.log('Last Response:', conversationContext[sessionId].lastResponse ? 
+        conversationContext[sessionId].lastResponse.substring(0, 200) + '...' : 'None');
+      console.log('Prescription:', conversationContext[sessionId].prescription ? 
+        JSON.stringify(conversationContext[sessionId].prescription, null, 2) : 'None');
+    } else {
+      console.log('No session context found for sessionId:', sessionId);
+    }
     
     // Get the full chat response text to replicate exactly in PDF
     let lastResponseText = null;
@@ -1797,13 +1808,15 @@ Hathor`;
     const pageWidth = 555; // A4 width minus margins
     const leftMargin = 20;
     
-    // Remove HTML tags and clean OCR artifacts from the text with enhanced regex
+    // Enhanced text cleanup with broader artifact removal
     const cleanText = lastResponseText
       .replace(/<a href="[^"]*" target="_blank">([^<]*)<\/a>/g, '$1') // Remove HTML links but keep text
       .replace(/💫 Sacred Scroll Available[\s\S]*$/g, '') // Remove download hint section
-      .replace(/Ø<ß|Ø<B|$\emptyset<|&|[\$\#\%\^\*\+=<>]+/g, '') // Enhanced artifact cleanup
-      .replace(/\s+/g, ' ') // Normalize whitespace
+      .replace(/[\(\)\[\]\{\}\Ø<ß|$\emptyset<|&|[\$\#\%\^\*\+=<>]+|\s{2,}/g, ' ') // Enhanced artifact cleanup
       .trim();
+    
+    console.log('Cleaned text length:', cleanText.length);
+    console.log('Cleaned text preview:', cleanText.substring(0, 300) + '...');
     
     // Split text into lines and sections
     const lines = cleanText.split('\n');
@@ -1820,7 +1833,9 @@ Hathor`;
     
     // Track if we've already added the header title to avoid duplication
     let headerAdded = false;
+    let contentRendered = false;
     
+    // Enhanced line processing with better pattern matching
     lines.forEach((line, index) => {
       // Check if we need a new page
       if (yPos > 750) {
@@ -1842,8 +1857,15 @@ Hathor`;
         return; // Skip duplicate header
       }
       
-      // Handle different types of lines
-      if (trimmedLine.startsWith('✨') || trimmedLine.includes('✨')) {
+      // Enhanced section header detection
+      if (trimmedLine.match(/🌙|🌿|⚱️|💫|🔮|🌅/)) {
+        doc.font('Times-Roman')
+           .fontSize(14)
+           .fill('#D4AF37')
+           .text(trimmedLine, leftMargin, yPos, { width: pageWidth });
+        yPos += 20;
+        contentRendered = true;
+      } else if (trimmedLine.startsWith('✨') || trimmedLine.includes('✨')) {
         // Header/title lines
         if (trimmedLine.includes('Hathor\'s Beauty Advice')) {
           headerAdded = true;
@@ -1854,108 +1876,49 @@ Hathor`;
              .fill('#D4AF37')
              .text(trimmedLine, leftMargin, yPos, { width: pageWidth, align: 'center' });
           yPos += 25;
+          contentRendered = true;
         }
-      } else if (trimmedLine.startsWith('🌙') || trimmedLine.startsWith('🌿') || 
-                 trimmedLine.startsWith('⚱️') || trimmedLine.startsWith('🔮') || 
-                 trimmedLine.startsWith('🌅') || trimmedLine.startsWith('💫')) {
-        // Section headers with emojis
+      } else if (trimmedLine.match(/^• /) || trimmedLine.match(/^- /)) {
+        // Enhanced bullet point handling
+        const bulletText = trimmedLine.replace(/^• /, '').replace(/^- /, '');
         doc.font('Times-Roman')
-           .fontSize(14)
-           .fill('#D4AF37')
-           .text(trimmedLine, leftMargin, yPos, { width: pageWidth });
-        yPos += 22;
-      } else if (trimmedLine.startsWith('• ')) {
-        // Bullet points - check for oil names and make them clickable
-        const oilResult = findOilLink(trimmedLine);
+           .fontSize(12)
+           .fill('black')
+           .text('  • ', leftMargin, yPos, { continued: true });
+        
+        // Check for oil names in bullet points
+        const oilResult = findOilLink(bulletText);
         if (oilResult.found) {
-          // Split the line to identify the oil name part
-          const parts = trimmedLine.split(oilResult.name);
+          const parts = bulletText.split(oilResult.name);
           if (parts.length >= 2) {
-            // Render the part before the oil name
-            doc.font('Times-Roman')
-               .fontSize(12)
-               .fill('black')
-               .text(parts[0], leftMargin + 10, yPos, { continued: true });
-            
-            // Add clickable link for oil name
+            doc.text(parts[0], { continued: true });
             doc.fillColor('blue')
                .text(oilResult.name, { 
                  link: oilResult.link,
                  underline: true,
                  continued: true 
                });
-            
-            // Add the rest of the line
             doc.fillColor('black')
                .text(parts.slice(1).join(oilResult.name), { continued: false });
           } else {
-            // Fallback to regular text if splitting fails
-            doc.font('Times-Roman')
-               .fontSize(12)
-               .fill('black')
-               .text(trimmedLine, leftMargin + 10, yPos, { width: pageWidth - 10 });
+            doc.text(bulletText, { continued: false });
           }
         } else {
-          // Regular bullet point without oil links
-          doc.font('Times-Roman')
-             .fontSize(12)
-             .fill('black')
-             .text(trimmedLine, leftMargin + 10, yPos, { width: pageWidth - 10 });
+          doc.text(bulletText, { continued: false });
         }
-        yPos += 18;
-      } else if (trimmedLine.startsWith('- ')) {
-        // Dash lists (like oil recommendations) - check for oil names and make them clickable
-        const oilResult = findOilLink(trimmedLine);
-        if (oilResult.found) {
-          // Split the line to identify the oil name part
-          const parts = trimmedLine.substring(2).split(oilResult.name); // Remove "- " prefix
-          if (parts.length >= 2) {
-            // Render bullet and part before oil name
-            doc.font('Times-Roman')
-               .fontSize(12)
-               .fill('black')
-               .text('• ' + parts[0], leftMargin + 10, yPos, { continued: true });
-            
-            // Add clickable link for oil name
-            doc.fillColor('blue')
-               .text(oilResult.name, { 
-                 link: oilResult.link,
-                 underline: true,
-                 continued: true 
-               });
-            
-            // Add the rest of the line
-            doc.fillColor('black')
-               .text(parts.slice(1).join(oilResult.name), { continued: false });
-          } else {
-            // Fallback to regular text if splitting fails
-            doc.font('Times-Roman')
-               .fontSize(12)
-               .fill('black')
-               .text('• ' + trimmedLine.substring(2), leftMargin + 10, yPos, { width: pageWidth - 10 });
-          }
-        } else {
-          // Regular dash list item without oil links
-          doc.font('Times-Roman')
-             .fontSize(12)
-             .fill('black')
-             .text('• ' + trimmedLine.substring(2), leftMargin + 10, yPos, { width: pageWidth - 10 });
-        }
-        yPos += 18;
+        yPos += 15;
+        contentRendered = true;
       } else {
         // Regular text - check for oil names and make them clickable
         const oilResult = findOilLink(trimmedLine);
         if (oilResult.found) {
-          // Split the line to identify the oil name part
           const parts = trimmedLine.split(oilResult.name);
           if (parts.length >= 2) {
-            // Render the part before the oil name
             doc.font('Times-Roman')
                .fontSize(12)
                .fill('black')
                .text(parts[0], leftMargin, yPos, { continued: true });
             
-            // Add clickable link for oil name
             doc.fillColor('blue')
                .text(oilResult.name, { 
                  link: oilResult.link,
@@ -1963,53 +1926,64 @@ Hathor`;
                  continued: true 
                });
             
-            // Add the rest of the line
             doc.fillColor('black')
                .text(parts.slice(1).join(oilResult.name), { continued: false });
           } else {
-            // Fallback to regular text if splitting fails
             doc.font('Times-Roman')
                .fontSize(12)
                .fill('black')
                .text(trimmedLine, leftMargin, yPos, { width: pageWidth });
           }
         } else {
-          // Regular text without oil links
           doc.font('Times-Roman')
              .fontSize(12)
              .fill('black')
              .text(trimmedLine, leftMargin, yPos, { width: pageWidth });
         }
-        yPos += 18;
+        yPos += 15;
+        contentRendered = true;
       }
     });
     
-    // Add footer
+    // Error handling for content rendering
+    if (!contentRendered) {
+      console.error('No content to render:', lastResponseText);
+      return res.status(500).json({ 
+        error: "Failed to generate PDF content.",
+        details: "No renderable content found in session response" 
+      });
+    }
+    
+    // Add footer with enhanced error handling
     yPos = Math.max(yPos + 30, 260); // Ensure footer is positioned properly
     
-    doc.fontSize(10)
-       .fill('black')
-       .text('With love and light, Hathor - https://hathororganics.com', leftMargin, yPos, { 
-         width: pageWidth,
-         italics: true 
-       });
-    
-    yPos += 20;
-    doc.fontSize(8)
-       .text(`Generated on: ${new Date().toLocaleDateString('en-US', { 
-         year: 'numeric', 
-         month: 'long', 
-         day: 'numeric' 
-       })}`, leftMargin, yPos);
-    
-    // Try to add small logo in footer
     try {
-      const logoPath = path.join(__dirname, 'public', 'hathor-logo-02.png');
-      if (fs.existsSync(logoPath)) {
-        doc.image(logoPath, 140, yPos - 5, { width: 20 });
+      doc.fontSize(10)
+         .fill('black')
+         .text('With love and light, Hathor - https://hathororganics.com', leftMargin, yPos, { 
+           width: pageWidth,
+           italics: true 
+         });
+      
+      yPos += 20;
+      doc.fontSize(8)
+         .text(`Generated on: ${new Date().toLocaleDateString('en-US', { 
+           year: 'numeric', 
+           month: 'long', 
+           day: 'numeric' 
+         })}`, leftMargin, yPos);
+      
+      // Try to add small logo in footer
+      try {
+        const logoPath = path.join(__dirname, 'public', 'hathor-logo-02.png');
+        if (fs.existsSync(logoPath)) {
+          doc.image(logoPath, 140, yPos - 5, { width: 20 });
+        }
+      } catch (err) {
+        console.error('Footer logo error:', err);
       }
     } catch (error) {
-      console.error('Footer logo error:', error);
+      console.error('Footer rendering error:', error);
     }
     
     // Finalize PDF
