@@ -1797,14 +1797,25 @@ Hathor`;
     const pageWidth = 555; // A4 width minus margins
     const leftMargin = 20;
     
-    // Remove HTML tags and clean the text for PDF
+    // Remove HTML tags and clean OCR artifacts from the text
     const cleanText = lastResponseText
       .replace(/<a href="[^"]*" target="_blank">([^<]*)<\/a>/g, '$1') // Remove HTML links but keep text
       .replace(/💫 Sacred Scroll Available[\s\S]*$/g, '') // Remove download hint section
+      .replace(/Ø<B|$\emptyset<|&/g, '') // Remove OCR artifacts
       .trim();
     
     // Split text into lines and sections
     const lines = cleanText.split('\n');
+    
+    // Helper function to find oil in inventory and create clickable link
+    const findOilLink = (text) => {
+      for (const oil of FULL_INVENTORY) {
+        if (text.includes(oil.name)) {
+          return { found: true, oil: oil, name: oil.name, link: oil.link };
+        }
+      }
+      return { found: false };
+    };
     
     lines.forEach((line, index) => {
       // Check if we need a new page
@@ -1839,25 +1850,121 @@ Hathor`;
            .text(trimmedLine, leftMargin, yPos, { width: pageWidth });
         yPos += 22;
       } else if (trimmedLine.startsWith('• ')) {
-        // Bullet points
-        doc.font('Times-Roman')
-           .fontSize(12)
-           .fill('black')
-           .text(trimmedLine, leftMargin + 10, yPos, { width: pageWidth - 10 });
+        // Bullet points - check for oil names and make them clickable
+        const oilResult = findOilLink(trimmedLine);
+        if (oilResult.found) {
+          // Split the line to identify the oil name part
+          const parts = trimmedLine.split(oilResult.name);
+          if (parts.length >= 2) {
+            // Render the part before the oil name
+            doc.font('Times-Roman')
+               .fontSize(12)
+               .fill('black')
+               .text(parts[0], leftMargin + 10, yPos, { continued: true });
+            
+            // Add clickable link for oil name
+            doc.fillColor('blue')
+               .text(oilResult.name, { 
+                 link: oilResult.link,
+                 underline: true,
+                 continued: true 
+               });
+            
+            // Add the rest of the line
+            doc.fillColor('black')
+               .text(parts.slice(1).join(oilResult.name), { continued: false });
+          } else {
+            // Fallback to regular text if splitting fails
+            doc.font('Times-Roman')
+               .fontSize(12)
+               .fill('black')
+               .text(trimmedLine, leftMargin + 10, yPos, { width: pageWidth - 10 });
+          }
+        } else {
+          // Regular bullet point without oil links
+          doc.font('Times-Roman')
+             .fontSize(12)
+             .fill('black')
+             .text(trimmedLine, leftMargin + 10, yPos, { width: pageWidth - 10 });
+        }
         yPos += 18;
       } else if (trimmedLine.startsWith('- ')) {
-        // Dash lists (like oil recommendations)
-        doc.font('Times-Roman')
-           .fontSize(12)
-           .fill('black')
-           .text('• ' + trimmedLine.substring(2), leftMargin + 10, yPos, { width: pageWidth - 10 });
+        // Dash lists (like oil recommendations) - check for oil names and make them clickable
+        const oilResult = findOilLink(trimmedLine);
+        if (oilResult.found) {
+          // Split the line to identify the oil name part
+          const parts = trimmedLine.substring(2).split(oilResult.name); // Remove "- " prefix
+          if (parts.length >= 2) {
+            // Render bullet and part before oil name
+            doc.font('Times-Roman')
+               .fontSize(12)
+               .fill('black')
+               .text('• ' + parts[0], leftMargin + 10, yPos, { continued: true });
+            
+            // Add clickable link for oil name
+            doc.fillColor('blue')
+               .text(oilResult.name, { 
+                 link: oilResult.link,
+                 underline: true,
+                 continued: true 
+               });
+            
+            // Add the rest of the line
+            doc.fillColor('black')
+               .text(parts.slice(1).join(oilResult.name), { continued: false });
+          } else {
+            // Fallback to regular text if splitting fails
+            doc.font('Times-Roman')
+               .fontSize(12)
+               .fill('black')
+               .text('• ' + trimmedLine.substring(2), leftMargin + 10, yPos, { width: pageWidth - 10 });
+          }
+        } else {
+          // Regular dash list item without oil links
+          doc.font('Times-Roman')
+             .fontSize(12)
+             .fill('black')
+             .text('• ' + trimmedLine.substring(2), leftMargin + 10, yPos, { width: pageWidth - 10 });
+        }
         yPos += 18;
       } else {
-        // Regular text
-        doc.font('Times-Roman')
-           .fontSize(12)
-           .fill('black')
-           .text(trimmedLine, leftMargin, yPos, { width: pageWidth });
+        // Regular text - check for oil names and make them clickable
+        const oilResult = findOilLink(trimmedLine);
+        if (oilResult.found) {
+          // Split the line to identify the oil name part
+          const parts = trimmedLine.split(oilResult.name);
+          if (parts.length >= 2) {
+            // Render the part before the oil name
+            doc.font('Times-Roman')
+               .fontSize(12)
+               .fill('black')
+               .text(parts[0], leftMargin, yPos, { continued: true });
+            
+            // Add clickable link for oil name
+            doc.fillColor('blue')
+               .text(oilResult.name, { 
+                 link: oilResult.link,
+                 underline: true,
+                 continued: true 
+               });
+            
+            // Add the rest of the line
+            doc.fillColor('black')
+               .text(parts.slice(1).join(oilResult.name), { continued: false });
+          } else {
+            // Fallback to regular text if splitting fails
+            doc.font('Times-Roman')
+               .fontSize(12)
+               .fill('black')
+               .text(trimmedLine, leftMargin, yPos, { width: pageWidth });
+          }
+        } else {
+          // Regular text without oil links
+          doc.font('Times-Roman')
+             .fontSize(12)
+             .fill('black')
+             .text(trimmedLine, leftMargin, yPos, { width: pageWidth });
+        }
         yPos += 18;
       }
     });
