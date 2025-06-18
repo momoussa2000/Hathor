@@ -21,6 +21,54 @@ function ChatInterface() {
     scrollToBottom();
   }, [messages]);
 
+  // Function to detect if message contains HTML
+  const containsHTML = (text) => {
+    return /<[^>]*>/g.test(text);
+  };
+
+  // Function to render message content
+  const renderMessageContent = (message) => {
+    if (message.isUser) {
+      // User messages are always plain text
+      return <span>{message.text}</span>;
+    }
+
+    // For Hathor messages, check if they contain HTML
+    if (containsHTML(message.text)) {
+      // If HTML is detected, render with dangerouslySetInnerHTML
+      // First, let's make sure links open in new tabs and have proper styling
+      const processedHTML = message.text
+        .replace(/<a /g, '<a class="message-link" ')
+        .replace(/target="_blank"/g, 'target="_blank" rel="noopener noreferrer"');
+      
+      return (
+        <div 
+          dangerouslySetInnerHTML={{ __html: processedHTML }}
+        />
+      );
+    } else {
+      // If no HTML, use ReactMarkdown for markdown content
+      return (
+        <ReactMarkdown 
+          components={{
+            a: ({node, ...props}) => (
+              <a 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="message-link"
+                {...props}
+              >
+                {props.children}
+              </a>
+            )
+          }}
+        >
+          {message.text}
+        </ReactMarkdown>
+      );
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
@@ -76,22 +124,7 @@ function ChatInterface() {
               className={`message ${message.isUser ? 'user' : 'hathor'}`}
             >
               <div className="message-content">
-                <ReactMarkdown 
-                  components={{
-                    a: ({node, ...props}) => (
-                      <a 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="message-link"
-                        {...props}
-                      >
-                        {props.children}
-                      </a>
-                    )
-                  }}
-                >
-                  {message.text}
-                </ReactMarkdown>
+                {renderMessageContent(message)}
               </div>
             </div>
           ))}
