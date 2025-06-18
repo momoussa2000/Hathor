@@ -1391,7 +1391,7 @@ app.post('/api/chat', async (req, res) => {
       });
       
       // Add prescription download hint to response
-      const responseWithHint = inventoryResponse + '\n\n💫 Sacred Scroll Available\nTo download your complete prescription as a beautiful PDF scroll, simply say "download my prescription".\n\nWith divine blessings,\nHathor';
+      const responseWithHint = inventoryResponse + '\n\n💫 Sacred Scroll Available\nTo download your complete prescription as a beautiful PDF scroll, <a href="https://hathor.vercel.app/api/download-prescription" target="_blank">click here</a>.\n\nWith divine blessings,\nHathor';
       
       logger.info('Returning inventory response with inventoryComplete flag and prescription data stored');
       return res.json({
@@ -1594,7 +1594,7 @@ Hathor`;
       // Add prescription hint if oils were recommended
       let finalResponse = response;
       if (prescriptionData) {
-        finalResponse += '\n\n💫 Sacred Scroll Available\nTo download your personalized prescription as a beautiful PDF scroll, <a href="https://hathor.vercel.app/api/download-prescription" target="_blank">click here</a> or say "download my prescription".';
+        finalResponse += '\n\n💫 Sacred Scroll Available\nTo download your personalized prescription as a beautiful PDF scroll, <a href="https://hathor.vercel.app/api/download-prescription" target="_blank">click here</a>.';
       }
       
       res.json({ 
