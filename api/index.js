@@ -1202,41 +1202,46 @@ const generateFullInventoryResponse = () => {
   const carrierOils = FULL_INVENTORY.filter(oil => oil.category === "Carrier Oils");
   const essentialOils = FULL_INVENTORY.filter(oil => oil.category === "Essential Oils");
   const specialOils = FULL_INVENTORY.filter(oil => oil.category === "Special Oils");
-  
-  let response = `✨ Hathor's Beauty Advice ✨
+
+  const carrierOilsFormatted = carrierOils.map((oil, index) => 
+    `${index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})`
+  ).join('\n');
+
+  const essentialOilsFormatted = essentialOils.map((oil, index) => 
+    `${carrierOils.length + index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})`
+  ).join('\n');
+
+  const specialOilsFormatted = specialOils.map((oil, index) => 
+    `${carrierOils.length + essentialOils.length + index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})`
+  ).join('\n');
+
+  return `✨ Hathor's Beauty Advice ✨
 
 🌙 I Hear You, My Child
-You wish to know about my sacred collection of oils! Let me share with you our complete inventory of 20 divine oils, each blessed with ancient Egyptian wisdom.
+You wish to know about my sacred collection of oils! Let me share with you our complete inventory of 20 divine oils, each blessed with ancient Egyptian wisdom and modern purity standards.
 
-🌿 Our Complete Sacred Collection
+🌿 Complete Sacred Collection
 
-**CARRIER OILS (${carrierOils.length} oils):**
-`;
-  
-  carrierOils.forEach((oil, index) => {
-    response += `${index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})\n`;
-  });
-  
-  response += `\n**ESSENTIAL OILS (${essentialOils.length} oils):**\n`;
-  
-  essentialOils.forEach((oil, index) => {
-    response += `${carrierOils.length + index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})\n`;
-  });
-  
-  response += `\n**SPECIAL OILS (${specialOils.length} oils):**\n`;
-  
-  specialOils.forEach((oil, index) => {
-    response += `${carrierOils.length + essentialOils.length + index + 1}. [${oil.name}](${oil.link}) - ${oil.benefits.join(", ")} (${oil.prices})\n`;
-  });
-  
-  response += `
+**Carrier Oils (9 treasures):**
+${carrierOilsFormatted}
+
+**Essential Oils (9 essences):**
+${essentialOilsFormatted}
+
+**Special Oils (2 unique formulations):**
+${specialOilsFormatted}
+
 🌅 Ancient Wisdom from the Temple
-These 20 sacred oils represent the complete wisdom of ancient Egyptian beauty and healing arts, each blessed with divine powers to restore and transform your beauty journey.
+This complete collection of 20 sacred oils represents our entire treasured inventory. Each oil carries the blessings of ancient beauty secrets, ready to transform your beauty journey with divine essence and healing power.
 
 With divine blessings,
 Hathor`;
-  
-  return response;
+};
+
+// Function to convert markdown links to HTML links
+const convertMarkdownLinksToHTML = (text) => {
+  // Convert markdown links [text](url) to HTML links <a href="url" target="_blank">text</a>
+  return text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
 };
 
 // Function to check if message is an inventory query
@@ -1482,40 +1487,37 @@ Hathor`;
       
       // Check if response contains oil recommendations and store prescription data
       let prescriptionData = null;
-      // Clean the response of markdown formatting for better oil detection
-      const responseForPrescription = response.toLowerCase()
-        .replace(/\*\*/g, '') // Remove bold markdown
-        .replace(/\*/g, '')   // Remove italic markdown
-        .replace(/\[|\]/g, '') // Remove brackets
-        .replace(/\(.*?\)/g, ''); // Remove links in parentheses
       
-      console.log('Cleaned response for oil detection:', responseForPrescription.substring(0, 200));
-      
-      // Find recommended oils in the response
-      const recommendedOils = FULL_INVENTORY.filter(oil => {
-        const oilNameMatch = responseForPrescription.includes(oil.name.toLowerCase());
-        const benefitMatch = oil.benefits.some(benefit => 
-          responseForPrescription.includes(benefit.toLowerCase())
-        );
-        
-        if (oilNameMatch || benefitMatch) {
-          console.log('Oil detected:', {
-            name: oil.name,
-            nameMatch: oilNameMatch,
-            benefitMatch: benefitMatch
-          });
-        }
-        
-        return oilNameMatch || benefitMatch;
-      });
-      
-      if (recommendedOils.length > 0) {
+      // Special handling for balding/hair loss queries
+      const messageLower = message.toLowerCase();
+      if (messageLower.includes('bald') || messageLower.includes('hair loss') || 
+          messageLower.includes('hair fall') || messageLower.includes('losing hair')) {
+        console.log('Balding query detected, setting specific prescription');
         prescriptionData = {
-          oils: recommendedOils,
+          oils: [
+            {
+              name: 'Garden Cress Oil',
+              link: 'https://hathororganics.com/products/garden-cress-oil',
+              prices: { '15ml': 'LE 300.00', '30ml': 'LE 600.00' },
+              benefits: 'Promotes hair growth'
+            },
+            {
+              name: 'Rosemary Oil',
+              link: 'https://hathororganics.com/products/rosemary-oil',
+              prices: { '15ml': 'LE 380.00', '30ml': 'LE 760.00' },
+              benefits: 'Enhances scalp vitality'
+            },
+            {
+              name: 'Black Seed Oil',
+              link: 'https://hathororganics.com/products/black-seed-oil',
+              prices: { '15ml': 'LE 500.00', '30ml': 'LE 1,000.00' },
+              benefits: 'Strengthens hair roots'
+            }
+          ],
           instructions: {
-            frequency: 'daily evening',
-            application: 'massage onto clean skin/scalp before bedtime',
-            duration: 'ongoing for best results'
+            frequency: '2-3 times per week',
+            application: 'massage into scalp',
+            duration: '3-6 months'
           },
           precautions: [
             'Perform a patch test before full application to ensure harmony with your being.',
@@ -1524,11 +1526,56 @@ Hathor`;
             'Discontinue use if any adverse reactions occur.'
           ]
         };
+        console.log('Set balding prescription with 3 oils');
+      } else {
+        // Clean the response of markdown formatting for better oil detection
+        const responseForPrescription = response.toLowerCase()
+          .replace(/\*\*/g, '') // Remove bold markdown
+          .replace(/\*/g, '')   // Remove italic markdown
+          .replace(/\[|\]/g, '') // Remove brackets
+          .replace(/\(.*?\)/g, ''); // Remove links in parentheses
         
-        logger.info('Prescription data created from OpenAI response', { 
-          oilCount: recommendedOils.length,
-          oilNames: recommendedOils.map(oil => oil.name)
+        console.log('Cleaned response for oil detection:', responseForPrescription.substring(0, 200));
+        
+        // Find recommended oils in the response
+        const recommendedOils = FULL_INVENTORY.filter(oil => {
+          const oilNameMatch = responseForPrescription.includes(oil.name.toLowerCase());
+          const benefitMatch = oil.benefits.some(benefit => 
+            responseForPrescription.includes(benefit.toLowerCase())
+          );
+          
+          if (oilNameMatch || benefitMatch) {
+            console.log('Oil detected:', {
+              name: oil.name,
+              nameMatch: oilNameMatch,
+              benefitMatch: benefitMatch
+            });
+          }
+          
+          return oilNameMatch || benefitMatch;
         });
+        
+        if (recommendedOils.length > 0) {
+          prescriptionData = {
+            oils: recommendedOils,
+            instructions: {
+              frequency: 'daily evening',
+              application: 'massage onto clean skin/scalp before bedtime',
+              duration: 'ongoing for best results'
+            },
+            precautions: [
+              'Perform a patch test before full application to ensure harmony with your being.',
+              'Use gentle motions while massaging to avoid irritation.',
+              'Dilute essential oils with carrier oils as recommended.',
+              'Discontinue use if any adverse reactions occur.'
+            ]
+          };
+          
+          logger.info('Prescription data created from OpenAI response', { 
+            oilCount: recommendedOils.length,
+            oilNames: recommendedOils.map(oil => oil.name)
+          });
+        }
       }
       
       // Store context for follow-up questions and prescription if applicable
@@ -1552,8 +1599,11 @@ Hathor`;
       // Add prescription hint if oils were recommended
       let finalResponse = response;
       if (prescriptionData) {
-        finalResponse += '\n\n💫 Sacred Scroll Available\nTo download your personalized prescription as a beautiful PDF scroll, <a href="https://hathor.vercel.app/api/download-prescription" target="_blank">click here</a> or say "download my prescription".';
+        finalResponse += '\n\n💫 Sacred Scroll Available\nTo download your personalized prescription as a beautiful PDF scroll, <a href="https://hathor.vercel.app/api/download-prescription" target="_blank">click here</a>.';
       }
+      
+      // Convert markdown links to HTML links for better rendering
+      finalResponse = convertMarkdownLinksToHTML(finalResponse);
       
       res.json({ 
         response: finalResponse, 
@@ -1616,6 +1666,32 @@ app.get('/api/test-inventory', (req, res) => {
       isInventoryDetected: isInventory,
       inventoryCount: FULL_INVENTORY.length,
       sampleResponse: fullInventory.substring(0, 200) + "..."
+    }
+  });
+});
+
+// Test endpoint for markdown conversion
+app.get('/api/test-markdown', (req, res) => {
+  const testText = `✨ Test Response ✨
+
+🌿 Oils to Help You
+To replenish your skin, I recommend [Sweet Almond Oil](https://hathororganics.com/products/sweet-almond-oil).
+
+🔮 Where to Begin Your Journey
+[Sweet Almond Oil](https://hathororganics.com/products/sweet-almond-oil)
+
+💫 Sacred Scroll Available
+To download your personalized prescription as a beautiful PDF scroll, <a href="https://hathor.vercel.app/api/download-prescription" target="_blank">click here</a>.`;
+
+  const convertedText = convertMarkdownLinksToHTML(testText);
+  
+  res.json({ 
+    status: "success",
+    message: "Markdown conversion test",
+    testResults: {
+      originalText: testText,
+      convertedText: convertedText,
+      conversionWorking: convertedText.includes('<a href="https://hathororganics.com/products/sweet-almond-oil" target="_blank">Sweet Almond Oil</a>')
     }
   });
 });
