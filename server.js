@@ -1670,6 +1670,32 @@ app.get('/api/test-inventory', (req, res) => {
   });
 });
 
+// Test endpoint for markdown conversion
+app.get('/api/test-markdown', (req, res) => {
+  const testText = `✨ Test Response ✨
+
+🌿 Oils to Help You
+To replenish your skin, I recommend [Sweet Almond Oil](https://hathororganics.com/products/sweet-almond-oil).
+
+🔮 Where to Begin Your Journey
+[Sweet Almond Oil](https://hathororganics.com/products/sweet-almond-oil)
+
+💫 Sacred Scroll Available
+To download your personalized prescription as a beautiful PDF scroll, <a href="https://hathor.vercel.app/api/download-prescription" target="_blank">click here</a>.`;
+
+  const convertedText = convertMarkdownLinksToHTML(testText);
+  
+  res.json({ 
+    status: "success",
+    message: "Markdown conversion test",
+    testResults: {
+      originalText: testText,
+      convertedText: convertedText,
+      conversionWorking: convertedText.includes('<a href="https://hathororganics.com/products/sweet-almond-oil" target="_blank">Sweet Almond Oil</a>')
+    }
+  });
+});
+
 // PDF prescription download endpoint
 app.get('/api/download-prescription', (req, res) => {
   try {
