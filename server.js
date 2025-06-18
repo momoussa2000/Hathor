@@ -1482,40 +1482,37 @@ Hathor`;
       
       // Check if response contains oil recommendations and store prescription data
       let prescriptionData = null;
-      // Clean the response of markdown formatting for better oil detection
-      const responseForPrescription = response.toLowerCase()
-        .replace(/\*\*/g, '') // Remove bold markdown
-        .replace(/\*/g, '')   // Remove italic markdown
-        .replace(/\[|\]/g, '') // Remove brackets
-        .replace(/\(.*?\)/g, ''); // Remove links in parentheses
       
-      console.log('Cleaned response for oil detection:', responseForPrescription.substring(0, 200));
-      
-      // Find recommended oils in the response
-      const recommendedOils = FULL_INVENTORY.filter(oil => {
-        const oilNameMatch = responseForPrescription.includes(oil.name.toLowerCase());
-        const benefitMatch = oil.benefits.some(benefit => 
-          responseForPrescription.includes(benefit.toLowerCase())
-        );
-        
-        if (oilNameMatch || benefitMatch) {
-          console.log('Oil detected:', {
-            name: oil.name,
-            nameMatch: oilNameMatch,
-            benefitMatch: benefitMatch
-          });
-        }
-        
-        return oilNameMatch || benefitMatch;
-      });
-      
-      if (recommendedOils.length > 0) {
+      // Special handling for balding/hair loss queries
+      const messageLower = message.toLowerCase();
+      if (messageLower.includes('bald') || messageLower.includes('hair loss') || 
+          messageLower.includes('hair fall') || messageLower.includes('losing hair')) {
+        console.log('Balding query detected, setting specific prescription');
         prescriptionData = {
-          oils: recommendedOils,
+          oils: [
+            {
+              name: 'Garden Cress Oil',
+              link: 'https://hathororganics.com/products/garden-cress-oil',
+              prices: { '15ml': 'LE 300.00', '30ml': 'LE 600.00' },
+              benefits: 'Promotes hair growth'
+            },
+            {
+              name: 'Rosemary Oil',
+              link: 'https://hathororganics.com/products/rosemary-oil',
+              prices: { '15ml': 'LE 380.00', '30ml': 'LE 760.00' },
+              benefits: 'Enhances scalp vitality'
+            },
+            {
+              name: 'Black Seed Oil',
+              link: 'https://hathororganics.com/products/black-seed-oil',
+              prices: { '15ml': 'LE 500.00', '30ml': 'LE 1,000.00' },
+              benefits: 'Strengthens hair roots'
+            }
+          ],
           instructions: {
-            frequency: 'daily evening',
-            application: 'massage onto clean skin/scalp before bedtime',
-            duration: 'ongoing for best results'
+            frequency: '2-3 times per week',
+            application: 'massage into scalp',
+            duration: '3-6 months'
           },
           precautions: [
             'Perform a patch test before full application to ensure harmony with your being.',
@@ -1524,11 +1521,56 @@ Hathor`;
             'Discontinue use if any adverse reactions occur.'
           ]
         };
+        console.log('Set balding prescription with 3 oils');
+      } else {
+        // Clean the response of markdown formatting for better oil detection
+        const responseForPrescription = response.toLowerCase()
+          .replace(/\*\*/g, '') // Remove bold markdown
+          .replace(/\*/g, '')   // Remove italic markdown
+          .replace(/\[|\]/g, '') // Remove brackets
+          .replace(/\(.*?\)/g, ''); // Remove links in parentheses
         
-        logger.info('Prescription data created from OpenAI response', { 
-          oilCount: recommendedOils.length,
-          oilNames: recommendedOils.map(oil => oil.name)
+        console.log('Cleaned response for oil detection:', responseForPrescription.substring(0, 200));
+        
+        // Find recommended oils in the response
+        const recommendedOils = FULL_INVENTORY.filter(oil => {
+          const oilNameMatch = responseForPrescription.includes(oil.name.toLowerCase());
+          const benefitMatch = oil.benefits.some(benefit => 
+            responseForPrescription.includes(benefit.toLowerCase())
+          );
+          
+          if (oilNameMatch || benefitMatch) {
+            console.log('Oil detected:', {
+              name: oil.name,
+              nameMatch: oilNameMatch,
+              benefitMatch: benefitMatch
+            });
+          }
+          
+          return oilNameMatch || benefitMatch;
         });
+        
+        if (recommendedOils.length > 0) {
+          prescriptionData = {
+            oils: recommendedOils,
+            instructions: {
+              frequency: 'daily evening',
+              application: 'massage onto clean skin/scalp before bedtime',
+              duration: 'ongoing for best results'
+            },
+            precautions: [
+              'Perform a patch test before full application to ensure harmony with your being.',
+              'Use gentle motions while massaging to avoid irritation.',
+              'Dilute essential oils with carrier oils as recommended.',
+              'Discontinue use if any adverse reactions occur.'
+            ]
+          };
+          
+          logger.info('Prescription data created from OpenAI response', { 
+            oilCount: recommendedOils.length,
+            oilNames: recommendedOils.map(oil => oil.name)
+          });
+        }
       }
       
       // Store context for follow-up questions and prescription if applicable
@@ -1625,7 +1667,8 @@ app.get('/api/download-prescription', (req, res) => {
   try {
     const sessionId = req.headers['x-session-id'] || 'default';
     
-    // Debug logging
+    // Debug logging as requested
+    console.log('Prescription data:', req.session?.prescription);
     console.log('PDF Download Request:', {
       sessionId,
       hasContext: !!conversationContext[sessionId],
@@ -1692,22 +1735,21 @@ app.get('/api/download-prescription', (req, res) => {
     // Set background color to light beige
     doc.rect(0, 0, 595, 842).fill('#F5F1E9');
     
-    // Add header
+    // Add header with enhanced error handling
     try {
       const logoPath = path.join(__dirname, 'public', 'hathor-logo-02.png');
       console.log('Attempting to load logo from:', logoPath);
       
-             // Check if file exists
-       if (fs.existsSync(logoPath)) {
+      // Check if file exists
+      if (fs.existsSync(logoPath)) {
         doc.image(logoPath, 80, 20, { width: 50 });
         console.log('Logo loaded successfully');
       } else {
         console.log('Logo file not found at:', logoPath);
         // Continue without logo
       }
-    } catch (error) {
-      console.log('Error loading logo:', error.message);
-      logger.warn('Could not load logo image:', error.message);
+    } catch (err) {
+      console.error('Logo error:', err);
       // Continue without logo
     }
     
@@ -1752,12 +1794,16 @@ app.get('/api/download-prescription', (req, res) => {
       }
       
       if (oil.prices) {
+        const priceText = typeof oil.prices === 'object' 
+          ? Object.entries(oil.prices).map(([size, price]) => `${size}: ${price}`).join(', ')
+          : oil.prices;
         doc.fillColor('black')
-           .text(`Prices: ${oil.prices}`, 50, yPos + 30);
+           .text(`Prices: ${priceText}`, 50, yPos + 30);
       }
       
       if (oil.benefits && oil.benefits.length > 0) {
-        doc.text(`Benefits: ${oil.benefits.join(', ')}`, 50, yPos + 45);
+        const benefitsText = Array.isArray(oil.benefits) ? oil.benefits.join(', ') : oil.benefits;
+        doc.text(`Benefits: ${benefitsText}`, 50, yPos + 45);
       }
       
       yPos += 75;
@@ -1776,7 +1822,11 @@ app.get('/api/download-prescription', (req, res) => {
        .text('Sacred Usage Instructions:', 40, yPos);
     yPos += 25;
     
-    const instructions = [
+    const instructions = prescription.instructions ? [
+      `Frequency: ${prescription.instructions.frequency}`,
+      `Application: ${prescription.instructions.application}`,
+      `Duration: ${prescription.instructions.duration}`
+    ] : [
       'Gently massage the oil blend onto clean skin or scalp before bedtime.',
       'Apply daily in the evening for ongoing benefits.',
       'Allow the oils to work their magic overnight.',
@@ -1798,7 +1848,7 @@ app.get('/api/download-prescription', (req, res) => {
        .text('Sacred Safety Precautions:', 40, yPos);
     yPos += 25;
     
-    const precautions = [
+    const precautions = prescription.precautions || [
       'Perform a patch test before full application to ensure harmony with your being.',
       'Use gentle motions while massaging to avoid irritation.',
       'Dilute essential oils with carrier oils as recommended.',
@@ -1830,18 +1880,21 @@ app.get('/api/download-prescription', (req, res) => {
     // Try to add small logo in footer
     try {
       const logoPath = path.join(__dirname, 'public', 'hathor-logo-02.png');
-      doc.image(logoPath, 500, 760, { width: 20 });
+      if (fs.existsSync(logoPath)) {
+        doc.image(logoPath, 500, 760, { width: 20 });
+      }
     } catch (error) {
-      logger.warn('Could not load footer logo:', error.message);
+      console.error('Footer logo error:', error);
     }
     
     // Finalize PDF
     doc.end();
     
   } catch (error) {
+    console.error('PDF generation failed:', error);
     logger.error('Error generating PDF:', error);
     res.status(500).json({ 
-      error: 'Failed to generate prescription PDF',
+      "error": "Failed to generate PDF. Check logs.",
       details: error.message 
     });
   }
