@@ -1797,11 +1797,12 @@ Hathor`;
     const pageWidth = 555; // A4 width minus margins
     const leftMargin = 20;
     
-    // Remove HTML tags and clean OCR artifacts from the text
+    // Remove HTML tags and clean OCR artifacts from the text with enhanced regex
     const cleanText = lastResponseText
       .replace(/<a href="[^"]*" target="_blank">([^<]*)<\/a>/g, '$1') // Remove HTML links but keep text
       .replace(/💫 Sacred Scroll Available[\s\S]*$/g, '') // Remove download hint section
-      .replace(/Ø<B|$\emptyset<|&/g, '') // Remove OCR artifacts
+      .replace(/Ø<ß|Ø<B|$\emptyset<|&|[\$\#\%\^\*\+=<>]+/g, '') // Enhanced artifact cleanup
+      .replace(/\s+/g, ' ') // Normalize whitespace
       .trim();
     
     // Split text into lines and sections
@@ -1816,6 +1817,9 @@ Hathor`;
       }
       return { found: false };
     };
+    
+    // Track if we've already added the header title to avoid duplication
+    let headerAdded = false;
     
     lines.forEach((line, index) => {
       // Check if we need a new page
@@ -1832,17 +1836,28 @@ Hathor`;
         return;
       }
       
+      // Skip duplicate title lines
+      if ((trimmedLine.startsWith('✨') || trimmedLine.includes('✨')) && 
+          trimmedLine.includes('Hathor\'s Beauty Advice') && headerAdded) {
+        return; // Skip duplicate header
+      }
+      
       // Handle different types of lines
       if (trimmedLine.startsWith('✨') || trimmedLine.includes('✨')) {
         // Header/title lines
-        doc.font('Times-Roman')
-           .fontSize(16)
-           .fill('#D4AF37')
-           .text(trimmedLine, leftMargin, yPos, { width: pageWidth, align: 'center' });
-        yPos += 25;
+        if (trimmedLine.includes('Hathor\'s Beauty Advice')) {
+          headerAdded = true;
+          return; // Skip as we already have header
+        } else {
+          doc.font('Times-Roman')
+             .fontSize(16)
+             .fill('#D4AF37')
+             .text(trimmedLine, leftMargin, yPos, { width: pageWidth, align: 'center' });
+          yPos += 25;
+        }
       } else if (trimmedLine.startsWith('🌙') || trimmedLine.startsWith('🌿') || 
                  trimmedLine.startsWith('⚱️') || trimmedLine.startsWith('🔮') || 
-                 trimmedLine.startsWith('🌅')) {
+                 trimmedLine.startsWith('🌅') || trimmedLine.startsWith('💫')) {
         // Section headers with emojis
         doc.font('Times-Roman')
            .fontSize(14)
