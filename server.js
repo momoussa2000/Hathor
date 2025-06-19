@@ -1944,8 +1944,10 @@ app.get('/api/download-prescription', (req, res) => {
         contentRendered = true;
       } else {
         // Regular text - check for oil names and make them clickable
+        console.log('Rendering regular text:', trimmedLine.substring(0, 30) + '...');
         const oilResult = findOilLink(trimmedLine);
         if (oilResult.found) {
+          console.log('Found oil link in text:', oilResult.name);
           const parts = trimmedLine.split(oilResult.name);
           if (parts.length >= 2) {
             doc.font('Times-Roman')
@@ -1982,8 +1984,8 @@ app.get('/api/download-prescription', (req, res) => {
     // Error handling for content rendering
     console.log(`Finished processing ${linesProcessed} lines, contentRendered: ${contentRendered}`);
     
-    if (!contentRendered || linesProcessed === 0) {
-      console.error('PDF generation failed, no lines rendered:', lines);
+    if (!contentRendered) {
+      console.error('PDF generation failed, no content rendered');
       console.error('Lines content:', lines.map((line, i) => `${i}: "${line}"`));
       return res.status(500).json({ 
         error: "PDF generation failed.",
