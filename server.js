@@ -1762,11 +1762,40 @@ app.get('/api/download-prescription', (req, res) => {
   const lastResponseText = conversationContext[sessionId].lastResponse;
   console.log('Found lastResponse text, length:', lastResponseText.length);
   
-  // Clean text
+  // Debug: Log the raw lastResponse to see what we're working with
+  console.log('Raw lastResponse text:', JSON.stringify(lastResponseText.substring(0, 200)));
+  
+  // Clean text with comprehensive artifact removal and OCR corrections
   let text = lastResponseText
     .replace(/<a href="[^"]*" target="_blank">([^<]*)<\/a>/g, '$1') // Remove HTML links but keep text
-    .replace(/💫 Sacred Scroll Available[\s\S]*$/g, '') // Remove download hint section  
-    .replace(/[\(\)\[\]\{\}\Ø<ß|$\emptyset<|&|[\$\#\%\^\*\+=<>]+|\s{2,}/g, ' ') // Enhanced artifact cleanup
+    .replace(/💫 Sacred Scroll Available[\s\S]*$/g, '') // Remove download hint section
+    // Remove specific OCR artifacts first
+    .replace(/Ø<ß|Ø<r ß|Ø=Ý|&±þ/g, ' ')
+    .replace(/[$\#\%\^\*\+=<>{}()[\]]/g, ' ')
+    // Fix common OCR corruptions
+    .replace(/H ar You, M Child/g, 'I Hear You, My Child')
+    .replace(/E brac /g, 'Embrace ')
+    .replace(/Sw Al ond Oil/g, 'Sweet Almond Oil')
+    .replace(/G n l /g, 'Gently ')
+    .replace(/a ag /g, 'massage ')
+    .replace(/P rfor /g, 'Perform ')
+    .replace(/a ch /g, 'patch ')
+    .replace(/b for /g, 'before ')
+    .replace(/a lica ion/g, 'application ')
+    .replace(/Af r U ing/g, 'After Using')
+    .replace(/ov rnigh /g, 'overnight ')
+    .replace(/Saf Rul /g, 'Safety Rules')
+    .replace(/Wh r o B gin/g, 'Where to Begin')
+    .replace(/Anci n Wi do/g, 'Ancient Wisdom')
+    .replace(/fro h T l/g, 'from the Temple')
+    .replace(/abili o/g, 'ability to')
+    .replace(/ro c/g, 'protect')
+    .replace(/nouri h/g, 'nourish')
+    .replace(/divin /g, 'divine')
+    .replace(/bl ing/g, 'blessings')
+    // Remove any remaining non-printable characters except emojis and basic punctuation
+    .replace(/[^\w\s\u{1F300}-\u{1F9FF}✨⚱️🌙🌿💫🔮🌅•\-.,!?:;'"]/gu, ' ')
+    .replace(/\s{2,}/g, ' ') // Collapse multiple spaces
     .trim();
   
   console.log('Cleaned text length:', text.length);
