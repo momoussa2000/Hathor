@@ -1698,7 +1698,7 @@ To download your personalized prescription as a beautiful PDF scroll, <a href="h
 });
 
 // PDF prescription download endpoint
-app.get('/api/download-prescription', (req, res) => {
+app.get('/api/download-prescription', async (req, res) => {
   const sessionId = req.headers['x-session-id'] || 'default';
   
   // Enhanced debugging: Log session data (note: using conversationContext, not req.session)
@@ -1752,253 +1752,140 @@ Hathor`;
   }
   console.log('Found lastResponse text, length:', lastResponseText.length);
   
-  // Debug: Log the raw lastResponse to see what we're working with
-  console.log('Raw lastResponse text:', JSON.stringify(lastResponseText.substring(0, 200)));
-  
-  // Clean text with comprehensive artifact removal and OCR corrections
-  let text = lastResponseText
-    .replace(/<a href="[^"]*" target="_blank">([^<]*)<\/a>/g, '$1') // Remove HTML links but keep text
-    .replace(/💫 Sacred Scroll Available[\s\S]*$/g, '') // Remove download hint section
-    // Remove specific OCR artifacts first
-    .replace(/Ø<ß|Ø<r ß|Ø=Ý|&±þ/g, ' ')
-    .replace(/[$\#\%\^\*\+=<>{}()[\]]/g, ' ')
-    // Fix common OCR corruptions
-    .replace(/H ar You, M Child/g, 'I Hear You, My Child')
-    .replace(/E brac /g, 'Embrace ')
-    .replace(/Sw Al ond Oil/g, 'Sweet Almond Oil')
-    .replace(/G n l /g, 'Gently ')
-    .replace(/a ag /g, 'massage ')
-    .replace(/P rfor /g, 'Perform ')
-    .replace(/a ch /g, 'patch ')
-    .replace(/b for /g, 'before ')
-    .replace(/a lica ion/g, 'application ')
-    .replace(/Af r U ing/g, 'After Using')
-    .replace(/ov rnigh /g, 'overnight ')
-    .replace(/Saf Rul /g, 'Safety Rules')
-    .replace(/Wh r o B gin/g, 'Where to Begin')
-    .replace(/Anci n Wi do/g, 'Ancient Wisdom')
-    .replace(/fro h T l/g, 'from the Temple')
-    .replace(/abili o/g, 'ability to')
-    .replace(/ro c/g, 'protect')
-    .replace(/nouri h/g, 'nourish')
-    .replace(/divin /g, 'divine')
-    .replace(/bl ing/g, 'blessings')
-    // Remove any remaining non-printable characters except emojis and basic punctuation
-    .replace(/[^\w\s\u{1F300}-\u{1F9FF}✨⚱️🌙🌿💫🔮🌅•\-.,!?:;'"]/gu, ' ')
-    .replace(/\s{2,}/g, ' ') // Collapse multiple spaces
-    .trim();
-  
-  console.log('Cleaned text length:', text.length);
-  
-  // Split into lines
-  const textLines = text.split('\n');
-  console.log('Total lines to process:', textLines.length);
-  
-  // Try PDF generation first
   try {
-    console.log('Attempting PDF generation...');
+    console.log('Attempting DOCX generation...');
     
-    // Create PDF document with A4 size  
-    const doc = new PDFDocument({ 
-      size: 'A4',
-      margins: { top: 20, bottom: 20, left: 20, right: 20 }
-    });
+    const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } = require('docx');
     
-    // Set PDF response headers
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename="hathor-prescription.pdf"');
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    // Clean text to remove only HTML links and download section, preserve everything else exactly
+    let text = lastResponseText
+      .replace(/<a href="[^"]*" target="_blank">([^<]*)<\/a>/g, '$1') // Remove HTML links but keep text
+      .replace(/💫 Sacred Scroll Available[\s\S]*$/g, '') // Remove download hint section
+      .trim();
     
-    // Pipe PDF to response
-    doc.pipe(res);
+    console.log('Cleaned text for DOCX:', text.substring(0, 200));
     
-    // Set background color to light beige (#F5F1E9)
-    doc.rect(0, 0, 595.28, 841.89).fill('#F5F1E9');
+    // Split into lines and create document elements
+    const lines = text.split('\n');
+    const docElements = [];
     
-    // Add header with logo
-    try {
-      const logoPath = path.join(__dirname, 'public', 'hathor-logo-02.png');
-      if (fs.existsSync(logoPath)) {
-        doc.image(logoPath, 80, 20, { width: 50 });
-        console.log('Header logo loaded successfully');
-      }
-    } catch (err) {
-      console.error('Header logo error:', err);
-    }
-    
-    // Add header title
-    doc.font('Times-Roman')
-       .fontSize(16)
-       .fill('#D4AF37')
-       .text('✨ Hathor\'s Beauty Advice ✨', 0, 80, { align: 'center' });
-    
-    // Initialize y position
-    let y = 100;
-    let contentRendered = false;
-    
-    // Process lines
-    textLines.forEach((line, index) => {
+    lines.forEach(line => {
       const trimmedLine = line.trim();
       if (!trimmedLine) {
-        y += 8;
+        // Add empty paragraph for spacing
+        docElements.push(new Paragraph({ text: '' }));
         return;
       }
       
-      console.log(`Processing line ${index + 1}: "${trimmedLine.substring(0, 30)}..."`);
-      
-      // Check if we need a new page
-      if (y > 750) {
-        doc.addPage();
-        doc.rect(0, 0, 595.28, 841.89).fill('#F5F1E9');
-        y = 50;
+      // Title line with sparkles
+      if (trimmedLine.includes('✨ Hathor\'s Beauty Advice ✨')) {
+        docElements.push(new Paragraph({
+          children: [
+            new TextRun({
+              text: trimmedLine,
+              bold: true,
+              size: 32,
+              color: 'D4AF37'
+            })
+          ],
+          alignment: AlignmentType.CENTER,
+          spacing: { after: 400 }
+        }));
       }
-      
-      // Headers (emojis)
-      if (trimmedLine.match(/🌙|🌿|⚱️|💫|🔮|🌅/)) {
-        doc.fontSize(14).fill('#D4AF37').text(trimmedLine, 20, y);
-        y += 20;
-        contentRendered = true;
+      // Section headers with emojis
+      else if (trimmedLine.match(/^[🌙🌿⚱️💫🔮🌅]/)) {
+        docElements.push(new Paragraph({
+          children: [
+            new TextRun({
+              text: trimmedLine,
+              bold: true,
+              size: 24,
+              color: 'D4AF37'
+            })
+          ],
+          spacing: { before: 300, after: 200 }
+        }));
       }
-      // Bullets
-      else if (trimmedLine.match(/^• /) || trimmedLine.match(/^- /)) {
-        const bulletText = trimmedLine.replace(/^• /, '').replace(/^- /, '');
-        doc.fontSize(12).fill('black').text('  • ', 20, y, { continued: true });
-        doc.text(bulletText, 30, y);
-        y += 15;
-        contentRendered = true;
-      }
-      // Oil names with links
-      else if (trimmedLine.match(/(Garden Cress Oil|Rosemary Oil|Black Seed Oil)/)) {
-        const oilName = trimmedLine.match(/(Garden Cress Oil|Rosemary Oil|Black Seed Oil)/)[0];
-        const oil = FULL_INVENTORY.find(item => item.name === oilName);
-        if (oil) {
-          doc.fontSize(12).fill('blue')
-             .text(trimmedLine, 20, y, { link: oil.link, underline: true });
-        } else {
-          doc.fontSize(12).fill('black').text(trimmedLine, 20, y);
-        }
-        y += 15;
-        contentRendered = true;
+      // Bullet points
+      else if (trimmedLine.match(/^[•-]\s/)) {
+        docElements.push(new Paragraph({
+          children: [
+            new TextRun({
+              text: trimmedLine,
+              size: 22
+            })
+          ],
+          spacing: { after: 100 }
+        }));
       }
       // Regular text
       else {
-        doc.fontSize(12).fill('black').text(trimmedLine, 20, y);
-        y += 15;
-        contentRendered = true;
+        docElements.push(new Paragraph({
+          children: [
+            new TextRun({
+              text: trimmedLine,
+              size: 22
+            })
+          ],
+          spacing: { after: 150 }
+        }));
       }
     });
     
-    if (!contentRendered) {
-      throw new Error('No content was rendered to PDF');
-    }
-    
     // Add footer
-    doc.fontSize(10).fill('black')
-       .text('With love and light, Hathor - https://hathororganics.com', 20, 260, { italics: true });
-    doc.fontSize(8)
-       .text(`Generated on: ${new Date().toLocaleDateString('en-US', { 
-         year: 'numeric', 
-         month: 'long', 
-         day: 'numeric' 
-       })}`, 20, 280);
+    docElements.push(
+      new Paragraph({ text: '' }), // spacing
+      new Paragraph({
+        children: [
+          new TextRun({
+            text: 'With love and light, Hathor - https://hathororganics.com',
+            italic: true,
+            size: 20
+          })
+        ],
+        spacing: { before: 400 }
+      }),
+      new Paragraph({
+        children: [
+          new TextRun({
+            text: `Generated on: ${new Date().toLocaleDateString('en-US', { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+            })}`,
+            size: 18,
+            color: '666666'
+          })
+        ]
+      })
+    );
     
-    // Try to add footer logo
-    try {
-      const logoPath = path.join(__dirname, 'public', 'hathor-logo-02.png');
-      if (fs.existsSync(logoPath)) {
-        doc.image(logoPath, 140, 275, { width: 20 });
-      }
-    } catch (err) {
-      console.error('Footer logo error:', err);
-    }
+    // Create document
+    const doc = new Document({
+      sections: [{
+        properties: {},
+        children: docElements
+      }]
+    });
     
-    // Finalize PDF
-    doc.end();
-    console.log('PDF generation completed successfully');
+    // Generate DOCX buffer
+    const buffer = await Packer.toBuffer(doc);
     
-  } catch (pdfError) {
-    console.error('PDF generation failed:', pdfError);
-    console.log('Falling back to JPG generation...');
+    // Set response headers for DOCX
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+    res.setHeader('Content-Disposition', 'attachment; filename="hathor-prescription.docx"');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     
-    // Fallback to JPG with canvas
-    try {
-      const { createCanvas } = require('canvas');
-      const canvas = createCanvas(595, 842);
-      const ctx = canvas.getContext('2d');
-      
-      // Set background
-      ctx.fillStyle = '#F5F1E9';
-      ctx.fillRect(0, 0, 595, 842);
-      
-      // Add header
-      ctx.font = '16px Times-Roman';
-      ctx.fillStyle = '#D4AF37';
-      ctx.textAlign = 'center';
-      ctx.fillText('✨ Hathor\'s Beauty Advice ✨', 297.5, 50);
-      
-      // Reset text properties
-      ctx.fillStyle = 'black';
-      ctx.font = '12px Times-Roman';
-      ctx.textAlign = 'left';
-      
-      let y = 80;
-      
-      textLines.forEach(line => {
-        const trimmedLine = line.trim();
-        if (!trimmedLine) {
-          y += 8;
-          return;
-        }
-        
-        if (trimmedLine.match(/🌙|🌿|⚱️|💫|🔮|🌅/)) {
-          ctx.font = '14px Times-Roman';
-          ctx.fillStyle = '#D4AF37';
-          ctx.fillText(trimmedLine, 20, y);
-          ctx.font = '12px Times-Roman';
-          ctx.fillStyle = 'black';
-          y += 20;
-        } else if (trimmedLine.match(/^• /) || trimmedLine.match(/^- /)) {
-          const bulletText = trimmedLine.replace(/^• /, '').replace(/^- /, '');
-          ctx.fillText('  • ' + bulletText, 20, y);
-          y += 15;
-        } else if (trimmedLine.match(/(Garden Cress Oil|Rosemary Oil|Black Seed Oil)/)) {
-          // Note: Canvas doesn't support hyperlinks natively; links will be text only
-          ctx.fillStyle = 'blue';
-          ctx.fillText(trimmedLine, 20, y);
-          ctx.fillStyle = 'black';
-          y += 15;
-        } else {
-          ctx.fillText(trimmedLine, 20, y);
-          y += 15;
-        }
-      });
-      
-      // Add footer
-      ctx.font = '10px Times-Roman';
-      ctx.fillText('With love and light, Hathor - https://hathororganics.com', 20, 800);
-      ctx.font = '8px Times-Roman';
-      ctx.fillText(`Generated on: ${new Date().toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-      })}`, 20, 820);
-      
-      const buffer = canvas.toBuffer('image/jpeg');
-      res.setHeader('Content-Type', 'image/jpeg');
-      res.setHeader('Content-Disposition', 'attachment; filename="hathor-prescription.jpg"');
-      res.end(buffer);
-      
-      console.log('JPG generation completed successfully');
-      
-    } catch (jpgError) {
-      console.error('JPG generation also failed:', jpgError);
-      return res.status(500).json({ 
-        error: 'File generation failed',
-        details: 'Both PDF and JPG generation failed',
-        pdfError: pdfError.message,
-        jpgError: jpgError.message
-      });
-    }
+    // Send the DOCX file
+    res.end(buffer);
+    console.log('DOCX generation completed successfully');
+    
+  } catch (error) {
+    console.error('DOCX generation failed:', error);
+    return res.status(500).json({ 
+      error: 'File generation failed',
+      details: 'DOCX generation failed: ' + error.message
+    });
   }
 });
 
