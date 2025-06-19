@@ -1746,58 +1746,33 @@ app.get('/api/download-prescription', (req, res) => {
   try {
     const sessionId = req.headers['x-session-id'] || 'default';
     
-    // Enhanced debugging: Log session data
+    // Enhanced debugging: Log complete session data
+    console.log('Session Data:', conversationContext[sessionId] || 'No session found');
+    console.log('Last Response:', conversationContext[sessionId]?.lastResponse || 'None');
+    console.log('Prescription:', conversationContext[sessionId]?.prescription || 'None');
+    
     console.log('PDF Download Request:', {
       sessionId,
       hasContext: !!conversationContext[sessionId],
       hasLastResponse: !!(conversationContext[sessionId] && conversationContext[sessionId].lastResponse),
-      contextKeys: conversationContext[sessionId] ? Object.keys(conversationContext[sessionId]) : []
+      contextKeys: conversationContext[sessionId] ? Object.keys(conversationContext[sessionId]) : [],
+      sessionExists: sessionId in conversationContext,
+      totalSessions: Object.keys(conversationContext).length
     });
     
-    // Debug logging for session data
-    if (conversationContext[sessionId]) {
-      console.log('Last Response:', conversationContext[sessionId].lastResponse ? 
-        conversationContext[sessionId].lastResponse.substring(0, 200) + '...' : 'None');
-      console.log('Prescription:', conversationContext[sessionId].prescription ? 
-        JSON.stringify(conversationContext[sessionId].prescription, null, 2) : 'None');
-    } else {
-      console.log('No session context found for sessionId:', sessionId);
+    // Check if lastResponse exists and validate
+    if (!conversationContext[sessionId] || !conversationContext[sessionId].lastResponse) {
+      console.error('No lastResponse found for session:', sessionId);
+      console.error('Available sessions:', Object.keys(conversationContext));
+      return res.status(400).json({ 
+        error: 'No prescription data available.',
+        details: 'Please start a chat session first before downloading a prescription.'
+      });
     }
     
-    // Get the full chat response text to replicate exactly in PDF
-    let lastResponseText = null;
-    
-    if (conversationContext[sessionId] && conversationContext[sessionId].lastResponse) {
-      lastResponseText = conversationContext[sessionId].lastResponse;
-      console.log('Found lastResponse text in session, length:', lastResponseText.length);
-    } else {
-      // Default fallback response if no session data
-      console.log('No session data found, creating default response');
-      lastResponseText = `✨ Hathor's Beauty Advice ✨
-
-🌙 I Hear You, My Child
-Welcome to the realm of ancient beauty wisdom. I sense you seek guidance on your journey to wellness and radiance.
-
-🌿 General Recommendation
-Sweet Almond Oil - A gentle, nourishing oil perfect for all skin types, blessed with vitamins A and E.
-
-⚱️ How to Use the Oil
-• Getting Ready: Use 3-4 drops of Sweet Almond Oil
-• How to Put On: Gently massage onto clean skin before bedtime
-• How Often: Apply daily in the evening
-• How Long: Continue for ongoing benefits
-• After Using: Allow the oil to absorb overnight
-• Safety Rules: Perform a patch test and use gentle motions
-
-🔮 Where to Begin Your Journey
-Visit https://hathororganics.com/products/sweet-almond-oil
-
-🌅 Ancient Wisdom from the Temple
-In ancient Egypt, we treasured the gifts of nature to enhance our beauty and well-being.
-
-With divine blessings,
-Hathor`;
-    }
+    const lastResponseText = conversationContext[sessionId].lastResponse;
+    console.log('Found lastResponse text in session, length:', lastResponseText.length);
+    console.log('Full lastResponse content:', lastResponseText);
     
     // Create PDF document with A4 size
     const doc = new PDFDocument({ 
@@ -1864,6 +1839,8 @@ Hathor`;
     
     // Split text into lines and sections
     const lines = cleanText.split('\n');
+    console.log('Total lines to process:', lines.length);
+    console.log('First 5 lines:', lines.slice(0, 5));
     
     // Helper function to find oil in inventory and create clickable link
     const findOilLink = (text) => {
@@ -1878,14 +1855,18 @@ Hathor`;
     // Track if we've already added the header title to avoid duplication
     let headerAdded = false;
     let contentRendered = false;
+    let linesProcessed = 0;
     
-    // Enhanced line processing with better pattern matching
+    // Enhanced line processing with better pattern matching and logging
     lines.forEach((line, index) => {
+      linesProcessed++;
+      
       // Check if we need a new page
       if (yPos > 750) {
         doc.addPage();
         doc.rect(0, 0, 595.28, 841.89).fill('#F5F1E9');
         yPos = 50;
+        console.log('Added new page, reset yPos to 50');
       }
       
       const trimmedLine = line.trim();
@@ -1895,14 +1876,18 @@ Hathor`;
         return;
       }
       
+      console.log(`Processing line ${index + 1}/${lines.length}: "${trimmedLine.substring(0, 50)}..."`);
+      
       // Skip duplicate title lines
       if ((trimmedLine.startsWith('✨') || trimmedLine.includes('✨')) && 
           trimmedLine.includes('Hathor\'s Beauty Advice') && headerAdded) {
+        console.log('Skipping duplicate header line');
         return; // Skip duplicate header
       }
       
       // Enhanced section header detection
       if (trimmedLine.match(/🌙|🌿|⚱️|💫|🔮|🌅/)) {
+        console.log('Rendering section header:', trimmedLine);
         doc.font('Times-Roman')
            .fontSize(14)
            .fill('#D4AF37')
@@ -1913,8 +1898,10 @@ Hathor`;
         // Header/title lines
         if (trimmedLine.includes('Hathor\'s Beauty Advice')) {
           headerAdded = true;
+          console.log('Header already added, skipping duplicate');
           return; // Skip as we already have header
         } else {
+          console.log('Rendering title line:', trimmedLine);
           doc.font('Times-Roman')
              .fontSize(16)
              .fill('#D4AF37')
@@ -1925,6 +1912,8 @@ Hathor`;
       } else if (trimmedLine.match(/^• /) || trimmedLine.match(/^- /)) {
         // Enhanced bullet point handling
         const bulletText = trimmedLine.replace(/^• /, '').replace(/^- /, '');
+        console.log('Rendering bullet point:', bulletText.substring(0, 30) + '...');
+        
         doc.font('Times-Roman')
            .fontSize(12)
            .fill('black')
@@ -1933,6 +1922,7 @@ Hathor`;
         // Check for oil names in bullet points
         const oilResult = findOilLink(bulletText);
         if (oilResult.found) {
+          console.log('Found oil link in bullet:', oilResult.name);
           const parts = bulletText.split(oilResult.name);
           if (parts.length >= 2) {
             doc.text(parts[0], { continued: true });
@@ -1990,11 +1980,14 @@ Hathor`;
     });
     
     // Error handling for content rendering
-    if (!contentRendered) {
-      console.error('No content to render:', lastResponseText);
+    console.log(`Finished processing ${linesProcessed} lines, contentRendered: ${contentRendered}`);
+    
+    if (!contentRendered || linesProcessed === 0) {
+      console.error('PDF generation failed, no lines rendered:', lines);
+      console.error('Lines content:', lines.map((line, i) => `${i}: "${line}"`));
       return res.status(500).json({ 
-        error: "Failed to generate PDF content.",
-        details: "No renderable content found in session response" 
+        error: "PDF generation failed.",
+        details: `No renderable content found. Processed ${linesProcessed} lines, contentRendered: ${contentRendered}`
       });
     }
     
