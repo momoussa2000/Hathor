@@ -1743,60 +1743,55 @@ To download your personalized prescription as a beautiful PDF scroll, <a href="h
 
 // PDF prescription download endpoint
 app.get('/api/download-prescription', (req, res) => {
-  try {
-    const sessionId = req.headers['x-session-id'] || 'default';
-    
-    // Enhanced debugging: Log complete session data
-    console.log('Session Data:', conversationContext[sessionId] || 'No session found');
-    console.log('Last Response:', conversationContext[sessionId]?.lastResponse || 'None');
-    console.log('Prescription:', conversationContext[sessionId]?.prescription || 'None');
-    
-    console.log('PDF Download Request:', {
-      sessionId,
-      hasContext: !!conversationContext[sessionId],
-      hasLastResponse: !!(conversationContext[sessionId] && conversationContext[sessionId].lastResponse),
-      contextKeys: conversationContext[sessionId] ? Object.keys(conversationContext[sessionId]) : [],
-      sessionExists: sessionId in conversationContext,
-      totalSessions: Object.keys(conversationContext).length
+  const sessionId = req.headers['x-session-id'] || 'default';
+  
+  // Enhanced debugging: Log session data (note: using conversationContext, not req.session)
+  console.log('Session:', conversationContext[sessionId] || 'No session found');
+  console.log('Last Response:', conversationContext[sessionId]?.lastResponse || 'None');
+  
+  // Check if lastResponse exists and validate
+  if (!conversationContext[sessionId] || !conversationContext[sessionId].lastResponse) {
+    console.error('No lastResponse found for session:', sessionId);
+    console.error('Available sessions:', Object.keys(conversationContext));
+    return res.status(400).json({ 
+      error: 'No prescription data.',
+      details: 'Please start a chat session first before downloading a prescription.'
     });
+  }
+  
+  const lastResponseText = conversationContext[sessionId].lastResponse;
+  console.log('Found lastResponse text, length:', lastResponseText.length);
+  
+  // Clean text
+  let text = lastResponseText
+    .replace(/<a href="[^"]*" target="_blank">([^<]*)<\/a>/g, '$1') // Remove HTML links but keep text
+    .replace(/💫 Sacred Scroll Available[\s\S]*$/g, '') // Remove download hint section  
+    .replace(/[\(\)\[\]\{\}\Ø<ß|$\emptyset<|&|[\$\#\%\^\*\+=<>]+|\s{2,}/g, ' ') // Enhanced artifact cleanup
+    .trim();
+  
+  console.log('Cleaned text length:', text.length);
+  
+  // Split into lines
+  const textLines = text.split('\n');
+  console.log('Total lines to process:', textLines.length);
+  
+  // Try PDF generation first
+  try {
+    console.log('Attempting PDF generation...');
     
-    // Check if lastResponse exists and validate
-    if (!conversationContext[sessionId] || !conversationContext[sessionId].lastResponse) {
-      console.error('No lastResponse found for session:', sessionId);
-      console.error('Available sessions:', Object.keys(conversationContext));
-      return res.status(400).json({ 
-        error: 'No prescription data available.',
-        details: 'Please start a chat session first before downloading a prescription.'
-      });
-    }
-    
-    const lastResponseText = conversationContext[sessionId].lastResponse;
-    console.log('Found lastResponse text in session, length:', lastResponseText.length);
-    console.log('Full lastResponse content:', lastResponseText);
-    
-    // Create PDF document with A4 size
+    // Create PDF document with A4 size  
     const doc = new PDFDocument({ 
       size: 'A4',
       margins: { top: 20, bottom: 20, left: 20, right: 20 }
     });
     
-    // Set document metadata
-    doc.info.Title = 'Hathor Prescription';
-    doc.info.Author = 'Hathor Organics';
-    
-    console.log('Setting PDF response headers...');
-    
-    // Set response headers BEFORE piping
+    // Set PDF response headers
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename="hathor-prescription.pdf"');
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
     
     // Pipe PDF to response
     doc.pipe(res);
-    
-    console.log('PDF document piped to response');
     
     // Set background color to light beige (#F5F1E9)
     doc.rect(0, 0, 595.28, 841.89).fill('#F5F1E9');
@@ -1804,16 +1799,12 @@ app.get('/api/download-prescription', (req, res) => {
     // Add header with logo
     try {
       const logoPath = path.join(__dirname, 'public', 'hathor-logo-02.png');
-      console.log('Attempting to load logo from:', logoPath);
-      
       if (fs.existsSync(logoPath)) {
         doc.image(logoPath, 80, 20, { width: 50 });
-        console.log('Logo loaded successfully');
-      } else {
-        console.log('Logo file not found, continuing without logo');
+        console.log('Header logo loaded successfully');
       }
     } catch (err) {
-      console.error('Logo error:', err);
+      console.error('Header logo error:', err);
     }
     
     // Add header title
@@ -1822,218 +1813,173 @@ app.get('/api/download-prescription', (req, res) => {
        .fill('#D4AF37')
        .text('✨ Hathor\'s Beauty Advice ✨', 0, 80, { align: 'center' });
     
-    // Process the lastResponse text to replicate the exact chat format
-    let yPos = 120;
-    const pageWidth = 555; // A4 width minus margins
-    const leftMargin = 20;
-    
-    // Enhanced text cleanup with broader artifact removal
-    const cleanText = lastResponseText
-      .replace(/<a href="[^"]*" target="_blank">([^<]*)<\/a>/g, '$1') // Remove HTML links but keep text
-      .replace(/💫 Sacred Scroll Available[\s\S]*$/g, '') // Remove download hint section
-      .replace(/[\(\)\[\]\{\}\Ø<ß|$\emptyset<|&|[\$\#\%\^\*\+=<>]+|\s{2,}/g, ' ') // Enhanced artifact cleanup
-      .trim();
-    
-    console.log('Cleaned text length:', cleanText.length);
-    console.log('Cleaned text preview:', cleanText.substring(0, 300) + '...');
-    
-    // Split text into lines and sections
-    const lines = cleanText.split('\n');
-    console.log('Total lines to process:', lines.length);
-    console.log('First 5 lines:', lines.slice(0, 5));
-    
-    // Helper function to find oil in inventory and create clickable link
-    const findOilLink = (text) => {
-      for (const oil of FULL_INVENTORY) {
-        if (text.includes(oil.name)) {
-          return { found: true, oil: oil, name: oil.name, link: oil.link };
-        }
-      }
-      return { found: false };
-    };
-    
-    // Track if we've already added the header title to avoid duplication
-    let headerAdded = false;
+    // Initialize y position
+    let y = 100;
     let contentRendered = false;
-    let linesProcessed = 0;
     
-    // Enhanced line processing with better pattern matching and logging
-    lines.forEach((line, index) => {
-      linesProcessed++;
-      
-      // Check if we need a new page
-      if (yPos > 750) {
-        doc.addPage();
-        doc.rect(0, 0, 595.28, 841.89).fill('#F5F1E9');
-        yPos = 50;
-        console.log('Added new page, reset yPos to 50');
-      }
-      
+    // Process lines
+    textLines.forEach((line, index) => {
       const trimmedLine = line.trim();
-      
       if (!trimmedLine) {
-        yPos += 8; // Add spacing for empty lines
+        y += 8;
         return;
       }
       
-      console.log(`Processing line ${index + 1}/${lines.length}: "${trimmedLine.substring(0, 50)}..."`);
+      console.log(`Processing line ${index + 1}: "${trimmedLine.substring(0, 30)}..."`);
       
-      // Skip duplicate title lines
-      if ((trimmedLine.startsWith('✨') || trimmedLine.includes('✨')) && 
-          trimmedLine.includes('Hathor\'s Beauty Advice') && headerAdded) {
-        console.log('Skipping duplicate header line');
-        return; // Skip duplicate header
+      // Check if we need a new page
+      if (y > 750) {
+        doc.addPage();
+        doc.rect(0, 0, 595.28, 841.89).fill('#F5F1E9');
+        y = 50;
       }
       
-      // Enhanced section header detection
+      // Headers (emojis)
       if (trimmedLine.match(/🌙|🌿|⚱️|💫|🔮|🌅/)) {
-        console.log('Rendering section header:', trimmedLine);
-        doc.font('Times-Roman')
-           .fontSize(14)
-           .fill('#D4AF37')
-           .text(trimmedLine, leftMargin, yPos, { width: pageWidth });
-        yPos += 20;
+        doc.fontSize(14).fill('#D4AF37').text(trimmedLine, 20, y);
+        y += 20;
         contentRendered = true;
-      } else if (trimmedLine.startsWith('✨') || trimmedLine.includes('✨')) {
-        // Header/title lines
-        if (trimmedLine.includes('Hathor\'s Beauty Advice')) {
-          headerAdded = true;
-          console.log('Header already added, skipping duplicate');
-          return; // Skip as we already have header
-        } else {
-          console.log('Rendering title line:', trimmedLine);
-          doc.font('Times-Roman')
-             .fontSize(16)
-             .fill('#D4AF37')
-             .text(trimmedLine, leftMargin, yPos, { width: pageWidth, align: 'center' });
-          yPos += 25;
-          contentRendered = true;
-        }
-      } else if (trimmedLine.match(/^• /) || trimmedLine.match(/^- /)) {
-        // Enhanced bullet point handling
+      }
+      // Bullets
+      else if (trimmedLine.match(/^• /) || trimmedLine.match(/^- /)) {
         const bulletText = trimmedLine.replace(/^• /, '').replace(/^- /, '');
-        console.log('Rendering bullet point:', bulletText.substring(0, 30) + '...');
-        
-        doc.font('Times-Roman')
-           .fontSize(12)
-           .fill('black')
-           .text('  • ', leftMargin, yPos, { continued: true });
-        
-        // Check for oil names in bullet points
-        const oilResult = findOilLink(bulletText);
-        if (oilResult.found) {
-          console.log('Found oil link in bullet:', oilResult.name);
-          const parts = bulletText.split(oilResult.name);
-          if (parts.length >= 2) {
-            doc.text(parts[0], { continued: true });
-            doc.fillColor('blue')
-               .text(oilResult.name, { 
-                 link: oilResult.link,
-                 underline: true,
-                 continued: true 
-               });
-            doc.fillColor('black')
-               .text(parts.slice(1).join(oilResult.name), { continued: false });
-          } else {
-            doc.text(bulletText, { continued: false });
-          }
-        } else {
-          doc.text(bulletText, { continued: false });
-        }
-        yPos += 15;
+        doc.fontSize(12).fill('black').text('  • ', 20, y, { continued: true });
+        doc.text(bulletText, 30, y);
+        y += 15;
         contentRendered = true;
-      } else {
-        // Regular text - check for oil names and make them clickable
-        console.log('Rendering regular text:', trimmedLine.substring(0, 30) + '...');
-        const oilResult = findOilLink(trimmedLine);
-        if (oilResult.found) {
-          console.log('Found oil link in text:', oilResult.name);
-          const parts = trimmedLine.split(oilResult.name);
-          if (parts.length >= 2) {
-            doc.font('Times-Roman')
-               .fontSize(12)
-               .fill('black')
-               .text(parts[0], leftMargin, yPos, { continued: true });
-            
-            doc.fillColor('blue')
-               .text(oilResult.name, { 
-                 link: oilResult.link,
-                 underline: true,
-                 continued: true 
-               });
-            
-            doc.fillColor('black')
-               .text(parts.slice(1).join(oilResult.name), { continued: false });
-          } else {
-            doc.font('Times-Roman')
-               .fontSize(12)
-               .fill('black')
-               .text(trimmedLine, leftMargin, yPos, { width: pageWidth });
-          }
+      }
+      // Oil names with links
+      else if (trimmedLine.match(/(Garden Cress Oil|Rosemary Oil|Black Seed Oil)/)) {
+        const oilName = trimmedLine.match(/(Garden Cress Oil|Rosemary Oil|Black Seed Oil)/)[0];
+        const oil = FULL_INVENTORY.find(item => item.name === oilName);
+        if (oil) {
+          doc.fontSize(12).fill('blue')
+             .text(trimmedLine, 20, y, { link: oil.link, underline: true });
         } else {
-          doc.font('Times-Roman')
-             .fontSize(12)
-             .fill('black')
-             .text(trimmedLine, leftMargin, yPos, { width: pageWidth });
+          doc.fontSize(12).fill('black').text(trimmedLine, 20, y);
         }
-        yPos += 15;
+        y += 15;
+        contentRendered = true;
+      }
+      // Regular text
+      else {
+        doc.fontSize(12).fill('black').text(trimmedLine, 20, y);
+        y += 15;
         contentRendered = true;
       }
     });
     
-    // Error handling for content rendering
-    console.log(`Finished processing ${linesProcessed} lines, contentRendered: ${contentRendered}`);
-    
     if (!contentRendered) {
-      console.error('PDF generation failed, no content rendered');
-      console.error('Lines content:', lines.map((line, i) => `${i}: "${line}"`));
-      return res.status(500).json({ 
-        error: "PDF generation failed.",
-        details: `No renderable content found. Processed ${linesProcessed} lines, contentRendered: ${contentRendered}`
-      });
+      throw new Error('No content was rendered to PDF');
     }
     
-    // Add footer with enhanced error handling
-    yPos = Math.max(yPos + 30, 260); // Ensure footer is positioned properly
+    // Add footer
+    doc.fontSize(10).fill('black')
+       .text('With love and light, Hathor - https://hathororganics.com', 20, 260, { italics: true });
+    doc.fontSize(8)
+       .text(`Generated on: ${new Date().toLocaleDateString('en-US', { 
+         year: 'numeric', 
+         month: 'long', 
+         day: 'numeric' 
+       })}`, 20, 280);
     
+    // Try to add footer logo
     try {
-      doc.fontSize(10)
-         .fill('black')
-         .text('With love and light, Hathor - https://hathororganics.com', leftMargin, yPos, { 
-           width: pageWidth,
-           italics: true 
-         });
-      
-      yPos += 20;
-      doc.fontSize(8)
-         .text(`Generated on: ${new Date().toLocaleDateString('en-US', { 
-           year: 'numeric', 
-           month: 'long', 
-           day: 'numeric' 
-         })}`, leftMargin, yPos);
-      
-      // Try to add small logo in footer
-      try {
-        const logoPath = path.join(__dirname, 'public', 'hathor-logo-02.png');
-        if (fs.existsSync(logoPath)) {
-          doc.image(logoPath, 140, yPos - 5, { width: 20 });
-        }
-      } catch (err) {
-        console.error('Footer logo error:', err);
+      const logoPath = path.join(__dirname, 'public', 'hathor-logo-02.png');
+      if (fs.existsSync(logoPath)) {
+        doc.image(logoPath, 140, 275, { width: 20 });
       }
-    } catch (error) {
-      console.error('Footer rendering error:', error);
+    } catch (err) {
+      console.error('Footer logo error:', err);
     }
     
     // Finalize PDF
     doc.end();
+    console.log('PDF generation completed successfully');
     
-  } catch (error) {
-    console.error('PDF generation failed:', error);
-    res.status(500).json({ 
-      error: "Failed to generate PDF",
-      details: error.message 
-    });
+  } catch (pdfError) {
+    console.error('PDF generation failed:', pdfError);
+    console.log('Falling back to JPG generation...');
+    
+    // Fallback to JPG with canvas
+    try {
+      const { createCanvas } = require('canvas');
+      const canvas = createCanvas(595, 842);
+      const ctx = canvas.getContext('2d');
+      
+      // Set background
+      ctx.fillStyle = '#F5F1E9';
+      ctx.fillRect(0, 0, 595, 842);
+      
+      // Add header
+      ctx.font = '16px Times-Roman';
+      ctx.fillStyle = '#D4AF37';
+      ctx.textAlign = 'center';
+      ctx.fillText('✨ Hathor\'s Beauty Advice ✨', 297.5, 50);
+      
+      // Reset text properties
+      ctx.fillStyle = 'black';
+      ctx.font = '12px Times-Roman';
+      ctx.textAlign = 'left';
+      
+      let y = 80;
+      
+      textLines.forEach(line => {
+        const trimmedLine = line.trim();
+        if (!trimmedLine) {
+          y += 8;
+          return;
+        }
+        
+        if (trimmedLine.match(/🌙|🌿|⚱️|💫|🔮|🌅/)) {
+          ctx.font = '14px Times-Roman';
+          ctx.fillStyle = '#D4AF37';
+          ctx.fillText(trimmedLine, 20, y);
+          ctx.font = '12px Times-Roman';
+          ctx.fillStyle = 'black';
+          y += 20;
+        } else if (trimmedLine.match(/^• /) || trimmedLine.match(/^- /)) {
+          const bulletText = trimmedLine.replace(/^• /, '').replace(/^- /, '');
+          ctx.fillText('  • ' + bulletText, 20, y);
+          y += 15;
+        } else if (trimmedLine.match(/(Garden Cress Oil|Rosemary Oil|Black Seed Oil)/)) {
+          // Note: Canvas doesn't support hyperlinks natively; links will be text only
+          ctx.fillStyle = 'blue';
+          ctx.fillText(trimmedLine, 20, y);
+          ctx.fillStyle = 'black';
+          y += 15;
+        } else {
+          ctx.fillText(trimmedLine, 20, y);
+          y += 15;
+        }
+      });
+      
+      // Add footer
+      ctx.font = '10px Times-Roman';
+      ctx.fillText('With love and light, Hathor - https://hathororganics.com', 20, 800);
+      ctx.font = '8px Times-Roman';
+      ctx.fillText(`Generated on: ${new Date().toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      })}`, 20, 820);
+      
+      const buffer = canvas.toBuffer('image/jpeg');
+      res.setHeader('Content-Type', 'image/jpeg');
+      res.setHeader('Content-Disposition', 'attachment; filename="hathor-prescription.jpg"');
+      res.end(buffer);
+      
+      console.log('JPG generation completed successfully');
+      
+    } catch (jpgError) {
+      console.error('JPG generation also failed:', jpgError);
+      return res.status(500).json({ 
+        error: 'File generation failed',
+        details: 'Both PDF and JPG generation failed',
+        pdfError: pdfError.message,
+        jpgError: jpgError.message
+      });
+    }
   }
 });
 
